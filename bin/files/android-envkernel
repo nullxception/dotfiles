@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+((return 0 2>/dev/null) || [[ $ZSH_EVAL_CONTEXT =~ :file$ ]]) || {
+  echo "Please load the file instead."
+  echo "example: source ./path/to/android-envkernel"
+  exit 1
+}
+
+KERNEL_DIR=$(dirname "$(readlink -f "$0")")
+BUILD_DIR=$KERNEL_DIR/out
+
+export KBUILD_COMPILER_STRING=$(clang -v |& sed -e '1!d;s/ (http.\+)//g')
+
+if [[ -z "$OLDPROMPT" ]]; then
+  export OLDPROMPT="$PS1"
+  export PS1="(dev) $OLDPROMPT"
+fi
+
+mke(){
+  mkdir -p $BUILD_DIR
+  if [[ -z "$kversion" ]]; then
+    kversion=$(git rev-list --tags --max-count=1 | xargs git describe --tags)
+  fi
+  echo "envsetup: Building Version $kversion."
+  echo "-$kversion" > {$KERNEL_DIR,$BUILD_DIR}/.scmversion
+
+  make -j$(nproc --ignore=1) \
+    -C $KERNEL_DIR \
+    O=$BUILD_DIR \
+    ARCH=arm64 \
+    CROSS_COMPILE=aarch64-linux-gnu- \
+    CC=clang CLANG_TRIPLE=aarch64-linux-gnu- $@ |& tee ../mke.log
+  
+  test -z "$@" && mke_dtimg
+}
+
+mke_dtimg(){
+  DTOUT=$BUILD_DIR/dtbo.img
+  MKDT=$(which mkdtboimg.py)
+
+  if [[ -n "$MKDT" ]];then
+    echo "Building overlay dt using $MKDT"
+    python2 $MKDT \
+      create $DTOUT \
+      $(find $BUILD_DIR/arch/arm64/boot/dts/ -iname '*-overlay.dtbo' -print)
+    echo "Build done: $DTOUT"
+  fi
+}
+
+cherry-am(){
+  co=cherry.patch
+  uri=$(echo $1|cut -d\# -f1)
+  curl -o $co $uri.patch && git am < $co && rm $co
+}
+
+deactivate(){
+  export PS1="$OLDPROMPT"
+  unset KBUILD_COMPILER_STRING OLDPROMPT
+  unset -f mke mke_dtimg cherry-am deactivate
+}
