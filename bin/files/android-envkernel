@@ -5,9 +5,15 @@
   exit 1
 }
 
-KERNEL_DIR=$(dirname "$(readlink -f "$0")")
-BUILD_DIR=$KERNEL_DIR/out
-
+# set current directory as kernel dir
+export KERNEL_DIR=$(pwd)
+export BUILD_DIR=$KERNEL_DIR/out
+# set ccache and clang path
+# you should set ANDROID_CLANG_HOME with your path of clang before using it
+export PATH="/usr/lib/ccache/bin/:$ANDROID_CLANG_HOME/bin:$PATH"
+# also insert the clang's libs for additional shared library usage (e.g LTO)
+export LD_LIBRARY_PATH="$ANDROID_CLANG_HOME/lib64:$LD_LIBRARY_PATH"
+# remove unused links on clang's version from aosp-clang
 export KBUILD_COMPILER_STRING=$(clang -v |& sed -e '1!d;s/ (http.\+)//g')
 
 if [[ -z "$OLDPROMPT" ]]; then
