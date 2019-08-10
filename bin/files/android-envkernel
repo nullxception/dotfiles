@@ -8,6 +8,14 @@
 # set current directory as kernel dir
 export KERNEL_DIR=$(pwd)
 export BUILD_DIR=$KERNEL_DIR/out
+
+[[ -f "$KERNEL_DIR/../prebuilts/.env" ]] && DOTENV="../prebuilts/.env"
+[[ -f "$KERNEL_DIR/../.env" ]] && DOTENV="$KERNEL_DIR/../.env"
+[[ -f "$KERNEL_DIR/.env" ]] && DOTENV="$KERNEL_DIR/.env"
+[[ -z "$DOTENV" ]] && { echo "no dotenv available. exiting"; exit 1; }
+
+source $DOTENV
+
 # set ccache and clang path
 # you should set ANDROID_CLANG_HOME with your path of clang before using it
 export PATH="/usr/lib/ccache/bin/:$ANDROID_CLANG_HOME/bin:$PATH"
@@ -58,8 +66,19 @@ cherry-am(){
   curl -o $co $uri.patch && git am < $co && rm $co
 }
 
-deactivate(){
+env-info(){
+  echo "DotEnv : $DOTENV"
+  echo "Target Kernel : $KERNEL_DIR"
+  echo "Output : $BUILD_DIR"
+  echo "Compiler: $KBUILD_COMPILER_STRING"
+  echo "Kernel Version: $kversion"
+}
+
+exit(){
   export PS1="$OLDPROMPT"
   unset KBUILD_COMPILER_STRING OLDPROMPT
-  unset -f mke mke_dtimg cherry-am deactivate
+  unset -f mke mke_dtimg cherry-am env-info exit
 }
+
+clear
+env-info
