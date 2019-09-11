@@ -7,7 +7,17 @@
 
 # set current directory as kernel dir
 export KERNEL_DIR=$(pwd)
-export BUILD_DIR=$KERNEL_DIR/out
+
+################ 
+# Example of .env content
+#
+# export KBUILD_VERSION_REL=7.5
+# export KBUILD_FAKECONFIG=1
+# export KBUILD_OUT=/tmp/buildkernel
+# export ANDROID_CLANG_HOME=$HOME/Android/prebuilts/clang-9.0.6/
+# export CROSS_COMPILE=$HOME/Android/prebuilts/aarch64-linux-android-4.9/bin/aarch64-linux-android-
+# export CROSS_COMPILE_ARM32=$HOME/Android/prebuilts/arm-linux-androideabi-4.9/bin/arm-linux-androideabi-
+#
 
 [[ -f "$KERNEL_DIR/../prebuilts/.env" ]] && DOTENV="../prebuilts/.env"
 [[ -f "$KERNEL_DIR/../.env" ]] && DOTENV="$KERNEL_DIR/../.env"
@@ -29,33 +39,35 @@ if [[ -z "$OLDPROMPT" ]]; then
   export PS1="(dev) $OLDPROMPT"
 fi
 
+# reset build version at the first time of sourcing this script
+if [[ -d "$KBUILD_OUT" ]]; then
+  echo 0 > $KBUILD_OUT/.version
+fi
+
 mke(){
-  mkdir -p $BUILD_DIR
-  if [[ -z "$kversion" ]]; then
-    kversion=$(git rev-list --tags --max-count=1 | xargs git describe --tags)
+  mkdir -p $KBUILD_OUT
+  if [[ -z "$KBUILD_VERSION_REL" ]]; then
+    KBUILD_VERSION_REL=$(git rev-list --tags --max-count=1 | xargs git describe --tags)
   fi
-  echo "envsetup: Building Version $kversion."
-  echo "-$kversion" > {$KERNEL_DIR,$BUILD_DIR}/.scmversion
+  echo "envsetup: Building Version $KBUILD_VERSION_REL."
+  echo "-$KBUILD_VERSION_REL" > {$KERNEL_DIR,$KBUILD_OUT}/.scmversion
 
   make -j$(nproc --ignore=1) \
-    -C $KERNEL_DIR \
-    O=$BUILD_DIR \
-    ARCH=arm64 \
-    CROSS_COMPILE=aarch64-linux-gnu- \
-    CC=clang CLANG_TRIPLE=aarch64-linux-gnu- $@ |& tee ../mke.log
+    -C $KERNEL_DIR O=$KBUILD_OUT \
+    ARCH=arm64 CC=clang CLANG_TRIPLE=aarch64-linux-gnu- $@ |& tee ../mke.log
   
   test -z "$@" && mke_dtimg
 }
 
 mke_dtimg(){
-  DTOUT=$BUILD_DIR/dtbo.img
+  DTOUT=$KBUILD_OUT/dtbo.img
   MKDT=$(which mkdtboimg.py)
 
   if [[ -n "$MKDT" ]];then
     echo "Building overlay dt using $MKDT"
     python2 $MKDT \
       create $DTOUT \
-      $(find $BUILD_DIR/arch/arm64/boot/dts/ -iname '*-overlay.dtbo' -print)
+      $(find $KBUILD_OUT/arch/arm64/boot/dts/ -iname '*-overlay.dtbo' -print)
     echo "Build done: $DTOUT"
   fi
 }
@@ -69,9 +81,9 @@ cherry-am(){
 env-info(){
   echo "DotEnv : $DOTENV"
   echo "Target Kernel : $KERNEL_DIR"
-  echo "Output : $BUILD_DIR"
+  echo "Output : $KBUILD_OUT"
   echo "Compiler: $KBUILD_COMPILER_STRING"
-  echo "Kernel Version: $kversion"
+  echo "Kernel Version: $KBUILD_VERSION_REL"
 }
 
 exit(){
