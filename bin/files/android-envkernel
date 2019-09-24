@@ -31,8 +31,11 @@ source $DOTENV
 export PATH="/usr/lib/ccache/bin/:$ANDROID_CLANG_HOME/bin:$PATH"
 # also insert the clang's libs for additional shared library usage (e.g LTO)
 export LD_LIBRARY_PATH="$ANDROID_CLANG_HOME/lib64:$LD_LIBRARY_PATH"
-# remove unused links on clang's version from aosp-clang
-export KBUILD_COMPILER_STRING=$(clang -v |& sed -e '1!d;s/ (http.\+)//g')
+
+if [[ -z "$KBUILD_COMPILER_STRING" ]]; then
+  # remove unused links on clang's version from aosp-clang
+  export KBUILD_COMPILER_STRING=$(clang -v |& sed -e '1!d;s/ (http.\+)//g')
+fi
 
 if [[ -z "$OLDPROMPT" ]]; then
   export OLDPROMPT="$PS1"
