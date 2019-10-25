@@ -1,0 +1,45 @@
+#!/bin/bash
+[[ ! -f build/envsetup.sh ]] && { echo "you're in the wrong dir. exiting"; exit 1; }
+export LC_ALL=C
+export USE_CCACHE=1 CCACHE_DIR="~/.ccache" CCACHE_EXEC=$(which ccache)
+
+CFG=$1
+KRONIC_FAIL=0
+GDRIVE_FAIL=0
+
+report() {
+    telegram-send --format html "${1}"
+}
+interrupted() {
+    echo "Script interrupted. exiting immediately."
+    exit 1;
+}
+
+trap 'interrupted' SIGINT
+$CCACHE_EXEC -M 50G
+
+source build/envsetup.sh
+lunch $CFG || exit 1
+
+report "Build process for <b>$CFG</b> started at $(date)"
+mka kronic || KRONIC_FAIL=1
+
+if [[ $KRONIC_FAIL == 1 ]]; then
+    report "Shishou, your build-task ($CFG) is failed at $(date), please check your work again :("
+    exit 1
+else
+    report "Shishou, your build-task ($CFG) is finished at $(date)."
+fi
+
+ZIPFILE=$(find $OUT/ -maxdepth 1 -name 'AOSiP-*.zip' -printf "%f\n")
+report "I'm gonna push <b>$ZIPFILE</b> to your Google Drive now!"
+gdrive upload $OUT/$ZIPFILE || GDRIVE_FAIL=1
+gdrive upload $OUT/$ZIPFILE.md5sum || GDRIVE_FAIL=1
+
+if [[ $GDRIVE_FAIL == 1 ]]; then
+    report "Sumimasen shishou! I can't access your Google Drive :("
+    exit 1
+else
+    report "Yoooosh! $ZIPFILE is uploaded!"
+    exit 1
+fi
