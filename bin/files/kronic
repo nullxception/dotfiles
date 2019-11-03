@@ -1,9 +1,9 @@
 #!/bin/bash
-[[ ! -f build/envsetup.sh ]] && { echo "you're in the wrong dir. exiting"; exit 1; }
-export LC_ALL=C
+DEFAULT_CFG=aosip_grus-userdebug
+CACHESIZE=50G
+
 export USE_CCACHE=1 CCACHE_DIR="~/.ccache" CCACHE_EXEC=$(which ccache)
 
-CFG=$1
 KRONIC_FAIL=0
 GDRIVE_FAIL=0
 
@@ -12,34 +12,43 @@ report() {
 }
 interrupted() {
     echo "Script interrupted. exiting immediately."
-    exit 1;
+    exit 1
+}
+setcache() {
+    CURR=$($CCACHE_EXEC -p | grep max_size | sed -e 's/.*e = \(.*\)\..*G/\1/')
+    [[ "$CURR" != "$1" ]] && $CCACHE_EXEC -M $1
 }
 
 trap 'interrupted' SIGINT
-$CCACHE_EXEC -M 50G
 
+[[ ! -f build/envsetup.sh ]] && { echo "you're in the wrong dir. exiting"; exit 1; }
+[[ -z $1 ]] && CFG=$DEFAULT_CFG || CFG=$1
+
+CFG_ROM=$(sed -e 's/\(.*\)_\(.*\)-\(.*\)/\1/' <<< $CFG)
+CFG_DEVICE=$(sed -e 's/\(.*\)_\(.*\)-\(.*\)/\2/' <<< $CFG)
+CFG_VARIANT=$(sed -e 's/\(.*\)_\(.*\)-\(.*\)/\3/' <<< $CFG)
+
+setcache $CACHESIZE
 source build/envsetup.sh
 lunch $CFG || exit 1
 
-report "Build process for <b>$CFG</b> started at $(date)"
+report "Build process of <b>$CFG_ROM</b> for <b>$CFG_DEVICE</b> started at $(date)"
 mka kronic || KRONIC_FAIL=1
 
 if [[ $KRONIC_FAIL == 1 ]]; then
-    report "Shishou, your build-task ($CFG) is failed at $(date), please check your work again :("
+    report "Shishou, your <b>$CFG_ROM</b> build for <b>$CFG_DEVICE</b> is failed at $(date), please check your work again :("
     exit 1
-else
-    report "Shishou, your build-task ($CFG) is finished at $(date)."
 fi
+report "Shishou, your <b>$CFG_ROM</b> build for <b>$CFG_DEVICE</b> is finished at $(date)."
 
-ZIPFILE=$(find $OUT/ -maxdepth 1 -name 'AOSiP-*.zip' -printf "%f\n")
-report "I'm gonna push <b>$ZIPFILE</b> to your Google Drive now!"
+ZIPFILE=$(find $OUT/ -maxdepth 1 -name 'AOSiP-*.zip' -printf "%f\n" | sort -n | tail -n1)
+report "I'm gonna push <b>$ZIPFILE</b> to your Google Drive now."
 gdrive upload $OUT/$ZIPFILE || GDRIVE_FAIL=1
 gdrive upload $OUT/$ZIPFILE.md5sum || GDRIVE_FAIL=1
 
 if [[ $GDRIVE_FAIL == 1 ]]; then
     report "Sumimasen shishou! I can't access your Google Drive :("
     exit 1
-else
-    report "Yoooosh! $ZIPFILE is uploaded!"
-    exit 1
 fi
+
+report "$ZIPFILE is uploaded!"
