@@ -1,14 +1,17 @@
 #!/bin/bash
 DEFAULT_CFG=aosip_grus-userdebug
-CACHESIZE=50G
+CCACHE_SIZE=50G
+GDRIVE_UPLOAD_PARENT=6driv3f0ld3rh4shc0d3
 
-export USE_CCACHE=1 CCACHE_DIR="~/.ccache" CCACHE_EXEC=$(which ccache)
-
-KRONIC_FAIL=0
-GDRIVE_FAIL=0
+# Load ~/.kronicrc for easier configuration override
+[[ -f $HOME/.kronicrc ]] && source $HOME/.kronicrc
 
 report() {
-    telegram-send --format html "${1}"
+    if [[ -f "${2}" ]]; then
+        telegram-send --file "${2}" --caption "${1}"
+    else
+        telegram-send --format markdown "${1}"
+    fi
 }
 interrupted() {
     echo "Script interrupted. exiting immediately."
@@ -16,11 +19,14 @@ interrupted() {
 }
 setcache() {
     CURR=$($CCACHE_EXEC -p | grep max_size | sed -e 's/.*e = \(.*\)\..*G/\1/')
-    [[ "$CURR" != "$1" ]] && $CCACHE_EXEC -M $1
+    [[ "${CURR}G" != "$1" ]] && $CCACHE_EXEC -M $1
 }
 
 trap 'interrupted' SIGINT
 
+export USE_CCACHE=1 CCACHE_DIR="~/.ccache" CCACHE_EXEC=$(which ccache)
+KRONIC_FAIL=0
+GDRIVE_FAIL=0
 [[ ! -f build/envsetup.sh ]] && { echo "you're in the wrong dir. exiting"; exit 1; }
 [[ -z $1 ]] && CFG=$DEFAULT_CFG || CFG=$1
 
@@ -28,27 +34,37 @@ CFG_ROM=$(sed -e 's/\(.*\)_\(.*\)-\(.*\)/\1/' <<< $CFG)
 CFG_DEVICE=$(sed -e 's/\(.*\)_\(.*\)-\(.*\)/\2/' <<< $CFG)
 CFG_VARIANT=$(sed -e 's/\(.*\)_\(.*\)-\(.*\)/\3/' <<< $CFG)
 
-setcache $CACHESIZE
+echo "Building $CFG_ROM for: $CFG_DEVICE"
+echo "ccache size: $CCACHE_SIZE"
+echo "GDrive-upload Parent Location: $GDRIVE_UPLOAD_PARENT"
+
+setcache $CCACHE_SIZE
 source build/envsetup.sh
 lunch $CFG || exit 1
 
-report "Build process of <b>$CFG_ROM</b> for <b>$CFG_DEVICE</b> started at $(date)"
+report "Build process of *$CFG_ROM* for *$CFG_DEVICE* started at $(date)"
 mka kronic || KRONIC_FAIL=1
 
 if [[ $KRONIC_FAIL == 1 ]]; then
-    report "Shishou, your <b>$CFG_ROM</b> build for <b>$CFG_DEVICE</b> is failed at $(date), please check your work again :("
+    REAL_OUT=$OUT/../../../
+    ERRLOG=/tmp/error-$CFG_ROM-$CFG_DEVICE_$(date +%F__%I-%M%P).buildlog.txt
+
+    report "Shishou, your *$CFG_ROM* build for *$CFG_DEVICE* is failed at $(date)."
+    cp $REAL_OUT/error.log $ERRLOG
+    report "Here is the error log :)" $ERRLOG
     exit 1
 fi
-report "Shishou, your <b>$CFG_ROM</b> build for <b>$CFG_DEVICE</b> is finished at $(date)."
+report "Shishou, your *$CFG_ROM* build for *$CFG_DEVICE* is finished at $(date)."
 
 ZIPFILE=$(find $OUT/ -maxdepth 1 -name 'AOSiP-*.zip' -printf "%f\n" | sort -n | tail -n1)
-report "I'm gonna push <b>$ZIPFILE</b> to your Google Drive now."
-gdrive upload $OUT/$ZIPFILE || GDRIVE_FAIL=1
-gdrive upload $OUT/$ZIPFILE.md5sum || GDRIVE_FAIL=1
+ZIPNAME=${ZIPFILE//.zip}
+report "I'm gonna push *$ZIPNAME* to your Google Drive now."
+gdrive upload --parent $GDRIVE_UPLOAD_PARENT $OUT/$ZIPFILE || GDRIVE_FAIL=1
+gdrive upload --parent $GDRIVE_UPLOAD_PARENT $OUT/$ZIPFILE.md5sum || GDRIVE_FAIL=1
 
 if [[ $GDRIVE_FAIL == 1 ]]; then
     report "Sumimasen shishou! I can't access your Google Drive :("
     exit 1
 fi
 
-report "$ZIPFILE is uploaded!"
+report "$ZIPNAME is uploaded at your [Google Drive](https://drive.google.com/drive/folders/${GDRIVE_UPLOAD_PARENT})"
