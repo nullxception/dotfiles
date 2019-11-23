@@ -56,7 +56,7 @@ if [[ $KRONIC_FAIL == 1 ]]; then
 fi
 report "Shishou, your *$CFG_ROM* build for *$CFG_DEVICE* is finished at $(date)."
 
-ZIPFILE=$(find $OUT/ -maxdepth 1 -name 'AOSiP-*.zip' -printf "%f\n" | sort -n | tail -n1)
+ZIPFILE=$(find $OUT/ -maxdepth 1 -name 'DerpFest-*.zip' -printf "%f\n" | sort -n | tail -n1)
 ZIPNAME=${ZIPFILE//.zip}
 report "I'm gonna push *$ZIPNAME* to your Google Drive now."
 gdrive upload --parent $GDRIVE_UPLOAD_PARENT $OUT/$ZIPFILE || GDRIVE_FAIL=1
