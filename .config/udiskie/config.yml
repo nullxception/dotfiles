@@ -1,0 +1,5 @@
+program_options:
+  tray: false
+  automount: true
+  notify: true
+

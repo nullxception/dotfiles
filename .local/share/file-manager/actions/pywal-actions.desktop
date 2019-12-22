@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Action
+Tooltip=Set this image as wallpaper with pywal
+ToolbarLabel=Set as Wallpaper with pywal
+Name=Set as Wallpaper with pywal
+Profiles=profile-zero;
+
+[X-Action-Profile profile-zero]
+Folders=*;
+Exec=sh -c "wal -i %f -o ~/.config/wal/post-launch.sh"
+Name=Set as Wallpaper with pywal
+MimeTypes=image/*;

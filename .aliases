@@ -1,0 +1,15 @@
+mkcd(){
+  mkdir -p "$1"
+  cd "$1"
+}
+
+alias :q="exit"
+alias {ed,emacs,nano,v,vi}="vim"
+alias {yaourt,yay}="trizen"
+alias admesg="adb shell su -c dmesg"
+alias alog="adb logcat"
+alias aroot="adb shell su -c"
+alias ll="ls --color=auto -la"
+alias lsport="sudo lsof -i"
+alias open="xdg-open"
+alias update-grub="sudo grub-mkconfig -o /boot/grub/grub.cfg"

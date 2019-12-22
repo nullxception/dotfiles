@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+typeset -A tempArr
+IFS_ORIG=$IFS
+IFS=':'
+
+for path in $1; do
+  [ -z "${tempArr[$path]}" ] || continue
+  tempArr[$path]=${#tempArr[*]}
+  if [ -z "$result" ]; then
+    result="$path"
+  else
+    result="$result:$path"
+  fi
+done
+
+IFS=$IFS_ORIG
+echo $result

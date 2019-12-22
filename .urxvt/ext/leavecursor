@@ -1,0 +1,13 @@
+#!/usr/bin/perl
+# Hide cursor when window(s) are inactive
+
+use strict;
+use warnings;
+
+sub on_refresh_begin {
+    my ($term) = @_;
+    if (not $term->focus) {
+        my ($y, $x) = $term->screen_cur();    
+        $term->overlay ($x, $y, 1, 1, urxvt::DEFAULT_RSTYLE, 0);        
+    }
+}

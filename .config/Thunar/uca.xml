@@ -1,0 +1,23 @@
+<?xml encoding="UTF-8" version="1.0"?>
+<actions>
+<action>
+	<icon>utilities-terminal</icon>
+	<name>Open Terminal Here</name>
+	<unique-id>1539210127596455-1</unique-id>
+	<command>exo-open --working-directory %f --launch TerminalEmulator</command>
+	<description>Example for a custom action</description>
+	<patterns>*</patterns>
+	<startup-notify/>
+	<directories/>
+</action>
+<action>
+	<icon>wallpaper</icon>
+	<name>Set as wallpaper (pywal)</name>
+	<unique-id>1540672303177564-1</unique-id>
+	<command>/usr/bin/wal -i %f -o "$HOME/.config/wal/post-launch.sh"</command>
+	<description>Set as wallpaper with pywal</description>
+	<patterns>*</patterns>
+	<startup-notify/>
+	<image-files/>
+</action>
+</actions>
