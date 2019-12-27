@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 CURR=$(realpath $(dirname $0))
 TARGET=/etc
 
