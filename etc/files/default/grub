@@ -9,7 +9,7 @@ MTBUG="nopti nospectre_v2 spectre_v2_user=off spec_store_bypass_disable=off l1tf
 GRUB_DEFAULT=0
 GRUB_TIMEOUT=5
 GRUB_DISTRIBUTOR="Arch"
-GRUB_CMDLINE_LINUX_DEFAULT="$ZEN_CMDLINE"
+GRUB_CMDLINE_LINUX_DEFAULT="$ZEN_CMDLINE $MTBUG"
 GRUB_CMDLINE_LINUX=""
 
 # Preload both GPT and MBR modules so that they are not missed
