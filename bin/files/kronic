@@ -1,5 +1,5 @@
 #!/bin/bash
-DEFAULT_CFG=aosip_grus-userdebug
+DEFAULT_CFG=derp_raphael-userdebug
 CCACHE_SIZE=50G
 GDRIVE_UPLOAD_PARENT=6driv3f0ld3rh4shc0d3
 
