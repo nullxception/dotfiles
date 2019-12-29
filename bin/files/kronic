@@ -1,7 +1,7 @@
 #!/bin/bash
 DEFAULT_CFG=derp_raphael-userdebug
 CCACHE_SIZE=50G
-GDRIVE_UPLOAD_PARENT=6driv3f0ld3rh4shc0d3
+GDRIVE_UPLOAD_PARENT=
 
 # Load ~/.kronicrc for easier configuration override
 [[ -f $HOME/.kronicrc ]] && source $HOME/.kronicrc
@@ -59,8 +59,13 @@ report "Shishou, your *$CFG_ROM* build for *$CFG_DEVICE* is finished at $(date).
 ZIPFILE=$(find $OUT/ -maxdepth 1 -name 'DerpFest-*.zip' -printf "%f\n" | sort -n | tail -n1)
 ZIPNAME=${ZIPFILE//.zip}
 report "I'm gonna push *$ZIPNAME* to your Google Drive now."
-gdrive upload --parent $GDRIVE_UPLOAD_PARENT $OUT/$ZIPFILE || GDRIVE_FAIL=1
-gdrive upload --parent $GDRIVE_UPLOAD_PARENT $OUT/$ZIPFILE.md5sum || GDRIVE_FAIL=1
+if [[ -n "$GDRIVE_UPLOAD_PARENT" ]]; then
+    gdrive upload --parent $GDRIVE_UPLOAD_PARENT $OUT/$ZIPFILE || GDRIVE_FAIL=1
+    gdrive upload --parent $GDRIVE_UPLOAD_PARENT $OUT/$ZIPFILE.md5sum || GDRIVE_FAIL=1
+else
+    gdrive upload $OUT/$ZIPFILE || GDRIVE_FAIL=1
+    gdrive upload $OUT/$ZIPFILE.md5sum || GDRIVE_FAIL=1
+fi
 
 if [[ $GDRIVE_FAIL == 1 ]]; then
     report "Sumimasen shishou! I can't access your Google Drive :("
