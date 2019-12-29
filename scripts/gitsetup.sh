@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+#
+# gitsetup.sh
+# a helper script to setup git for the first time
+#
 
 echo "Configuring git"
 echo "Previous user was : $(git config --global user.name) <$(git config --global user.email)>"
