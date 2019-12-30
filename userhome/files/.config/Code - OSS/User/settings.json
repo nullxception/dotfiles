@@ -2,8 +2,8 @@
   "editor.fontFamily": "'Dank Mono', monospace",
   "editor.fontLigatures": true,
   "editor.formatOnSave": true,
-  "git.enableCommitSigning": true,
   "telemetry.enableCrashReporter": false,
   "telemetry.enableTelemetry": false,
-  "window.titleBarStyle": "custom"
+  "window.titleBarStyle": "custom",
+  "git.alwaysSignOff": true
 }
