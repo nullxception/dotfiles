@@ -4,6 +4,7 @@
   "editor.formatOnSave": true,
   "telemetry.enableCrashReporter": false,
   "telemetry.enableTelemetry": false,
-  "window.titleBarStyle": "custom",
-  "git.alwaysSignOff": true
+  "git.alwaysSignOff": true,
+  "workbench.colorTheme": "Yoncé",
+  "editor.fontSize": 12
 }
