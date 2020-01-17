@@ -40,6 +40,7 @@ echo "GDrive-upload Parent Location: $GDRIVE_UPLOAD_PARENT"
 
 setcache $CCACHE_SIZE
 source build/envsetup.sh
+echo 0 > $OUT/obj/KERNEL_OBJ/.version
 lunch $CFG || exit 1
 
 report "Build process of *$CFG_ROM* for *$CFG_DEVICE* started at $(date)"
