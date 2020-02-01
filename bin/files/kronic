@@ -4,10 +4,10 @@ CCACHE_SIZE=50G
 GDRIVE_UPLOAD_PARENT=
 
 # Load ~/.kronicrc for easier configuration override
-[[ -f $HOME/.kronicrc ]] && source $HOME/.kronicrc
+[[ -f "$HOME/.kronicrc" ]] && source $HOME/.kronicrc
 
 report() {
-    if [[ -f "${2}" ]]; then
+    if [[ -f ${2} ]]; then
         telegram-send --file "${2}" --caption "${1}"
     else
         telegram-send --format markdown "${1}"
@@ -27,22 +27,30 @@ trap 'interrupted' SIGINT
 export USE_CCACHE=1 CCACHE_DIR="~/.ccache" CCACHE_EXEC=$(which ccache)
 KRONIC_FAIL=0
 GDRIVE_FAIL=0
-[[ ! -f build/envsetup.sh ]] && { echo "you're in the wrong dir. exiting"; exit 1; }
-[[ -z $1 ]] && CFG=$DEFAULT_CFG || CFG=$1
+if [[ ! -f "build/envsetup.sh" ]]; then
+    echo "you're in the wrong dir. exiting"
+    exit 1
+fi
+[[ -z "$1" ]] && CFG=$DEFAULT_CFG || CFG=$1
 
-CFG_ROM=$(sed -e 's/\(.*\)_\(.*\)-\(.*\)/\1/' <<< $CFG)
-CFG_DEVICE=$(sed -e 's/\(.*\)_\(.*\)-\(.*\)/\2/' <<< $CFG)
-CFG_VARIANT=$(sed -e 's/\(.*\)_\(.*\)-\(.*\)/\3/' <<< $CFG)
+CFG_ROM=$(sed -e 's/\(.*\)_\(.*\)-\(.*\)/\1/' <<<$CFG)
+CFG_DEVICE=$(sed -e 's/\(.*\)_\(.*\)-\(.*\)/\2/' <<<$CFG)
+CFG_VARIANT=$(sed -e 's/\(.*\)_\(.*\)-\(.*\)/\3/' <<<$CFG)
 
 echo "Building $CFG_ROM for: $CFG_DEVICE"
 echo "ccache size: $CCACHE_SIZE"
-echo "GDrive-upload Parent Location: $GDRIVE_UPLOAD_PARENT"
+if [[ -n "$GDRIVE_UPLOAD_PARENT" ]]; then
+    echo "GDrive-upload Parent Location: $GDRIVE_UPLOAD_PARENT"
+fi
 
 setcache $CCACHE_SIZE
 source build/envsetup.sh
-echo 0 > $OUT/obj/KERNEL_OBJ/.version
-lunch $CFG || exit 1
 
+if [[ -f "$OUT/obj/KERNEL_OBJ/.version" ]]; then
+    echo 0 >$OUT/obj/KERNEL_OBJ/.version
+fi
+
+lunch $CFG || exit 1
 report "Build process of *$CFG_ROM* for *$CFG_DEVICE* started at $(date)"
 mka kronic || KRONIC_FAIL=1
 
@@ -55,11 +63,13 @@ if [[ $KRONIC_FAIL == 1 ]]; then
     report "Here is the error log :)" $ERRLOG
     exit 1
 fi
+
 report "Shishou, your *$CFG_ROM* build for *$CFG_DEVICE* is finished at $(date)."
 
 ZIPFILE=$(find $OUT/ -maxdepth 1 -name 'DerpFest-*.zip' -printf "%f\n" | sort -n | tail -n1)
-ZIPNAME=${ZIPFILE//.zip}
+ZIPNAME=${ZIPFILE//.zip/}
 report "I'm gonna push *$ZIPNAME* to your Google Drive now."
+
 if [[ -n "$GDRIVE_UPLOAD_PARENT" ]]; then
     gdrive upload --parent $GDRIVE_UPLOAD_PARENT $OUT/$ZIPFILE || GDRIVE_FAIL=1
     gdrive upload --parent $GDRIVE_UPLOAD_PARENT $OUT/$ZIPFILE.md5sum || GDRIVE_FAIL=1
@@ -73,4 +83,10 @@ if [[ $GDRIVE_FAIL == 1 ]]; then
     exit 1
 fi
 
-report "$ZIPNAME is uploaded at your [Google Drive](https://drive.google.com/drive/folders/${GDRIVE_UPLOAD_PARENT})"
+if [[ -n "$GDRIVE_UPLOAD_PARENT" ]]; then
+    GDRIVE_URI="https://drive.google.com/drive/folders/${GDRIVE_UPLOAD_PARENT}"
+else
+    GDRIVE_URI="https://drive.google.com/drive"
+fi
+
+report "$ZIPNAME is uploaded at your [Google Drive]($GDRIVE_URI)"
