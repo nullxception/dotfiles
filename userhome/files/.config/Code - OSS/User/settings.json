@@ -1,10 +1,18 @@
 {
   "editor.fontFamily": "'Dank Mono', monospace",
   "editor.fontLigatures": true,
-  "editor.formatOnSave": true,
   "telemetry.enableCrashReporter": false,
   "telemetry.enableTelemetry": false,
-  "git.alwaysSignOff": true,
   "workbench.colorTheme": "Yoncé",
-  "editor.fontSize": 12
+  "editor.fontSize": 12,
+  "editor.minimap.enabled": false,
+  "diffEditor.ignoreTrimWhitespace": false,
+  "C_Cpp.clang_format_fallbackStyle": "Google",
+  "window.zoomLevel": 0,
+  "git.alwaysSignOff": true,
+  "editor.formatOnSave": true,
+  "editor.formatOnType": true,
+  "files.eol": "\n",
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true
 }
