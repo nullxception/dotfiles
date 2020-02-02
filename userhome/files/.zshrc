@@ -22,8 +22,8 @@ zplug "lib/directories",  from:oh-my-zsh
 # zplug "paulmelnikow/zsh-startup-timer"
 
 # naisu minimal theme
-MNML_USER_CHAR=$USER
-MNML_INSERT_CHAR='do:'
+MNML_USER_CHAR="[ $USER ]"
+MNML_INSERT_CHAR='.//'
 zplug 'subnixr/minimal', use:minimal.zsh, as:theme
 
 # auto-close quotes and brackets like a pro
