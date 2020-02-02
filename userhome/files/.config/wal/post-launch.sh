@@ -20,13 +20,13 @@ fi
 
 if command -v qdbus 2>&1 /dev/null; then
   # For KDE
-  qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript '
+  qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "
     var a=desktops();
     for(i=0;i<a.length;i++) {
       b=a[i];
-      b.wallpaperPlugin="org.kde.image";
-      b.currentConfigGroup=Array("Wallpaper","org.kde.image","General");
-      b.writeConfig("Image","'$IMG'");
+      b.wallpaperPlugin='org.kde.image';
+      b.currentConfigGroup=Array('Wallpaper','org.kde.image','General');
+      b.writeConfig('Image','$IMG');
     }
-  '
+  "
 fi

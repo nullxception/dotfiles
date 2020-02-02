@@ -6,6 +6,6 @@ Actions=SetAsWallpaper;
 X-KDE-Priority=TopLevel
 
 [Desktop Action SetAsWallpaper]
-Name=Set As Wallpaper (pywal)
+Name=pywal-ify
 Exec=sh -c "wal -i %f -o ~/.config/wal/post-launch.sh"
 Icon=image
