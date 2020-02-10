@@ -72,10 +72,8 @@ report "I'm gonna push *$ZIPNAME* to your Google Drive now."
 
 if [[ -n "$GDRIVE_UPLOAD_PARENT" ]]; then
     gdrive upload --parent $GDRIVE_UPLOAD_PARENT $OUT/$ZIPFILE || GDRIVE_FAIL=1
-    gdrive upload --parent $GDRIVE_UPLOAD_PARENT $OUT/$ZIPFILE.md5sum || GDRIVE_FAIL=1
 else
     gdrive upload $OUT/$ZIPFILE || GDRIVE_FAIL=1
-    gdrive upload $OUT/$ZIPFILE.md5sum || GDRIVE_FAIL=1
 fi
 
 if [[ $GDRIVE_FAIL == 1 ]]; then
@@ -90,3 +88,6 @@ else
 fi
 
 report "$ZIPNAME is uploaded at your [Google Drive]($GDRIVE_URI)"
+report "Hash : " $OUT/$ZIPFILE.md5sum
+report "Metadata : " $OUT/raphael.json
+report "Changelog : " $OUT/Changelog.txt
