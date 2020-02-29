@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
-((return 0 2>/dev/null) || [[ $ZSH_EVAL_CONTEXT =~ :file$ ]]) || {
+if ! (return 0 2>/dev/null || [[ $ZSH_EVAL_CONTEXT =~ :file$ ]]); then
   echo "Please load the file instead."
   echo "example: source ./path/to/android-envkernel"
   exit 1
-}
+fi
 
 # set current directory as kernel dir
 export KERNEL_DIR=$(pwd)
 
-################ 
+################
 # Example of .env content
 #
 # export KBUILD_VERSION_REL=7.5
@@ -22,7 +22,10 @@ export KERNEL_DIR=$(pwd)
 [[ -f "$KERNEL_DIR/../prebuilts/.env" ]] && DOTENV="../prebuilts/.env"
 [[ -f "$KERNEL_DIR/../.env" ]] && DOTENV="$KERNEL_DIR/../.env"
 [[ -f "$KERNEL_DIR/.env" ]] && DOTENV="$KERNEL_DIR/.env"
-[[ -z "$DOTENV" ]] && { echo "no dotenv available. exiting"; exit 1; }
+[[ -z $DOTENV ]] && {
+  echo "no dotenv available. exiting"
+  return
+}
 
 source $DOTENV
 
@@ -32,41 +35,41 @@ export PATH="/usr/lib/ccache/bin/:$ANDROID_CLANG_HOME/bin:$PATH"
 # also insert the clang's libs for additional shared library usage (e.g LTO)
 export LD_LIBRARY_PATH="$ANDROID_CLANG_HOME/lib64:$LD_LIBRARY_PATH"
 
-if [[ -z "$KBUILD_COMPILER_STRING" ]]; then
+if [[ -z $KBUILD_COMPILER_STRING ]]; then
   # remove unused links on clang's version from aosp-clang
   export KBUILD_COMPILER_STRING=$(clang -v |& sed -e '1!d;s/ (http.\+)//g')
 fi
 
-if [[ -z "$OLDPROMPT" ]]; then
+if [[ -z $OLDPROMPT ]]; then
   export OLDPROMPT="$PS1"
   export PS1="(dev) $OLDPROMPT"
 fi
 
 # reset build version at the first time of sourcing this script
-if [[ -d "$KBUILD_OUT" ]]; then
-  echo 0 > $KBUILD_OUT/.version
+if [[ -d $KBUILD_OUT ]]; then
+  echo 0 >$KBUILD_OUT/.version
 fi
 
-mke(){
+mke() {
   mkdir -p $KBUILD_OUT
-  if [[ -z "$KBUILD_VERSION_REL" ]]; then
+  if [[ -z $KBUILD_VERSION_REL ]]; then
     KBUILD_VERSION_REL=$(git rev-list --tags --max-count=1 | xargs git describe --tags)
   fi
   echo "envsetup: Building Version $KBUILD_VERSION_REL."
-  echo "-$KBUILD_VERSION_REL" > {$KERNEL_DIR,$KBUILD_OUT}/.scmversion
+  echo "-$KBUILD_VERSION_REL" >{$KERNEL_DIR,$KBUILD_OUT}/.scmversion
 
   make -j$(nproc --ignore=1) \
     -C $KERNEL_DIR O=$KBUILD_OUT \
     ARCH=arm64 CC=clang CLANG_TRIPLE=aarch64-linux-gnu- $@ |& tee ../mke.log
-  
+
   test -z "$@" && mke_dtimg
 }
 
-mke_dtimg(){
+mke_dtimg() {
   DTOUT=$KBUILD_OUT/dtbo.img
   MKDT=$(which mkdtboimg.py)
 
-  if [[ -f "$MKDT" ]];then
+  if [[ -f $MKDT ]]; then
     echo "Building overlay dt using $MKDT"
     python2 $MKDT \
       create $DTOUT \
@@ -75,13 +78,13 @@ mke_dtimg(){
   fi
 }
 
-cherry-am(){
+cherry-am() {
   co=cherry.patch
-  uri=$(echo $1|cut -d\# -f1)
-  curl -o $co $uri.patch && git am < $co && rm $co
+  uri=$(echo $1 | cut -d\# -f1)
+  curl -o $co $uri.patch && git am <$co && rm $co
 }
 
-env-info(){
+env-info() {
   echo "DotEnv : $DOTENV"
   echo "Target Kernel : $KERNEL_DIR"
   echo "Output : $KBUILD_OUT"
@@ -89,7 +92,7 @@ env-info(){
   echo "Kernel Version: $KBUILD_VERSION_REL"
 }
 
-exit(){
+exit() {
   export PS1="$OLDPROMPT"
   unset KBUILD_COMPILER_STRING OLDPROMPT
   unset -f mke mke_dtimg cherry-am env-info exit

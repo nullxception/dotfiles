@@ -2,23 +2,23 @@
 IMG="$(cat ~/.cache/wal/wal)"
 
 # For awesomewm -- only to send refresh signal
-if command -v awesome-client 2>&1 /dev/null; then
+if command -v awesome-client /dev/null 2>&1; then
   echo 'awesome.emit_signal("pywal::apply")' | awesome-client
 fi
 
 # For XFCE4
-if command -v xfconf-query 2>&1 /dev/null; then
+if command -v xfconf-query /dev/null 2>&1; then
   xfconf-query --channel xfce4-desktop --list | grep last-image | while read path; do
-      xfconf-query --channel xfce4-desktop --property $path --set "$IMG"
+    xfconf-query --channel xfce4-desktop --property $path --set "$IMG"
   done
 fi
 
 # For GNOME
-if command -v gsettings 2>&1 /dev/null; then
+if command -v gsettings /dev/null 2>&1; then
   gsettings set org.gnome.desktop.background picture-uri "file://$IMG"
 fi
 
-if command -v qdbus 2>&1 /dev/null; then
+if command -v qdbus /dev/null 2>&1; then
   # For KDE
   qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "
     var a=desktops();

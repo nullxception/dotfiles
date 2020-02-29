@@ -5,7 +5,7 @@
 #
 
 if command -v git >/dev/null 2>&1; then
-    sudo pacman -S git
+  sudo pacman -S git
 fi
 
 cd /tmp/

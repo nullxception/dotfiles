@@ -7,19 +7,19 @@ GDRIVE_UPLOAD_PARENT=
 [[ -f "$HOME/.kronicrc" ]] && source $HOME/.kronicrc
 
 report() {
-    if [[ -f ${2} ]]; then
-        telegram-send --file "${2}" --caption "${1}"
-    else
-        telegram-send --format markdown "${1}"
-    fi
+  if [[ -f ${2} ]]; then
+    telegram-send --file "${2}" --caption "${1}"
+  else
+    telegram-send --format markdown "${1}"
+  fi
 }
 interrupted() {
-    echo "Script interrupted. exiting immediately."
-    exit 1
+  echo "Script interrupted. exiting immediately."
+  exit 1
 }
 setcache() {
-    CURR=$($CCACHE_EXEC -p | grep max_size | sed -e 's/.*e = \(.*\)\..*G/\1/')
-    [[ "${CURR}G" != "$1" ]] && $CCACHE_EXEC -M $1
+  CURR=$($CCACHE_EXEC -p | grep max_size | sed -e 's/.*e = \(.*\)\..*G/\1/')
+  [[ "${CURR}G" != "$1" ]] && $CCACHE_EXEC -M $1
 }
 
 trap 'interrupted' SIGINT
@@ -28,10 +28,10 @@ export USE_CCACHE=1 CCACHE_DIR="~/.ccache" CCACHE_EXEC=$(which ccache)
 KRONIC_FAIL=0
 GDRIVE_FAIL=0
 if [[ ! -f "build/envsetup.sh" ]]; then
-    echo "you're in the wrong dir. exiting"
-    exit 1
+  echo "you're in the wrong dir. exiting"
+  exit 1
 fi
-[[ -z "$1" ]] && CFG=$DEFAULT_CFG || CFG=$1
+[[ -z $1 ]] && CFG=$DEFAULT_CFG || CFG=$1
 
 CFG_ROM=$(sed -e 's/\(.*\)_\(.*\)-\(.*\)/\1/' <<<$CFG)
 CFG_DEVICE=$(sed -e 's/\(.*\)_\(.*\)-\(.*\)/\2/' <<<$CFG)
@@ -39,8 +39,8 @@ CFG_VARIANT=$(sed -e 's/\(.*\)_\(.*\)-\(.*\)/\3/' <<<$CFG)
 
 echo "Building $CFG_ROM for: $CFG_DEVICE"
 echo "ccache size: $CCACHE_SIZE"
-if [[ -n "$GDRIVE_UPLOAD_PARENT" ]]; then
-    echo "GDrive-upload Parent Location: $GDRIVE_UPLOAD_PARENT"
+if [[ -n $GDRIVE_UPLOAD_PARENT ]]; then
+  echo "GDrive-upload Parent Location: $GDRIVE_UPLOAD_PARENT"
 fi
 
 # cleanup properties
@@ -52,7 +52,7 @@ setcache $CCACHE_SIZE
 source build/envsetup.sh
 
 if [[ -f "$OUT/obj/KERNEL_OBJ/.version" ]]; then
-    echo 0 >$OUT/obj/KERNEL_OBJ/.version
+  echo 0 >$OUT/obj/KERNEL_OBJ/.version
 fi
 
 lunch $CFG || exit 1
@@ -60,13 +60,13 @@ report "Build process of *$CFG_ROM* for *$CFG_DEVICE* started at $(date)"
 mka kronic || KRONIC_FAIL=1
 
 if [[ $KRONIC_FAIL == 1 ]]; then
-    REAL_OUT=$OUT/../../../
-    ERRLOG=/tmp/error-$CFG_ROM-$CFG_DEVICE_$(date +%F__%I-%M%P).buildlog.txt
+  REAL_OUT=$OUT/../../../
+  ERRLOG=/tmp/error-$CFG_ROM-$CFG_DEVICE_$(date +%F__%I-%M%P).buildlog.txt
 
-    report "Shishou, your *$CFG_ROM* build for *$CFG_DEVICE* is failed at $(date)."
-    cp $REAL_OUT/error.log $ERRLOG
-    report "Here is the error log :)" $ERRLOG
-    exit 1
+  report "Shishou, your *$CFG_ROM* build for *$CFG_DEVICE* is failed at $(date)."
+  cp $REAL_OUT/error.log $ERRLOG
+  report "Here is the error log :)" $ERRLOG
+  exit 1
 fi
 
 report "Shishou, your *$CFG_ROM* build for *$CFG_DEVICE* is finished at $(date)."
@@ -75,21 +75,21 @@ ZIPFILE=$(find $OUT/ -maxdepth 1 -name 'DerpFest-*.zip' -printf "%f\n" | sort -n
 ZIPNAME=${ZIPFILE//.zip/}
 report "I'm gonna push *$ZIPNAME* to your Google Drive now."
 
-if [[ -n "$GDRIVE_UPLOAD_PARENT" ]]; then
-    gdrive upload --parent $GDRIVE_UPLOAD_PARENT $OUT/$ZIPFILE || GDRIVE_FAIL=1
+if [[ -n $GDRIVE_UPLOAD_PARENT ]]; then
+  gdrive upload --parent $GDRIVE_UPLOAD_PARENT $OUT/$ZIPFILE || GDRIVE_FAIL=1
 else
-    gdrive upload $OUT/$ZIPFILE || GDRIVE_FAIL=1
+  gdrive upload $OUT/$ZIPFILE || GDRIVE_FAIL=1
 fi
 
 if [[ $GDRIVE_FAIL == 1 ]]; then
-    report "Sumimasen shishou! I can't access your Google Drive :("
-    exit 1
+  report "Sumimasen shishou! I can't access your Google Drive :("
+  exit 1
 fi
 
-if [[ -n "$GDRIVE_UPLOAD_PARENT" ]]; then
-    GDRIVE_URI="https://drive.google.com/drive/folders/${GDRIVE_UPLOAD_PARENT}"
+if [[ -n $GDRIVE_UPLOAD_PARENT ]]; then
+  GDRIVE_URI="https://drive.google.com/drive/folders/${GDRIVE_UPLOAD_PARENT}"
 else
-    GDRIVE_URI="https://drive.google.com/drive"
+  GDRIVE_URI="https://drive.google.com/drive"
 fi
 
 report "$ZIPNAME is uploaded at your [Google Drive]($GDRIVE_URI)"
