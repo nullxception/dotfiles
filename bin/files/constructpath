@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# constructpath - $PATH constructor
+# create a $PATH based on list on arguments
+#
+# example:
+#  constructpath /opt/ghidra/bin /opt/aosp/bin $HOME/bin
+#
+
+typeset -A tempArr
+
+_construct() {
+  paths=$(sed -e 's/\/:/:/g;s/::/:/g;s/^:\//\//g' <<< $1)
+  _IFS=$IFS
+  IFS=':'
+
+  for path in $paths; do
+    eval path=$path
+    [ ! -d "$path" ] && continue
+    [ -z "${tempArr[$path]}" ] || continue
+    tempArr[$path]=${#tempArr[*]}
+    if [ -z "$result" ]; then
+      result="$path"
+    else
+      result="$result:$path"
+    fi
+  done
+
+  IFS=$_IFS
+  echo $result
+}
+
+main() {
+  for path in $@; do
+    paths="$paths:$path"
+  done
+  _construct $paths
+}
+
+main $@
