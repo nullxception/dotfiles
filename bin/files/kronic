@@ -95,4 +95,5 @@ fi
 report "$ZIPNAME is uploaded at your [Google Drive]($GDRIVE_URI)"
 report "Hash : " $OUT/$ZIPFILE.md5sum
 report "Metadata : " $OUT/raphael.json
-report "Changelog : " $OUT/Changelog.txt
+cp $OUT/Changelog.txt $OUT/changelog.txt
+report "Changelog : " $OUT/changelog.txt
