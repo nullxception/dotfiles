@@ -3,97 +3,110 @@ DEFAULT_CFG=derp_raphael-userdebug
 CCACHE_SIZE=50G
 GDRIVE_UPLOAD_PARENT=
 
+if [[ ! -f "build/envsetup.sh" ]]; then
+  echo "you're in the wrong dir. exiting"
+  exit 1
+fi
+
 # Load ~/.kronicrc for easier configuration override
 [[ -f "$HOME/.kronicrc" ]] && source $HOME/.kronicrc
 
-report() {
+[[ -z $1 ]] && CFG=$DEFAULT_CFG || CFG=$1
+cfg_rom=$(sed -e 's/\(.*\)_\(.*\)-\(.*\)/\1/' <<<$CFG)
+cfg_device=$(sed -e 's/\(.*\)_\(.*\)-\(.*\)/\2/' <<<$CFG)
+cfg_variant=$(sed -e 's/\(.*\)_\(.*\)-\(.*\)/\3/' <<<$CFG)
+
+outdir=$(pwd)/out
+outdevicedir=$outdir/target/product/$cfg_device
+
+_interrupted() {
+  echo "Script interrupted. exiting immediately."
+  exit 1
+}
+
+telereport() {
   if [[ -f ${2} ]]; then
     telegram-send --file "${2}" --caption "${1}"
   else
     telegram-send --format markdown "${1}"
   fi
 }
-interrupted() {
-  echo "Script interrupted. exiting immediately."
-  exit 1
-}
-setcache() {
+
+set_ccache() {
+  export USE_CCACHE=1 CCACHE_DIR="~/.ccache" CCACHE_EXEC=$(which ccache)
   CURR=$($CCACHE_EXEC -p | grep max_size | sed -e 's/.*e = \(.*\)\..*G/\1/')
   [[ "${CURR}G" != "$1" ]] && $CCACHE_EXEC -M $1
 }
 
-trap 'interrupted' SIGINT
+cleanup_build_info() {
+  if [[ -d "$outdir/" ]]; then
+    find $outdir/ -maxdepth 1 -type f -iname 'build_*.txt' -print -delete
+    if [[ -d "$outdir/target/product/$cfg_device" ]]; then
+      find $outdir/target/product/$cfg_device -maxdepth 1 -type f -iname 'build_*.txt' -print -delete
+      find $outdir/target/product/$cfg_device -maxdepth 6 -type f -iname 'build.prop' -print -delete
+    fi
+  fi
+  if [[ -f "$outdevicedir/obj/KERNEL_OBJ/.version" ]]; then
+    echo 0 >$outdevicedir/obj/KERNEL_OBJ/.version
+  fi
+}
 
-export USE_CCACHE=1 CCACHE_DIR="~/.ccache" CCACHE_EXEC=$(which ccache)
-KRONIC_FAIL=0
-GDRIVE_FAIL=0
-if [[ ! -f "build/envsetup.sh" ]]; then
-  echo "you're in the wrong dir. exiting"
-  exit 1
-fi
-[[ -z $1 ]] && CFG=$DEFAULT_CFG || CFG=$1
+main() {
+  failed=0
 
-CFG_ROM=$(sed -e 's/\(.*\)_\(.*\)-\(.*\)/\1/' <<<$CFG)
-CFG_DEVICE=$(sed -e 's/\(.*\)_\(.*\)-\(.*\)/\2/' <<<$CFG)
-CFG_VARIANT=$(sed -e 's/\(.*\)_\(.*\)-\(.*\)/\3/' <<<$CFG)
+  echo "Building $cfg_rom for: $cfg_device"
+  if [[ -n $GDRIVE_UPLOAD_PARENT ]]; then
+    echo "GDrive-upload Parent Location: $GDRIVE_UPLOAD_PARENT"
+  fi
 
-echo "Building $CFG_ROM for: $CFG_DEVICE"
-echo "ccache size: $CCACHE_SIZE"
-if [[ -n $GDRIVE_UPLOAD_PARENT ]]; then
-  echo "GDrive-upload Parent Location: $GDRIVE_UPLOAD_PARENT"
-fi
+  source build/envsetup.sh
 
-# cleanup properties
-find out/ -maxdepth 1 -type f -iname 'build_*.txt' -print -delete
-find out/target/product/$CFG_DEVICE/ -maxdepth 1 -type f -iname 'build_*.txt' -print -delete
-find out/target/product/$CFG_DEVICE/ -maxdepth 6 -type f -iname 'build.prop' -print -delete
+  lunch $CFG || exit 1
+  telereport "Build process of *$cfg_rom* for *$cfg_device* started at $(date)"
+  mka kronic || failed=1
 
-setcache $CCACHE_SIZE
-source build/envsetup.sh
+  if [[ $failed == 1 ]]; then
+    errlog=/tmp/error-$cfg_rom-$cfg_device_$(date +%F__%I-%M%P).buildlog.txt
 
-if [[ -f "$OUT/obj/KERNEL_OBJ/.version" ]]; then
-  echo 0 >$OUT/obj/KERNEL_OBJ/.version
-fi
+    telereport "Shishou, your *$cfg_rom* build for *$cfg_device* is failed at $(date)."
+    cp $outdir/error.log $errlog
+    telereport "Here is the error log :)" $errlog
+    exit 1
+  fi
 
-lunch $CFG || exit 1
-report "Build process of *$CFG_ROM* for *$CFG_DEVICE* started at $(date)"
-mka kronic || KRONIC_FAIL=1
+  telereport "Shishou, your *$cfg_rom* build for *$cfg_device* is finished at $(date)."
 
-if [[ $KRONIC_FAIL == 1 ]]; then
-  REAL_OUT=$OUT/../../../
-  ERRLOG=/tmp/error-$CFG_ROM-$CFG_DEVICE_$(date +%F__%I-%M%P).buildlog.txt
+  zipfile=$(find $outdevicedir -maxdepth 1 -name 'DerpFest-*.zip' -printf "%f\n" | sort -n | tail -n1)
+  zipname=${zipfile//.zip/}
+  telereport "I'm gonna push *$zipname* to your Google Drive now."
 
-  report "Shishou, your *$CFG_ROM* build for *$CFG_DEVICE* is failed at $(date)."
-  cp $REAL_OUT/error.log $ERRLOG
-  report "Here is the error log :)" $ERRLOG
-  exit 1
-fi
+  if [[ -n $GDRIVE_UPLOAD_PARENT ]]; then
+    gdrive upload --parent $GDRIVE_UPLOAD_PARENT $outdevicedir/$zipfile || failed=1
+  else
+    gdrive upload $outdevicedir/$zipfile || failed=1
+  fi
 
-report "Shishou, your *$CFG_ROM* build for *$CFG_DEVICE* is finished at $(date)."
+  if [[ $failed == 1 ]]; then
+    telereport "Sumimasen shishou! I can't access your Google Drive :("
+    exit 1
+  fi
 
-ZIPFILE=$(find $OUT/ -maxdepth 1 -name 'DerpFest-*.zip' -printf "%f\n" | sort -n | tail -n1)
-ZIPNAME=${ZIPFILE//.zip/}
-report "I'm gonna push *$ZIPNAME* to your Google Drive now."
+  if [[ -n $GDRIVE_UPLOAD_PARENT ]]; then
+    gdrive_url="https://drive.google.com/drive/folders/$GDRIVE_UPLOAD_PARENT"
+  else
+    gdrive_url="https://drive.google.com/drive"
+  fi
 
-if [[ -n $GDRIVE_UPLOAD_PARENT ]]; then
-  gdrive upload --parent $GDRIVE_UPLOAD_PARENT $OUT/$ZIPFILE || GDRIVE_FAIL=1
-else
-  gdrive upload $OUT/$ZIPFILE || GDRIVE_FAIL=1
-fi
+  cp $outdevicedir/Changelog.txt $outdevicedir/changelog.txt
 
-if [[ $GDRIVE_FAIL == 1 ]]; then
-  report "Sumimasen shishou! I can't access your Google Drive :("
-  exit 1
-fi
+  telereport "$zipname is uploaded at your [Google Drive]($gdrive_url)"
+  telereport "Hash : " $outdevicedir/$zipfile.md5sum
+  telereport "Metadata : " $outdevicedir/raphael.json
+  telereport "Changelog : " $outdevicedir/changelog.txt
+}
 
-if [[ -n $GDRIVE_UPLOAD_PARENT ]]; then
-  GDRIVE_URI="https://drive.google.com/drive/folders/${GDRIVE_UPLOAD_PARENT}"
-else
-  GDRIVE_URI="https://drive.google.com/drive"
-fi
+trap '_interrupted' SIGINT
 
-report "$ZIPNAME is uploaded at your [Google Drive]($GDRIVE_URI)"
-report "Hash : " $OUT/$ZIPFILE.md5sum
-report "Metadata : " $OUT/raphael.json
-cp $OUT/Changelog.txt $OUT/changelog.txt
-report "Changelog : " $OUT/changelog.txt
+set_ccache $CCACHE_SIZE
+cleanup_build_info
+main $@
