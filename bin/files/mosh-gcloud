@@ -45,10 +45,15 @@ main() {
   if [[ -z $instance_addr ]]; then
     echo "$SELF: No instances running, starting instance $instance_name"
     startInstance $instance_name
+  else
+    echo "$SELF: $instance_name: IP Address: $instance_addr"
   fi
 
+  # config and get ssh alias
+  sshalias=$(gcloud compute config-ssh | grep "$ ssh $instance_name." | sed -e 's/.*$ ssh \(.*\)/\1/g')
+
   echo "$SELF: $instance_name: Login via mosh"
-  mosh --ssh='ssh -i ~/.ssh/google_compute_engine' $USER@$instance_addr
+  mosh $sshalias
 }
 
 main $@
