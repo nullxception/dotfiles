@@ -104,7 +104,7 @@ main() {
   telereport "$zipname is uploaded at your [Google Drive]($gdrive_url)"
   telereport "Hash : " $outdevicedir/$zipfile.md5sum
   telereport "Metadata : " $outdevicedir/raphael.json
-  telereport "Changelog : " $outdevicedir/Changelog.txt
+  telereport "Changelog : " $outdevicedir/system/etc/Changelog.txt
 }
 
 trap '_interrupted' SIGINT
