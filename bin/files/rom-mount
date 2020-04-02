@@ -1,0 +1,46 @@
+#!/bin/bash
+#
+# Mount sparsed android system and vendor
+# sparsed file will be transformed to the .img
+# and then will be mounted to the target dir
+#
+# usage :
+#   $ cd path/to/rom/dir
+#   $ rom-mount path/to/target/dir
+#
+
+TARGET=$1
+
+dump() {
+    file=$1
+    targetmount=$2
+    if [[ -f $file.new.dat.br ]]; then
+        echo ":: decompressing $file"
+        brotli --decompress $file.new.dat.br
+        sdat2img $file.transfer.list $file.new.dat $file.img
+        rm -rf $file.{new.dat.br,new.dat,transfer.list,patch.dat}
+        echo ":: decompressing $file done"
+    fi
+    if [[ -f $file.img ]]; then
+        mkdir -p $targetmount
+        echo ":: mounting $file into $targetmount"
+        sudo mount $file.img $targetmount
+        sudo chown -hR "$USER:users" $targetmount
+        echo ":: mounting $file done"
+    fi
+}
+
+if ! ls $(pwd) | grep -qE '(vendor|system)\.(img|new\.dat\.br)'; then
+    echo ":: no system or vendor images to extract, exiting"
+    exit
+fi
+
+if [[ "$TARGET" == "" ]]; then
+    echo ":: target is empty, please run $(basename $0) <target-dir>"
+elif [[ ! -d "$TARGET" ]]; then
+    echo ":: target directory not found, creating ones"
+    mkdir $TARGET
+fi
+
+dump system $TARGET
+dump vendor $TARGET/vendor
