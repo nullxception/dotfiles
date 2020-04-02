@@ -56,7 +56,7 @@ mke() {
     KBUILD_VERSION_REL=$(git rev-list --tags --max-count=1 | xargs git describe --tags)
   fi
   echo "envsetup: Building Version $KBUILD_VERSION_REL."
-  echo "-$KBUILD_VERSION_REL" >{$KERNEL_DIR,$KBUILD_OUT}/.scmversion
+  echo "$KBUILD_VERSION_REL" >{$KERNEL_DIR,$KBUILD_OUT}/.scmversion
 
   make -j$(nproc --ignore=1) \
     -C $KERNEL_DIR O=$KBUILD_OUT \
