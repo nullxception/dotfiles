@@ -55,6 +55,8 @@ cleanup_build_info() {
 main() {
   failed=0
 
+  export TEMPORARY_DISABLE_PATH_RESTRICTIONS=true
+
   echo "Building $cfg_rom for: $cfg_device"
   if [[ -n $GDRIVE_UPLOAD_PARENT ]]; then
     echo "GDrive-upload Parent Location: $GDRIVE_UPLOAD_PARENT"
