@@ -11,7 +11,11 @@ read -p 'email: ' email
 read -p 'Git credential cache time (in hours): ' $pwdtime
 git config --global user.name "$name"
 git config --global user.email "$email"
-[ $pwtime -gt 0 ] && git config --global credential.helper "cache --timeout $((3600 * pwtime))"
+if [[ $pwtime -gt 0 ]]; then
+    git config --global credential.helper "cache --timeout $((3600 * pwtime))"
+else
+    git config --global --unset credential.helper
+fi
 git config --global merge.renamelimit 999999
 git config --global diff.renameLimit 999999
 git config --global alias.merge 'merge --no-ff'
