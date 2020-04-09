@@ -3,10 +3,10 @@
 GRUB_DEFAULT=0
 GRUB_TIMEOUT=5
 GRUB_DISTRIBUTOR="Arch"
-GRUB_CMDLINE_LINUX_DEFAULT="nopti nospectre_v2 spectre_v2_user=off spec_store_bypass_disable=off l1tf=off mitigations=off"
+GRUB_CMDLINE_LINUX_DEFAULT="mitigations=off"
 if cat /proc/cpuinfo | grep -i ryzen > /dev/null 2>&1; then
   # Specific kernel fix and mods for Ryzen
-  GRUB_CMDLINE_LINUX_DEFAULT+=" idle=nomwait processor.max_cstate=5"
+  GRUB_CMDLINE_LINUX_DEFAULT+=" idle=nomwait iommu=pt"
   GRUB_CMDLINE_LINUX_DEFAULT+=" amdgpu.ppfeaturemask=0xffffffff"
 fi
 GRUB_CMDLINE_LINUX=""
