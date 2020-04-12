@@ -1,0 +1,24 @@
+module_install() {
+  ff_dir=$HOME/.mozilla/firefox
+
+  if [[ ! -f $ff_dir/profiles.ini ]]; then
+    echo "no firefox profile detected, creating a new ones"
+    printf '%s\n' \
+      "[General]" \
+      "StartWithLastProfile=1" \
+      "[Profile0]" \
+      "Name=default" \
+      "IsRelative=1" \
+      "Path=00000001.default" \
+      "Default=1" >$ff_dir/profiles.ini
+
+    mkdir -p $ff_dir/00000001.default
+  fi
+
+  awk '/\[/{prefix=$0; next} $1{print prefix $0}' $ff_dir/profiles.ini | grep Path | sed -e 's/.*Path=//g' | while read profile; do
+    if [[ -d $ff_dir/$profile ]]; then
+      echo ":: Copy user.js to $profile"
+      cp -af $dotfiles/$mod/user.js $ff_dir/$profile
+    fi
+  done
+}

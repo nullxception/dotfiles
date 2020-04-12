@@ -19,30 +19,26 @@ This is a dotfiles repo, which is a set of some configurations that commonly use
 It was supposed to helps me config my fresh machine faster, but also act as an archive in case someones want to know my setup.
 So, don't be shy, give a ⭐️ if some configs can helps you :)
 
-## Structures
+## Installation and Structures
 
-I'm not an expert in abstraction-stuff.
-So, as you can see, mines are pretty simple :
-
-```
-<module-name>/install.sh
-```
-Just like the name, it's a simple shell script that will process/copy required files/folders to the destination that already setted-up inside the script.
+For the installation, you can run :
 
 ```
-<module-name>/files/*
+./install.sh <module-name>
 ```
-The files and folders inside of it are supposed to be things that `install.sh` would be processed/copied to the actual destination, such as actual configuration, encrypted blobs, etc.
+
+The `install.sh` will source configuration files inside the module folder; `<module-name>/.moduleinst`.
+So the structures is quite simple and straightforward, everything except `.moduleinst` is a files/folder that will be installed to the `$module_target` that provided in `.moduleinst`.
 
 ### Special `scripts` directory
 
 As you can see, there's a `bin` and `scripts` on this modular repo.
 
 #### bin
-this is a module that contains _executable_ files that will be installed by `bin/install.sh` and will accessible from $PATH after that.
+this is a module that contains _executable_ files that _installable_ and will accessible from user `$PATH` once it's installed.
 
 #### scripts
-unlike `bin`, this directory are only meant to store executable scripts that I have, except I don't want it to be installed on my $PATH, so that's why it doesn't have `install.sh` script.
+unlike `bin`, this directory are only meant to store executable scripts that I have, except I don't want it to be installed on my $PATH, so that's why it's not _installable_.
 
 ## License
 
