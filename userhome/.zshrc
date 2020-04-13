@@ -2,7 +2,7 @@ export EDITOR="vim"
 export ZPLUG_HOME=$HOME/.zplug
 
 # user profile
-source $HOME/.profile
+[[ $PROFILE_SOURCED != 1 ]] && source $HOME/.profile
 
 # zplug initialization
 [[ ! -f $ZPLUG_HOME/init.zsh ]] && git clone https://github.com/zplug/zplug $ZPLUG_HOME
