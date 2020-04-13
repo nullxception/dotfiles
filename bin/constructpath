@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 # constructpath - $PATH constructor
 # create a $PATH based on list on arguments
 #

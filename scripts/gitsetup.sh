@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 #
 # gitsetup.sh
 # a helper script to setup git for the first time

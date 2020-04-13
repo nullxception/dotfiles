@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 if ! (return 0 2>/dev/null || [[ $ZSH_EVAL_CONTEXT =~ :file$ ]]); then
   echo "Please load the file instead."
   echo "example: source ./path/to/android-envkernel"

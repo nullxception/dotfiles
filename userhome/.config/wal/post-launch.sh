@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 IMG="$(cat ~/.cache/wal/wal)"
 
 # For awesomewm -- only to send refresh signal

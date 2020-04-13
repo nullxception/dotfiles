@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 #
 # gdrive.sh
 # a helper to compile gdrive cli with custom API
