@@ -2,6 +2,7 @@ module_target="/etc"
 module_use_sudo="true"
 
 module_postinstall() {
+    sudo sysctl -p /etc/sysctl.d/*
     sudo mkinitcpio -p linux
     sudo grub-mkconfig -o /boot/grub/grub.cfg
 }
