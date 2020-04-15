@@ -1,7 +1,8 @@
 // Mozilla User Preferences
 user_pref("dom.webnotifications.enabled", false);
 user_pref("services.sync.engine.passwords", false);
-user_pref("security.ask_for_password", 0);
+user_pref("services.sync.prefs.sync.signon.rememberSignons", false);
+user_pref("signon.rememberSignons", false);
 user_pref("privacy.donottrackheader.enable", true);
 user_pref("privacy.resistFingerprintin", true);
 user_pref("geo.enabled", false);
