@@ -6,54 +6,57 @@
 #   $ mosh-gcloud <instance_name>
 #
 
-SELF=$(basename $0)
+log() {
+    TAG=$(basename $0)
+    printf "$TAG: %s\n" "$1"
+}
 
 getInstanceIP() {
-  gcloud --format="value(networkInterfaces[0].accessConfigs[0].natIP)" compute instances list
+    gcloud --format="value(networkInterfaces[0].accessConfigs[0].natIP)" compute instances list
 }
 
 startInstance() {
-  gcloud compute instances start $1
+    gcloud compute instances start $1
 
-  sleep 5
-  instance_addr=$(getInstanceIP)
-  echo "$SELF: $instance_name: IP Address: $instance_addr"
+    sleep 5
+    instance_addr=$(getInstanceIP)
+    log "$instance_name: IP Address: $instance_addr"
 
-  echo "$SELF: $instance_name: Starting mosh-server"
-  gcloud compute ssh chaldea --command='mosh-server'
-  sleep 5
+    log "$instance_name: Starting mosh-server"
+    gcloud compute ssh chaldea --command='mosh-server'
+    sleep 5
 }
 
 main() {
-  if [[ -z "$(which ssh)" ]]; then
-    echo "$SELF: ssh is not installed, exiting."
-    exit 1
-  elif [[ -z "$(which mosh)" ]]; then
-    echo "$SELF: mosh is not installed, exiting."
-    exit 1
-  elif [[ -z "$(which gcloud)" ]]; then
-    echo "$SELF: gcloud cli is not installed, exiting."
-    exit 1
-  elif [[ -z $1 ]]; then
-    echo "$SELF: Instance name is not provided, exiting."
-    exit 1
-  fi
+    if [[ -z "$(which ssh)" ]]; then
+        log "ssh is not installed, exiting."
+        exit 1
+    elif [[ -z "$(which mosh)" ]]; then
+        log "mosh is not installed, exiting."
+        exit 1
+    elif [[ -z "$(which gcloud)" ]]; then
+        log "gcloud cli is not installed, exiting."
+        exit 1
+    elif [[ -z $1 ]]; then
+        log "Instance name is not provided, exiting."
+        exit 1
+    fi
 
-  instance_name=$1
-  instance_addr=$(getInstanceIP)
+    instance_name=$1
+    instance_addr=$(getInstanceIP)
 
-  if [[ -z $instance_addr ]]; then
-    echo "$SELF: No instances running, starting instance $instance_name"
-    startInstance $instance_name
-  else
-    echo "$SELF: $instance_name: IP Address: $instance_addr"
-  fi
+    if [[ -z $instance_addr ]]; then
+        log "No instances running, starting instance $instance_name"
+        startInstance $instance_name
+    else
+        log "$instance_name: IP Address: $instance_addr"
+    fi
 
-  # config and get ssh alias
-  sshalias=$(gcloud compute config-ssh | grep "$ ssh $instance_name." | sed -e 's/.*$ ssh \(.*\)/\1/g')
+    # config and get ssh alias
+    sshalias=$(gcloud compute config-ssh | grep "$ ssh $instance_name." | sed -e 's/.*$ ssh \(.*\)/\1/g')
 
-  echo "$SELF: $instance_name: Login via mosh"
-  mosh $sshalias
+    log "$instance_name: Login via mosh"
+    mosh $sshalias
 }
 
 main $@

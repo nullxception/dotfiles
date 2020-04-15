@@ -9,20 +9,25 @@
 dotfiles=$(realpath $(dirname $0))
 mod=$(basename $(realpath $1))
 
+log() {
+    TAG=$(basename $0)
+    printf "$TAG: %s\n" "$1"
+}
+
 fun_exists() {
     declare -f -F $1 > /dev/null
     return $?
 }
 
 if [[ ! -f $dotfiles/$mod/.moduleinst ]]; then
-    echo ":: .moduleinst for $mod doesn't exists. aborting"
+    log ".moduleinst for $mod doesn't exists. aborting"
     exit 1
 fi
 
 source $dotfiles/$mod/.moduleinst
 
 if fun_exists module_install; then
-    echo ":: using custom install method for $mod"
+    log "using custom install method for $mod"
     module_install
     exit $?
 fi
@@ -32,9 +37,9 @@ if fun_exists module_preinstall; then
     module_preinstall
 fi
 
-echo "installing $mod to $target"
+log "installing $mod to $target"
 
-[[ "$module_use_sudo" == "true" ]] && PREFX="sudo" || PREFX=""
+[[ $module_use_sudo == "true" ]] && PREFX="sudo" || PREFX=""
 $PREFX mkdir -p $target
 $PREFX cp -af $dotfiles/$mod/. $target/
 $PREFX rm $target/.moduleinst
