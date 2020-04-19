@@ -12,9 +12,10 @@ fi
 [[ -f "$HOME/.kronicrc" ]] && source $HOME/.kronicrc
 
 [[ -z $1 ]] && CFG=$DEFAULT_CFG || CFG=$1
-cfg_rom=$(sed -e 's/\(.*\)_\(.*\)-\(.*\)/\1/' <<< $CFG)
-cfg_device=$(sed -e 's/\(.*\)_\(.*\)-\(.*\)/\2/' <<< $CFG)
-cfg_variant=$(sed -e 's/\(.*\)_\(.*\)-\(.*\)/\3/' <<< $CFG)
+cfg=($(sed -e 's/_/ /;s/-/ /;' <<< "$CFG"))
+cfg_rom=${cfg[0]}
+cfg_device=${cfg[1]}
+cfg_variant=${cfg[2]}
 
 outdir=$(pwd)/out
 outdevicedir=$outdir/target/product/$cfg_device
