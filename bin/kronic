@@ -2,6 +2,7 @@
 DEFAULT_CFG=derp_raphael-userdebug
 CCACHE_SIZE=50G
 GDRIVE_UPLOAD_PARENT=
+KERNEL_SCMVERSION_CUSTOM=
 
 if [[ ! -f "build/envsetup.sh" ]]; then
     echo "you're in the wrong dir. exiting"
@@ -50,6 +51,10 @@ cleanup_build_info() {
     fi
     if [[ -f "$outdevicedir/obj/KERNEL_OBJ/.version" ]]; then
         echo 0 > $outdevicedir/obj/KERNEL_OBJ/.version
+    fi
+    if [[ ! -z "$KERNEL_SCMVERSION_CUSTOM" ]]; then
+        mkdir -p $outdevicedir/obj/KERNEL_OBJ
+        echo $KERNEL_SCMVERSION_CUSTOM > $outdevicedir/obj/KERNEL_OBJ/.scmversion
     fi
 }
 
