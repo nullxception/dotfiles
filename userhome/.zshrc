@@ -4,6 +4,9 @@ export ZPLUG_HOME=$HOME/.zplug
 # user profile
 [[ $PROFILE_SOURCED != 1 ]] && source $HOME/.profile
 
+# lutris custom wine
+source $HOME/.winelutris
+
 # zplug initialization
 [[ ! -f $ZPLUG_HOME/init.zsh ]] && git clone https://github.com/zplug/zplug $ZPLUG_HOME
 source $ZPLUG_HOME/init.zsh
