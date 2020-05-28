@@ -5,7 +5,7 @@ if [ "$LUTRIS_WINE_SOURCED" != 1 ] && [ -f $LUTRIS_WINEFOLDERS/$LUTRIS_WINEVER/b
     export WINE=$LUTRIS_WINEFOLDERS/$LUTRIS_WINEVER/bin/wine
     export PATH="$LUTRIS_WINEFOLDERS/$LUTRIS_WINEVER/bin:$PATH"
     export WINEPREFIX=$HOME/.wine
-    export WINEDLLOVERRIDES="d3d10core,d3d11,d3d9,dxgi=n;winemenubuilder.exe=d"
+    export WINEDLLOVERRIDES="d3d10core,d3d11,d3d9,dxgi=n;winemenubuilder.exe=d;winhttp=n,b"
     export WINEESYNC=1
     export WINEDEBUG=-all
     export LUTRIS_WINE_SOURCED=1
