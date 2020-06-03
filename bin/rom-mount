@@ -29,8 +29,7 @@ dump() {
     if [[ -f $file.img ]]; then
         mkdir -p $targetmount
         log "mounting $file into $targetmount"
-        sudo mount $file.img $targetmount
-        sudo chown -hR "$USER:users" $targetmount
+        sudo mount -o ro $file.img $targetmount
         log "mounting $file done"
     fi
 }
