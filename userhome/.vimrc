@@ -35,7 +35,10 @@ set number
 set cursorline
 set nowrap
 
-colorscheme wal
+let themename="wal"
+if findfile("colors/" .themename.".vim", &rtp) != ""
+    execute "colorscheme " . themename
+endif
 
 hi EndOfBuffer ctermfg=NONE
 hi LineNr term=bold cterm=NONE ctermfg=7 ctermbg=NONE
