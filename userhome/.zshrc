@@ -30,8 +30,12 @@ zplug "lib/directories",  from:oh-my-zsh
 # zplug "paulmelnikow/zsh-startup-timer"
 
 # naisu minimal theme
-MNML_USER_CHAR="[ $USER ]"
-MNML_INSERT_CHAR='.//'
+mnml_entry() {
+  echo -n "%{\e[1m%}::%{\e[21m%}"
+}
+MNML_OK_COLOR="1"
+MNML_USER_CHAR="[ %{\e[1m%}$USER%{\e[21m%} ]"
+MNML_PROMPT=(mnml_status mnml_ssh mnml_pyenv mnml_entry)
 zplug 'subnixr/minimal', use:minimal.zsh, as:theme
 
 # auto-close quotes and brackets like a pro
