@@ -6,10 +6,6 @@ user_pref("signon.rememberSignons", false);
 user_pref("privacy.donottrackheader.enable", true);
 user_pref("privacy.resistFingerprintin", true);
 user_pref("geo.enabled", false);
-// Fix invisible text on dark themes
-user_pref("widget.chrome.allow-gtk-dark-theme", true);
-user_pref("widget.content.allow-gtk-dark-theme", true);
-user_pref("widget.content.gtk-theme-override", "Adwaita"); // or any other light themes
 // Fix HTML5 video tearing
 user_pref("layers.acceleration.force-enabled", true);
 // Scrolling Tweaks
@@ -28,3 +24,11 @@ user_pref("mousewheel.system_scroll_override_on_root_content.horizontal.factor",
 user_pref("mousewheel.system_scroll_override_on_root_content.vertical.factor", 175);
 user_pref("toolkit.scrollbox.horizontalScrollDistance", 6);
 user_pref("toolkit.scrollbox.verticalScrollDistance", 2);
+// Fix invisible text on dark themes
+user_pref("widget.content.allow-gtk-dark-theme", true);
+// Enable customChrome.css
+user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);
+// Enable CSD
+user_pref("browser.tabs.drawInTitlebar", true);
+// Enable SVG context-propertes
+user_pref("svg.context-properties.content.enabled", true);
