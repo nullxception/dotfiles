@@ -7,8 +7,8 @@ Xft.rgba:                 rgb
 
 URxvt.geometry:           74x14
 URxvt.intensityStyles:    false
-URxvt.font:               xft:Fira Code:bold:size=8, xft:TakaoMincho:bold:size=8:hintstyle=hintnone
-URxvt.boldFont:           xft:Fira Code:bold:size=8, xft:TakaoMincho:bold:size=8:hintstyle=hintnone
+URxvt.font:               xft:JetBrains Mono Medium:size=8, xft:TakaoMincho:bold:size=8:hintstyle=hintnone
+URxvt.boldFont:           xft:JetBrains Mono Medium:size=8, xft:TakaoMincho:bold:size=8:hintstyle=hintnone
 URxvt.saveLines:          8192
 URxvt*letterSpace: -1
 

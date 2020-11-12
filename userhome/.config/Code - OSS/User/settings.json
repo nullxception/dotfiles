@@ -1,5 +1,5 @@
 {
-  "editor.fontFamily": "'Dank Mono', monospace",
+  "editor.fontFamily": "'JetBrains Mono Medium', monospace",
   "editor.fontLigatures": true,
   "telemetry.enableCrashReporter": false,
   "telemetry.enableTelemetry": false,
