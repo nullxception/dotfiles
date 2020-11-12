@@ -7,9 +7,12 @@ module_install() {
   fi
 
   awk '/\[/{prefix=$0; next} $1{print prefix $0}' $ff_dir/profiles.ini | grep Path | sed -e 's/.*Path=//g' | while read profile; do
-    if [[ -d $ff_dir/$profile ]]; then
-      echo ":: Copy user.js to $profile"
+    if [[ -f $ff_dir/$profile/prefs.js ]]; then
+      echo ":: Install user.js to $profile"
       cp -af $dotfiles/$mod/user.js $ff_dir/$profile
+      mkdir -p $ff_dir/$profile/chrome
+      echo ":: Install userChrome.css to $profile"
+      cp -af $dotfiles/$mod/userChrome.css $ff_dir/$profile/chrome/
     fi
   done
 }
