@@ -35,6 +35,10 @@
   "terminal.integrated.fontSize": 12,
   "terminal.integrated.fontWeight": "bold",
   "terminal.integrated.rendererType": "canvas",
+  "terminal.integrated.detectLocale": "off",
+  "terminal.integrated.env.linux": {
+      "LC_ALL":"en_US.UTF-8"
+  },
   "window.newWindowDimensions": "maximized",
   "workbench.colorTheme": "Yoncé",
   "workbench.tree.indent": 10,
