@@ -7,7 +7,6 @@
 #
 
 dotfiles=$(realpath $(dirname $0))
-mod=$(basename $(realpath $1))
 
 log() {
     TAG=$(basename $0)
@@ -19,10 +18,24 @@ fun_exists() {
     return $?
 }
 
-if [[ ! -f $dotfiles/$mod/.moduleinst ]]; then
-    log ".moduleinst for $mod doesn't exists. aborting"
+usage() {
+cat <<EOF
+Dotfiles install script
+
+Usage :
+  $(basename $0) [module-name]
+
+EOF
+}
+
+if [[ -z "$1" ]];then
+    usage
+    exit 1
+elif [[ ! -f "$dotfiles/$1/.moduleinst" ]]; then
+    log ".moduleinst for \"$1\" doesn't exists. aborting"
     exit 1
 fi
+mod=$(basename $(realpath $1))
 
 source $dotfiles/$mod/.moduleinst
 
