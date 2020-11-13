@@ -15,8 +15,6 @@ findstring(){
 }
 
 alias :q="exit"
-alias {ed,emacs,nano,v,vi}="vim"
-alias {yaourt,yay}="trizen"
 alias admesg="adb shell su -c dmesg"
 alias alog="adb logcat"
 alias aroot="adb shell su -c"
