@@ -6,10 +6,10 @@
 #   ./install.sh <module-name>
 #
 
-dotfiles=$(realpath $(dirname $0))
+dotfiles=$(realpath "$(dirname "$0")")
 
 log() {
-    TAG=$(basename $0)
+    TAG=$(basename "$0")
     printf "$TAG: %s\n" "$1"
 }
 
@@ -23,7 +23,7 @@ cat <<EOF
 Dotfiles install script
 
 Usage :
-  $(basename $0) [module-name]
+  $(basename "$0") [module-name]
 
 EOF
 }
@@ -35,9 +35,9 @@ elif [[ ! -f "$dotfiles/$1/.moduleinst" ]]; then
     log ".moduleinst for \"$1\" doesn't exists. aborting"
     exit 1
 fi
-mod=$(basename $(realpath $1))
+mod=$(basename "$(realpath "$1")")
 
-source $dotfiles/$mod/.moduleinst
+source "$dotfiles/$mod/.moduleinst"
 
 if fun_exists module_install; then
     log "using custom install method for $mod"
@@ -45,7 +45,7 @@ if fun_exists module_install; then
     exit $?
 fi
 
-target=$(realpath -m $module_target)
+target=$(realpath -m "$module_target")
 if fun_exists module_preinstall; then
     module_preinstall
 fi
@@ -53,9 +53,9 @@ fi
 log "installing $mod to $target"
 
 [[ $module_use_sudo == "true" ]] && PREFX="sudo" || PREFX=""
-$PREFX mkdir -p $target
-$PREFX cp -af $dotfiles/$mod/. $target/
-$PREFX rm $target/.moduleinst
+$PREFX mkdir -p "$target"
+$PREFX cp -af "$dotfiles/$mod/." "$target/"
+$PREFX rm "$target/.moduleinst"
 
 if fun_exists module_postinstall; then
     module_postinstall
