@@ -1,20 +1,17 @@
-export EDITOR="vim"
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+
 export ZPLUG_HOME=$HOME/.zplug
 
-safesource() {
-  if [[ -f "$1" ]]; then
-    source $1
-  fi
-}
 # user profile
-[[ $PROFILE_SOURCED != 1 ]] && safesource $HOME/.profile
+[[ $PROFILE_SOURCED != 1 && -f $HOME/.profile ]] && source $HOME/.profile
 
 # lutris custom wine
-safesource $HOME/.winelutris
+[[ -f $HOME/.winelutris ]] && source $HOME/.winelutris
 
 # zplug initialization
 [[ ! -f $ZPLUG_HOME/init.zsh ]] && git clone https://github.com/zplug/zplug $ZPLUG_HOME
-safesource $ZPLUG_HOME/init.zsh
+source $ZPLUG_HOME/init.zsh
 
 # do self-manage
 zplug 'zplug/zplug', hook-build:'zplug --self-manage'
@@ -63,7 +60,7 @@ rehash_precmd() {
 }
 add-zsh-hook -Uz precmd rehash_precmd
 
-# load my own aliases
+# load command aliases
 [[ -f $HOME/.aliases ]] && source $HOME/.aliases
 
 # finally. paint the terminal emulator!
