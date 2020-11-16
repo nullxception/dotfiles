@@ -1,0 +1,8 @@
+# Detect MS-Build config dir first
+if [[ -d "$HOME/.config/Code" ]]; then
+    module_target="$HOME/.config/Code/User"
+else
+    # Assuming OSS Build is used
+    module_target="$HOME/.config/Code - OSS/User"
+fi
+module_use_sudo="false"
