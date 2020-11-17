@@ -1,67 +1,61 @@
+# user profile for fallback initialization (primitive environment cases)
+[[ $PROFILE_SOURCED != 1 && -f ~/.profile ]] && source ~/.profile
+
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
-export ZPLUG_HOME=$HOME/.zplug
+# check if zinit is not exists
+[[ -d ~/.zinit ]] || mkdir ~/.zinit
+[[ -f ~/.zinit/bin/zinit.zsh ]] || git clone https://github.com/zdharma/zinit.git ~/.zinit/bin
 
-# user profile
-[[ $PROFILE_SOURCED != 1 && -f $HOME/.profile ]] && source $HOME/.profile
+# Initialize zinit
+source ~/.zinit/bin/zinit.zsh
+autoload -Uz _zinit
+(( ${+_comps} )) && _comps[zinit]=_zinit
 
-# lutris custom wine
-[[ -f $HOME/.winelutris ]] && source $HOME/.winelutris
-
-# zplug initialization
-[[ ! -f $ZPLUG_HOME/init.zsh ]] && git clone https://github.com/zplug/zplug $ZPLUG_HOME
-source $ZPLUG_HOME/init.zsh
-
-# do self-manage
-zplug 'zplug/zplug', hook-build:'zplug --self-manage'
-
-# load nice libs from oh-my-zsh
-zplug "lib/completion",   from:oh-my-zsh
-zplug "lib/history",      from:oh-my-zsh
-zplug "lib/key-bindings", from:oh-my-zsh
-zplug "lib/termsupport",  from:oh-my-zsh
-zplug "lib/directories",  from:oh-my-zsh
-
-# for speed debug. mine ? 230ms, not bad tho
-# zplug "paulmelnikow/zsh-startup-timer"
-
-# naisu minimal theme
+# Theme
 MNML_USER_CHAR="[ $USER ]"
 MNML_INSERT_CHAR='.//'
-zplug 'subnixr/minimal', use:minimal.zsh, as:theme
+zinit wait='!' depth=1 lucid for subnixr/minimal
 
-# auto-close quotes and brackets like a pro
-zplug 'hlissner/zsh-autopair', defer:2
+# Plugins
+zinit wait depth=1 lucid for \
+  hlissner/zsh-autopair \
+  atinit="zicompinit; zicdreplay" \
+    zdharma/fast-syntax-highlighting
 
-# another eyecandy
-zplug 'zdharma/fast-syntax-highlighting', defer:2, hook-load:'FAST_HIGHLIGHT=()'
-
-# finally install and load those plugins
-zplug check || zplug install
-zplug load
+# Snippets
+zinit lucid light-mode for \
+  OMZ::lib/completion.zsh \
+  OMZ::lib/directories.zsh \
+  OMZ::lib/history.zsh \
+  OMZ::lib/key-bindings.zsh \
+  OMZ::lib/termsupport.zsh
 
 # returning command and folder completion when line is empty
 # like a bash, but better
 blanktab() { [[ $#BUFFER == 0 ]] && CURSOR=3 zle list-choices || zle expand-or-complete }
 zle -N blanktab && bindkey '^I' blanktab
 
-# On-demand rehash
-zshcache_time="$(date +%s%N)"
-autoload -Uz add-zsh-hook
-rehash_precmd() {
-  if [[ -a /var/cache/zsh/pacman ]]; then
+# On-demand rehash for pacman
+if command -v pacman > /dev/null; then
+  zshcache_time="$(date +%s%N)"
+  rehash_precmd() {
+    [[ -a /var/cache/zsh/pacman ]] || return
     local paccache_time="$(date -r /var/cache/zsh/pacman +%s%N)"
     if (( zshcache_time < paccache_time )); then
-      rehash
-      zshcache_time="$paccache_time"
+      rehash && zshcache_time="$paccache_time"
     fi
-  fi
-}
-add-zsh-hook -Uz precmd rehash_precmd
+  }
+  autoload -Uz add-zsh-hook
+  add-zsh-hook -Uz precmd rehash_precmd
+fi
 
 # load command aliases
-[[ -f $HOME/.aliases ]] && source $HOME/.aliases
+[[ -f ~/.aliases ]] && source ~/.aliases
+
+# lutris custom wine
+[[ -f ~/.winelutris ]] && source ~/.winelutris
 
 # finally. paint the terminal emulator!
 [[ -f ~/.cache/wal/sequences ]] && (cat ~/.cache/wal/sequences &)
