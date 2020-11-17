@@ -5,8 +5,10 @@
 [[ $- != *i* ]] && return
 
 # check if zinit is not exists
-[[ -d ~/.zinit ]] || mkdir ~/.zinit
-[[ -f ~/.zinit/bin/zinit.zsh ]] || git clone https://github.com/zdharma/zinit.git ~/.zinit/bin
+[[ -f ~/.zinit/bin/zinit.zsh ]] || {
+    mkdir -p ~/.zinit
+    git clone --depth=1 https://github.com/zdharma/zinit.git ~/.zinit/bin
+}
 
 # Initialize zinit
 source ~/.zinit/bin/zinit.zsh
@@ -26,11 +28,11 @@ zinit wait depth=1 lucid for \
 
 # Snippets
 zinit lucid light-mode for \
-    OMZ::lib/completion.zsh \
-    OMZ::lib/directories.zsh \
-    OMZ::lib/history.zsh \
-    OMZ::lib/key-bindings.zsh \
-    OMZ::lib/termsupport.zsh
+    OMZL::completion.zsh \
+    OMZL::directories.zsh \
+    OMZL::history.zsh \
+    OMZL::key-bindings.zsh \
+    OMZL::termsupport.zsh
 
 # returning command and folder completion when line is empty
 # like a bash, but better
