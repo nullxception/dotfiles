@@ -14,12 +14,12 @@ log() {
 }
 
 fun_exists() {
-    declare -f -F $1 > /dev/null
+    declare -f -F $1 >/dev/null
     return $?
 }
 
 usage() {
-cat <<EOF
+    cat <<EOF
 Dotfiles install script
 
 Usage :
@@ -28,7 +28,7 @@ Usage :
 EOF
 }
 
-if [[ -z "$1" ]];then
+if [[ -z "$1" ]]; then
     usage
     exit 1
 elif [[ ! -f "$dotfiles/$1/.moduleinst" ]]; then

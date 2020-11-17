@@ -12,8 +12,8 @@ log() {
 
 listfromlargest() {
     find $1 -type f \! -type l -printf '%s@%p\n' | sort -nr | while read file; do
-        path=$(cut -d@ -f2 <<< $file)
-        size_b=$(cut -d@ -f1 <<< $file)
+        path=$(cut -d@ -f2 <<<$file)
+        size_b=$(cut -d@ -f1 <<<$file)
         if [ $size_b -gt 1024000 ]; then
             siz=$((size_b / 1024 / 1024))
             typ="MB"

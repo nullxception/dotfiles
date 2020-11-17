@@ -1,5 +1,5 @@
 #!/bin/bash
-if ! (return 0 2> /dev/null || [[ $ZSH_EVAL_CONTEXT =~ :file$ ]]); then
+if ! (return 0 2>/dev/null || [[ $ZSH_EVAL_CONTEXT =~ :file$ ]]); then
     echo "Please load the file instead."
     echo "example: source ./path/to/android-envkernel"
     exit 1
@@ -47,7 +47,7 @@ fi
 
 # reset build version at the first time of sourcing this script
 if [[ -d $KBUILD_OUT ]]; then
-    echo 0 > $KBUILD_OUT/.version
+    echo 0 >$KBUILD_OUT/.version
 fi
 
 mke() {
@@ -56,7 +56,7 @@ mke() {
         KBUILD_VERSION_REL=$(git rev-list --tags --max-count=1 | xargs git describe --tags)
     fi
     echo "envsetup: Building Version $KBUILD_VERSION_REL."
-    echo "$KBUILD_VERSION_REL" > {$KERNEL_DIR,$KBUILD_OUT}/.scmversion
+    echo "$KBUILD_VERSION_REL" >{$KERNEL_DIR,$KBUILD_OUT}/.scmversion
 
     make -j$(nproc --ignore=1) \
         -C $KERNEL_DIR O=$KBUILD_OUT \
@@ -81,7 +81,7 @@ mke_dtimg() {
 cherry-am() {
     co=cherry.patch
     uri=$(echo $1 | cut -d\# -f1)
-    curl -o $co $uri.patch && git am < $co && rm $co
+    curl -o $co $uri.patch && git am <$co && rm $co
 }
 
 env-info() {

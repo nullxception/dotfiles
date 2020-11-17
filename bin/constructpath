@@ -9,7 +9,7 @@
 typeset -A tempArr
 
 _construct() {
-    paths=$(sed -e 's/\/:/:/g;s/::/:/g;s/^:\//\//g' <<< "$1")
+    paths=$(sed -e 's/\/:/:/g;s/::/:/g;s/^:\//\//g' <<<"$1")
     _IFS=$IFS
     IFS=':'
 

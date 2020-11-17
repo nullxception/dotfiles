@@ -4,7 +4,7 @@
 # a helper script to compile trizen AUR Manager
 #
 
-if command -v git > /dev/null 2>&1; then
+if command -v git >/dev/null  2>&1; then
     sudo pacman -S git
 fi
 

@@ -13,7 +13,7 @@ fi
 [[ -f "$HOME/.kronicrc" ]] && source $HOME/.kronicrc
 
 [[ -z $1 ]] && CFG=$DEFAULT_CFG || CFG=$1
-cfg=($(sed -e 's/_/ /;s/-/ /;' <<< "$CFG"))
+cfg=($(sed -e 's/_/ /;s/-/ /;' <<<"$CFG"))
 cfg_rom=${cfg[0]}
 cfg_device=${cfg[1]}
 cfg_variant=${cfg[2]}
@@ -50,11 +50,11 @@ cleanup_build_info() {
         fi
     fi
     if [[ -f "$outdevicedir/obj/KERNEL_OBJ/.version" ]]; then
-        echo 0 > $outdevicedir/obj/KERNEL_OBJ/.version
+        echo 0 >$outdevicedir/obj/KERNEL_OBJ/.version
     fi
     if [[ ! -z "$KERNEL_SCMVERSION_CUSTOM" ]]; then
         mkdir -p $outdevicedir/obj/KERNEL_OBJ
-        echo $KERNEL_SCMVERSION_CUSTOM > $outdevicedir/obj/KERNEL_OBJ/.scmversion
+        echo $KERNEL_SCMVERSION_CUSTOM >$outdevicedir/obj/KERNEL_OBJ/.scmversion
     fi
 }
 

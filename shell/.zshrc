@@ -20,17 +20,17 @@ zinit wait='!' depth=1 lucid for subnixr/minimal
 
 # Plugins
 zinit wait depth=1 lucid for \
-  hlissner/zsh-autopair \
-  atinit="zicompinit; zicdreplay" \
-    zdharma/fast-syntax-highlighting
+    hlissner/zsh-autopair \
+    atinit="zicompinit; zicdreplay" \
+        zdharma/fast-syntax-highlighting
 
 # Snippets
 zinit lucid light-mode for \
-  OMZ::lib/completion.zsh \
-  OMZ::lib/directories.zsh \
-  OMZ::lib/history.zsh \
-  OMZ::lib/key-bindings.zsh \
-  OMZ::lib/termsupport.zsh
+    OMZ::lib/completion.zsh \
+    OMZ::lib/directories.zsh \
+    OMZ::lib/history.zsh \
+    OMZ::lib/key-bindings.zsh \
+    OMZ::lib/termsupport.zsh
 
 # returning command and folder completion when line is empty
 # like a bash, but better
@@ -39,16 +39,16 @@ zle -N blanktab && bindkey '^I' blanktab
 
 # On-demand rehash for pacman
 if command -v pacman > /dev/null; then
-  zshcache_time="$(date +%s%N)"
-  rehash_precmd() {
-    [[ -a /var/cache/zsh/pacman ]] || return
-    local paccache_time="$(date -r /var/cache/zsh/pacman +%s%N)"
-    if (( zshcache_time < paccache_time )); then
-      rehash && zshcache_time="$paccache_time"
-    fi
-  }
-  autoload -Uz add-zsh-hook
-  add-zsh-hook -Uz precmd rehash_precmd
+    zshcache_time="$(date +%s%N)"
+    rehash_precmd() {
+        [[ -a /var/cache/zsh/pacman ]] || return
+        local paccache_time="$(date -r /var/cache/zsh/pacman +%s%N)"
+        if (( zshcache_time < paccache_time )); then
+            rehash && zshcache_time="$paccache_time"
+        fi
+    }
+    autoload -Uz add-zsh-hook
+    add-zsh-hook -Uz precmd rehash_precmd
 fi
 
 # load command aliases
