@@ -18,7 +18,8 @@ autoload -Uz _zinit
 # Theme
 MNML_USER_CHAR="[ $USER ]"
 MNML_INSERT_CHAR='.//'
-zinit wait='!' depth=1 lucid for subnixr/minimal
+zinit ice wait='!' lucid
+zinit depth=1 for subnixr/minimal
 
 # Plugins
 zinit wait depth=1 lucid for \
