@@ -9,8 +9,7 @@
 dotfiles=$(realpath "$(dirname "$0")")
 
 log() {
-    TAG=$(basename "$0")
-    printf "$TAG: %s\n" "$1"
+    printf "$(basename "$0"): %s\n" "$1"
 }
 
 fun_exists() {
@@ -28,35 +27,44 @@ Usage :
 EOF
 }
 
-if [[ -z "$1" ]]; then
+install_mod() {
+    local comm_prefix=""
+    local mod=$(basename "$(realpath "$1")")
+
+    if [[ ! -f "$dotfiles/$1/.moduleinst" ]]; then
+        log ".moduleinst for \"$1\" doesn't exists. aborting"
+        exit 1
+    fi
+
+    source "$dotfiles/$mod/.moduleinst"
+    if fun_exists module_install; then
+        log "using custom install method for $mod"
+        module_install
+        exit $?
+    fi
+
+    target=$(realpath -m "$module_target")
+    if fun_exists module_preinstall; then
+        module_preinstall
+    fi
+
+    # Execute module's post-install
+    log "installing $mod to $target"
+    [[ $module_use_sudo == "true" ]] && comm_prefix="sudo"
+    $comm_prefix mv "$mod/.moduleinst" "$dotfiles/.tmp-$mod--mdi"
+    $comm_prefix mkdir -p "$target"
+    $comm_prefix cp -rv "$dotfiles/$mod/." "$target" | sed -e 's/^/:: copying /;s/\.\///g;s/->/to/'
+    $comm_prefix mv "$dotfiles/.tmp-$mod--mdi" "$mod/.moduleinst"
+
+    # Execute module's post-install
+    if fun_exists module_postinstall; then
+        module_postinstall
+    fi
+}
+
+if [[ -z "$@" ]]; then
     usage
     exit 1
-elif [[ ! -f "$dotfiles/$1/.moduleinst" ]]; then
-    log ".moduleinst for \"$1\" doesn't exists. aborting"
-    exit 1
-fi
-mod=$(basename "$(realpath "$1")")
-
-source "$dotfiles/$mod/.moduleinst"
-
-if fun_exists module_install; then
-    log "using custom install method for $mod"
-    module_install
-    exit $?
 fi
 
-target=$(realpath -m "$module_target")
-if fun_exists module_preinstall; then
-    module_preinstall
-fi
-
-log "installing $mod to $target"
-
-[[ $module_use_sudo == "true" ]] && PREFX="sudo" || PREFX=""
-$PREFX mkdir -p "$target"
-$PREFX cp -af "$dotfiles/$mod/." "$target/"
-$PREFX rm "$target/.moduleinst"
-
-if fun_exists module_postinstall; then
-    module_postinstall
-fi
+install_mod "$1"
