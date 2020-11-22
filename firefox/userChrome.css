@@ -1,4 +1,4 @@
-# Fix csd background
+/* Fix csd background */
 #main-window {
 	-moz-appearance: -moz-window-titlebar !important;
-} 
+}
