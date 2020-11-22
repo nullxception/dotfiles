@@ -1,6 +1,8 @@
 # Detect MS-Build config dir first
-if [[ -d "$HOME/.config/Code" ]]; then
-    module_target="$HOME/.config/Code/User"
+if [[ -d "$HOME/.config/VSCodium" ]]; then
+   module_target="$HOME/.config/VSCodium/User"
+elif [[ -d "$HOME/.config/Code" ]]; then
+   module_target="$HOME/.config/Code/User"
 else
     # Assuming OSS Build is used
     module_target="$HOME/.config/Code - OSS/User"
