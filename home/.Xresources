@@ -5,39 +5,3 @@ Xft.hintstyle:            hintslight
 Xft.lcdfilter:            lcddefault
 Xft.rgba:                 rgb
 
-URxvt.geometry:           74x14
-URxvt.intensityStyles:    false
-URxvt.font:               xft:JetBrains Mono Medium:size=8, xft:TakaoMincho:bold:size=8:hintstyle=hintnone
-URxvt.boldFont:           xft:JetBrains Mono Medium:size=8, xft:TakaoMincho:bold:size=8:hintstyle=hintnone
-URxvt.saveLines:          8192
-URxvt*letterSpace: -1
-
-URxvt*scrollTtyOutput:    false
-URxvt*scrollWithBuffer:   true
-URxvt*scrollTtyKeypress:  true
-URxvt.scrollBar:          false
-URxvt.internalBorder:     30
-URxvt*cursorBlink:        false
-URxvt.cursorUnderline:    true
-
-URxvt.perl-ext-common:    ibeamcursor,leavecursor,matcher
-URxvt.url-launcher:       firefox
-URxvt.matcher.button:     1
-URxvt.iso14755:           false
-URxvt.iso14755_52:        false
-URxvt.keysym.C-minus:     resize-font:smaller
-URxvt.keysym.C-equal:     resize-font:bigger
-URxvt.keysym.C-0:         resize-font:reset
-URxvt.keysym.C-question:  resize-font:show
-
-rofi.font:                Nimbus Sans Bold 8
-rofi.modi:                run
-rofi.lines:               1
-rofi.columns:             4
-rofi.line-margin:         5
-rofi.line-padding:        10
-rofi.separator-style:     none
-rofi.hide-scrollbar:      false
-rofi.sidebar-mode:        false
-rofi.fullscreen:          true
-rofi.padding:             200
