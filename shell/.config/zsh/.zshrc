@@ -53,7 +53,7 @@ if command -v pacman > /dev/null; then
 fi
 
 # load command aliases
-[[ -f ~/.aliases ]] && source ~/.aliases
+[[ -f $ZDOTDIR/.aliases ]] && source $ZDOTDIR/.aliases
 
 # lutris custom wine
 [[ -f ~/.winelutris ]] && source ~/.winelutris
