@@ -56,7 +56,7 @@ fi
 [[ -f $ZDOTDIR/.aliases ]] && source $ZDOTDIR/.aliases
 
 # lutris custom wine
-[[ -f ~/.winelutris ]] && source ~/.winelutris
+[[ -f $XDG_DATA_HOME/lutris/env ]] && source $XDG_DATA_HOME/lutris/env
 
 # finally. paint the terminal emulator!
 [[ -f ~/.cache/wal/sequences ]] && (cat ~/.cache/wal/sequences &)
