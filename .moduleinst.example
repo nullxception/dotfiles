@@ -1,0 +1,16 @@
+#!/bin/bash
+module_target="/path/to/target"
+module_use_sudo="false"
+
+module_preinstall() {
+    # custom action before install process (default/custom method)
+}
+
+module_install() {
+    # custom install method that will replace the default method
+    # Note: remove it if you want to use the default method
+}
+
+module_postinstall() {
+    # custom action after install process (default/custom method)
+}
