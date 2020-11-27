@@ -1,4 +1,4 @@
-# Detect MS-Build config dir first
+#!/bin/bash
 if [[ -d "$HOME/.config/VSCodium" ]]; then
    module_target="$HOME/.config/VSCodium/User"
 elif [[ -d "$HOME/.config/Code" ]]; then

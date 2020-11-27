@@ -1,3 +1,4 @@
+#!/bin/bash
 module_target="/etc"
 module_use_sudo="true"
 
