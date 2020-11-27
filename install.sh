@@ -37,24 +37,23 @@ install_mod() {
     fi
 
     source "$dotfiles/$mod/.moduleinst"
-    if fun_exists module_install; then
-        log "using custom install method for $mod"
-        module_install
-        exit $?
-    fi
-
     target=$(realpath -m "$module_target")
     if fun_exists module_preinstall; then
         module_preinstall
     fi
 
-    # Execute module's post-install
-    log "installing $mod to $target"
-    [[ $module_use_sudo == "true" ]] && comm_prefix="sudo"
-    $comm_prefix mv "$mod/.moduleinst" "$dotfiles/.tmp-$mod--mdi"
-    $comm_prefix mkdir -p "$target"
-    $comm_prefix cp -rv "$dotfiles/$mod/." "$target" | sed -e 's/^/:: copying /;s/\.\///g;s/->/to/'
-    $comm_prefix mv "$dotfiles/.tmp-$mod--mdi" "$mod/.moduleinst"
+    if fun_exists module_install; then
+        log "using custom install method for $mod"
+        module_install
+    else
+        # Execute module's post-install
+        log "installing $mod to $target"
+        [[ $module_use_sudo == "true" ]] && comm_prefix="sudo"
+        $comm_prefix mv "$mod/.moduleinst" "$dotfiles/.tmp-$mod--mdi"
+        $comm_prefix mkdir -p "$target"
+        $comm_prefix cp -rv "$dotfiles/$mod/." "$target" | sed -e 's/^/:: copying /;s/\.\///g;s/->/to/'
+        $comm_prefix mv "$dotfiles/.tmp-$mod--mdi" "$mod/.moduleinst"
+    fi
 
     # Execute module's post-install
     if fun_exists module_postinstall; then
