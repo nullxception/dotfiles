@@ -1,0 +1,2 @@
+module_target="$HOME/.config"
+module_use_sudo="false"
