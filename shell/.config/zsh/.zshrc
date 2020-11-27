@@ -1,17 +1,15 @@
-# user profile for fallback initialization (primitive environment cases)
-[[ $PROFILE_SOURCED != 1 && -f ~/.profile ]] && source ~/.profile
-
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
 # check if zinit is not exists
-[[ -f ~/.zinit/bin/zinit.zsh ]] || {
-    mkdir -p ~/.zinit
-    git clone --depth=1 https://github.com/zdharma/zinit.git ~/.zinit/bin
+ZINITDIR=$ZDOTDIR/zinit
+[[ -f $ZINITDIR/bin/zinit.zsh ]] || {
+    mkdir -p $ZINITDIR/bin
+    git clone --depth=1 https://github.com/zdharma/zinit.git $ZINITDIR/bin
 }
 
 # Initialize zinit
-source ~/.zinit/bin/zinit.zsh
+source $ZINITDIR/bin/zinit.zsh
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 
