@@ -6,3 +6,4 @@ skip_global_compinit=1
 
 # semi XDG-compliant zsh setup
 ZDOTDIR=${XDG_CONFIG_HOME}/zsh
+HISTFILE=${ZDOTDIR}/.zsh_history

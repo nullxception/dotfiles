@@ -2,7 +2,7 @@
 [[ $- != *i* ]] && return
 
 # check if zinit is not exists
-ZINITDIR=$ZDOTDIR/zinit
+ZINITDIR=$ZDOTDIR/.zinit
 [[ -f $ZINITDIR/bin/zinit.zsh ]] || {
     mkdir -p $ZINITDIR/bin
     git clone --depth=1 https://github.com/zdharma/zinit.git $ZINITDIR/bin
