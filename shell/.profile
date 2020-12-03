@@ -10,13 +10,14 @@ export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/npmrc"
 export QT_QPA_PLATFORMTHEME=qt5ct
 export USE_CCACHE=1
 
-# Executable Path
-export PATH="$PATH:$HOME/.local/bin"
-export PATH="$PATH:$HOME/.local/lib/node/bin"
-export PATH="$PATH:$HOME/.local/lib/flutter/bin"
-export PATH="$PATH:$ANDROID_SDK_ROOT/emulator"
-export PATH="$PATH:$ANDROID_SDK_ROOT/platform-tools"
-export PATH="$PATH:$ANDROID_SDK_ROOT/tools"
-export PATH="$PATH:$ANDROID_SDK_ROOT/tools/bin"
-
-export PROFILE_SOURCED=1
+# Idempotent executable path
+if [ "${PATH#*$HOME/.local/bin}" = "$PATH" ]; then
+    PATH="$PATH:$HOME/.local/bin"
+    PATH="$PATH:$HOME/.local/lib/node/bin"
+    PATH="$PATH:$HOME/.local/lib/flutter/bin"
+    PATH="$PATH:$ANDROID_SDK_ROOT/emulator"
+    PATH="$PATH:$ANDROID_SDK_ROOT/platform-tools"
+    PATH="$PATH:$ANDROID_SDK_ROOT/tools"
+    PATH="$PATH:$ANDROID_SDK_ROOT/tools/bin"
+    export PATH
+fi
