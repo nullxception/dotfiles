@@ -1,6 +1,5 @@
 #!/bin/bash
 module_target="/path/to/target"
-module_use_sudo="false"
 
 module_preinstall() {
     # custom action before install process (default/custom method)

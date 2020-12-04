@@ -7,4 +7,3 @@ else
     # Assuming OSS Build is used
     module_target="$HOME/.config/Code - OSS/User"
 fi
-module_use_sudo="false"

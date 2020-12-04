@@ -27,6 +27,22 @@ Usage :
 EOF
 }
 
+comm_prefix_gen() {
+    if [ ! -d "$1" ]; then
+        mkdir -p "$1" >/dev/null 2>&1
+        if [ $? != 0 ]; then
+            sudo mkdir -p "$1" >/dev/null 2>&1
+            printf sudo
+        fi
+    else
+        local curr=$(id -gn)
+        local dest=$(stat -c %G "$1")
+        if [ "$dest" != "$curr" ]; then
+            printf sudo
+        fi
+    fi
+}
+
 install_mod() {
     local comm_prefix=""
     local mod=$(basename "$(realpath "$1")")
@@ -48,9 +64,11 @@ install_mod() {
     else
         # Execute module's post-install
         log "installing $mod to $target"
-        [[ $module_use_sudo == "true" ]] && comm_prefix="sudo"
+        comm_prefix=$(comm_prefix_gen "$target")
+        if [ "$comm_prefix" = "sudo" ]; then
+            log "using sudo to install module..."
+        fi
         $comm_prefix mv "$mod/.moduleinst" "$dotfiles/.tmp-$mod--mdi"
-        $comm_prefix mkdir -p "$target"
         $comm_prefix cp -rv "$dotfiles/$mod/." "$target" | sed -e 's/^/:: copying /;s/\.\///g;s/->/to/'
         $comm_prefix mv "$dotfiles/.tmp-$mod--mdi" "$mod/.moduleinst"
     fi

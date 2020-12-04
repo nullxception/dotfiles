@@ -1,6 +1,5 @@
 #!/bin/bash
 module_target="/etc"
-module_use_sudo="true"
 
 module_postinstall() {
     sudo sysctl -p /etc/sysctl.d/*

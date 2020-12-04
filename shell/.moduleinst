@@ -1,3 +1,2 @@
 #!/bin/bash
 module_target="$HOME"
-module_use_sudo="false"
