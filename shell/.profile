@@ -7,7 +7,6 @@ export XDG_DATA_HOME="$HOME/.local/share"
 export ANDROID_SDK_ROOT="$HOME/.local/lib/android"
 export EDITOR="vim"
 export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/npmrc"
-export QT_QPA_PLATFORMTHEME=qt5ct
 export USE_CCACHE=1
 
 # Idempotent executable path
