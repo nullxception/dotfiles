@@ -1,0 +1,25 @@
+# Cherry colorscheme
+colors:
+  primary:
+    background: '#23232F'
+    foreground: '#BDC3C7'
+
+  normal:
+    black:   '#515b73'
+    red:     '#FF568E'
+    green:   '#64DE83'
+    yellow:  '#EFFF73'
+    blue:    '#73A9FF'
+    magenta: '#946FF7'
+    cyan:    '#46cfcc'
+    white:   '#dee5e9'
+
+  bright:
+    black:   '#79839C'
+    red:     '#ff84a6'
+    green:   '#8be39e'
+    yellow:  '#f1ff94'
+    blue:    '#94b9ff'
+    magenta: '#aa91f8'
+    cyan:    '#7cd7d5'
+    white:   '#eaf0f4'
