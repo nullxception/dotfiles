@@ -53,7 +53,7 @@ install_mod() {
     fi
 
     source "$dotfiles/$mod/.moduleinst"
-    target=$(realpath -m "$module_target")
+    target=$(realpath -mq "$module_target")
     if fun_exists module_preinstall; then
         module_preinstall
     fi
