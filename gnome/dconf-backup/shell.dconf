@@ -1,0 +1,5 @@
+[org/gnome/shell/window-switcher]
+current-workspace-only=false
+
+[org/gnome/shell/app-switcher]
+current-workspace-only=false

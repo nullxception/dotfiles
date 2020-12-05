@@ -1,0 +1,7 @@
+[org/gnome/settings-daemon/plugins/media-keys]
+custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/term/']
+
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/term]
+binding='<Super>Return'
+command='gnome-terminal'
+name='Terminal'

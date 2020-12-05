@@ -1,0 +1,4 @@
+[org/gnome/desktop/peripherals/touchpad]
+tap-to-click=true
+edge-scrolling-enabled=false
+two-finger-scrolling-enabled=true
