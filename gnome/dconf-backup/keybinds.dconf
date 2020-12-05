@@ -3,5 +3,5 @@ custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybin
 
 [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/term]
 binding='<Super>Return'
-command='gnome-terminal'
+command='alacritty'
 name='Terminal'
