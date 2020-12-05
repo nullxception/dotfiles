@@ -43,6 +43,25 @@ comm_prefix_gen() {
     fi
 }
 
+deploy_topic() {
+    local target=$1
+    local comm_prefix=$(comm_prefix_gen "$target")
+    local moddir="$dotfiles/$mod"
+
+    if [ "$comm_prefix" = "sudo" ]; then
+        log "using sudo to install module..."
+    fi
+
+    find "$moddir" -type f | while read src; do
+        [ "${src#*.moduleinst}" != "$src" ] && continue
+
+        dest="$(printf ${src%/*} | sed "s|$moddir|$target|")/"
+        log "copying $src to $dest"
+        [ -d "$dest" ] || $comm_prefix mkdir -p "$dest"
+        $comm_prefix cp "$src" "$dest"
+    done
+}
+
 install_mod() {
     local comm_prefix=""
     local mod=$(basename "$(realpath "$1")")
@@ -53,24 +72,23 @@ install_mod() {
     fi
 
     source "$dotfiles/$mod/.moduleinst"
-    target=$(realpath -mq "$module_target")
     if fun_exists module_preinstall; then
         module_preinstall
     fi
 
     if fun_exists module_install; then
-        log "using custom install method for $mod"
+        log "using custom install method for topic '$mod'"
         module_install
     else
-        # Execute module's post-install
-        log "installing $mod to $target"
-        comm_prefix=$(comm_prefix_gen "$target")
-        if [ "$comm_prefix" = "sudo" ]; then
-            log "using sudo to install module..."
+        local target=$(realpath -mq "$module_target")
+        if [ -z "$target" ]; then
+            log "Invalid module_target entry. aborting"
+            exit 1
         fi
-        $comm_prefix mv "$mod/.moduleinst" "$dotfiles/.tmp-$mod--mdi"
-        $comm_prefix cp -rv "$dotfiles/$mod/." "$target" | sed -e 's/^/:: copying /;s/\.\///g;s/->/to/'
-        $comm_prefix mv "$dotfiles/.tmp-$mod--mdi" "$mod/.moduleinst"
+
+        # Execute install procedure
+        log "installing topic '$mod' to $target"
+        deploy_topic "$target"
     fi
 
     # Execute module's post-install
