@@ -2,6 +2,9 @@
   <img src="https://user-images.githubusercontent.com/58150791/71537208-ffe23900-295b-11ea-841b-318adfe977d8.png" />
 </p>
 <p align="center">
+nullxception's desktop and other configurations
+</p>
+<p align="center">
   <a href="LICENSE" target="_blank">
     <img alt="License: BSD 3--Clause License" src="https://img.shields.io/badge/License-BSD 3--Clause License-yellow.svg" />
   </a>
@@ -10,36 +13,62 @@
   </a>
 </p>
 
-> nullxception's desktop and other configurations
+## What the heck is this 🤔
 
-## What the heck is this
-
-This is a dotfiles repo, which is a set of some configurations that commonly used by me on my desktop and server.
+It just a dotfiles repo, which is a set of some configurations that commonly used by me on my desktop and server.
 
 It was supposed to helps me config my fresh machine faster, but also act as an archive in case someones want to know my setup.
 So, don't be shy, give a ⭐️ if some configs can helps you :)
 
-## Installation and Structures
+## 🏗 Installation
 
-For the installation, you can run :
+After cloning the repo, you can run this command :
 
 ```
-./install.sh <module-name>
+./install.sh <topic-name>
 ```
+and that's pretty much it 😊
 
-The `install.sh` will source configuration files inside the module folder; `<module-name>/.moduleinst`.
-So the structures is quite simple and straightforward, everything except `.moduleinst` is a files/folder that will be installed to the `$module_target` that provided in `.moduleinst`.
+## 📑 Topic Structures
+As you can see, this dotfiles is grouped by topics.
 
-### Special `scripts` directory
+Each of it has their own `.moduleinst` files that will be used by `install.sh`. Here's some methods that currently supported by the `install.sh`.
 
-As you can see, there's a `bin` and `scripts` on this modular repo.
+* **basic copy-to-target**
 
-#### bin
-this is a module that contains _executable_ files that _installable_ and will accessible from user `$PATH` once it's installed.
+    For simple structures like the `audio` topic, `install.sh` will deploy all the files inside `audio` topic into `$HOME/.config/`, which's already defined in `audio/.moduleinst` by `module_target` variable.
 
-#### scripts
-unlike `bin`, this directory are only meant to store executable scripts that I have, except I don't want it to be installed on my $PATH, so that's why it's not _installable_.
+* **custom install method**
 
-## License
+    For another topics that needs dynamic operation like `firefox`, `install.sh` will using `module_install()` function that already defined in `firefox/.moduleinst`.
+
+* **dynamic destination**
+
+    Since `.moduleinst` are just merely a bash script that will be evaluated by `install.sh`, we can also utilize the power of shell script to extends it.
+    For example, `vscode` topic has a simple prompt to choose the install destination.
+
+* or, **No install method at all.**
+
+    There's an another topic that has no `.moduleinst` file, the `script` topic.
+
+    Unlike `bin`, this topic are only meant to store executable scripts, portably, no need to be installed on anywhere.
+
+## 💬 FAQ
+
+🤔: _Can I use it on my machine ?_
+
+For some topic like `shell` or `firefox`, yes.
+
+But for `etc` topic, I don't think you want to install it blatantly, since it's a system configuration, tho you can still use it as a references (maybe ?) :)
+
+🤔: _Why don't use ansible/stow/yadm/etc instead ?_
+
+All of my systems is using GNU/Linux, so I think simple bash script already enough for my cases.
+
+🤔: _Is there any LDA or r/unixporn-able desktop suite configuration here ?_
+
+I'm just your regular desktop-environment neighbor (ATM) :)
+
+## 📄 License
 
 Copyright © 2019 [Nauval Rizky](https://github.com/nullxception). This project is [BSD 3-Clause License](LICENSE) licensed.
