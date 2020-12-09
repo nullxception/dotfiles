@@ -1,5 +1,5 @@
 {
-  "editor.fontFamily": "'JetBrains Mono Medium', monospace",
+  "editor.fontFamily": "'JetBrainsMono Nerd Font Medium', monospace",
   "editor.fontLigatures": true,
   "telemetry.enableCrashReporter": false,
   "telemetry.enableTelemetry": false,

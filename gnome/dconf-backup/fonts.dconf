@@ -5,7 +5,7 @@ titlebar-uses-system-font=true
 [org/gnome/desktop/interface]
 document-font-name='Inter 9'
 font-name='Inter 9'
-monospace-font-name='JetBrains Mono Medium 9'
+monospace-font-name='JetBrainsMono Nerd Font Medium 9'
 
 [org/gnome/settings-daemon/plugins/xsettings]
 antialiasing='rgba'

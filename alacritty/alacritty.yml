@@ -16,7 +16,7 @@ scrolling:
 font:
   size: 9
   normal:
-    family: JetBrains Mono
+    family: JetBrainsMono Nerd Font
     style: Medium
 
 background_opacity: 1.0
