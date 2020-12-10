@@ -33,6 +33,7 @@ mouse:
   hide_when_typing: true
 
 #
-# End of config
-# Colors will be managed by external app
+# Color Scheme
 #
+import:
+  - .config/alacritty/colors/cherry.yml
