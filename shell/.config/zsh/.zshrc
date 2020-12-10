@@ -53,10 +53,10 @@ if command -v pacman > /dev/null; then
 fi
 
 # load command aliases
-[[ -f $ZDOTDIR/.aliases ]] && source $ZDOTDIR/.aliases
+[[ -f $ZDOTDIR/.aliases ]] && source $ZDOTDIR/.aliases || true
 
 # lutris custom wine
-[[ -f $XDG_DATA_HOME/lutris/env ]] && source $XDG_DATA_HOME/lutris/env
+[[ -f $XDG_DATA_HOME/lutris/env ]] && source $XDG_DATA_HOME/lutris/env || true
 
 # finally. paint the terminal emulator!
-[[ -f ~/.cache/wal/sequences ]] && (cat ~/.cache/wal/sequences &)
+[[ -f ~/.cache/wal/sequences ]] && (cat ~/.cache/wal/sequences &) || true
