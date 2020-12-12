@@ -14,10 +14,7 @@ autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 
 # Theme
-MNML_USER_CHAR="[ $USER ]"
-MNML_INSERT_CHAR='.//'
-zinit ice wait='!' lucid
-zinit depth=1 for subnixr/minimal
+zinit light nullxception/roundy
 
 # Plugins
 zinit wait depth=1 lucid for \
