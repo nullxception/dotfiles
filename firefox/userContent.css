@@ -1,0 +1,8 @@
+/* Override some elements appearance that mostly
+ * screwed by Dark GTK Themes
+ */
+input, textarea, select, button {
+    background-color: white;
+    color: black;
+    -moz-appearance: none !important;
+}

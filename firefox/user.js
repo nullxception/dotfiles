@@ -24,9 +24,7 @@ user_pref("mousewheel.system_scroll_override_on_root_content.horizontal.factor",
 user_pref("mousewheel.system_scroll_override_on_root_content.vertical.factor", 175);
 user_pref("toolkit.scrollbox.horizontalScrollDistance", 6);
 user_pref("toolkit.scrollbox.verticalScrollDistance", 2);
-// Fix invisible text on dark themes
 user_pref("widget.content.allow-gtk-dark-theme", true);
-user_pref("widget.content.gtk-theme-override", "Adwaita:light"); // or any other light themes
 // Enable customChrome.css
 user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);
 // Enable CSD
