@@ -34,13 +34,10 @@
   "update.mode": "manual",
   "terminal.integrated.cursorBlinking": true,
   "terminal.integrated.cursorStyle": "line",
+  "terminal.integrated.fontFamily": "'JetBrainsMono Nerd Font Mono'",
   "terminal.integrated.fontSize": 12,
   "terminal.integrated.fontWeight": "bold",
-  "terminal.integrated.rendererType": "canvas",
-  "terminal.integrated.detectLocale": "off",
-  "terminal.integrated.env.linux": {
-      "LC_ALL":"en_US.UTF-8"
-  },
+  "terminal.integrated.rendererType": "dom",
   "window.newWindowDimensions": "maximized",
   "workbench.colorTheme": "Cherry",
   "workbench.tree.indent": 10,
