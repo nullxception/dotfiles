@@ -6,3 +6,11 @@ input, textarea, select, button {
     color: black;
     -moz-appearance: none !important;
 }
+
+/* super minimal flat scrollbar */
+:root {
+    scrollbar-color: var(--color-border-overlay) transparent;
+}
+* {
+    scrollbar-width: thin;
+}
