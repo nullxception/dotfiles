@@ -1,0 +1,12 @@
+{
+    "flutter.openDevLogSplitCommand": "botright 10split",
+    "json.format.enable": true,
+    "coc.preferences.formatOnSaveFiletypes": [
+        "css",
+        "dart",
+        "javascript",
+        "json",
+        "typescript",
+        "yaml"
+    ]
+}
