@@ -14,6 +14,9 @@ autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 
 # Theme
+ROUNDY_USER_CONTENT_NORMAL=$' 🐹 ' # hamster
+ROUNDY_USER_CONTENT_ROOT=$' 🐧 ' # penguin
+zinit ice pick="lib/async.zsh" src="roundy.zsh" compile"{lib/async,roundy}.zsh"
 zinit light nullxception/roundy
 
 # Plugins
