@@ -7,7 +7,7 @@ if empty(glob("~/.local/share/nvim/site/autoload/plug.vim"))
   autocmd VimEnter * PlugInstall --sync
 endif
 
-call plug#begin('~/.local/share/nvim/plugged') 
+call plug#begin('~/.local/share/nvim/plugged')
 
 " utilities and themes
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
@@ -58,6 +58,32 @@ set visualbell
 
 "}}}
 
+" == netrw == {{{
+
+set autochdir
+
+let g:netrw_altv=1
+let g:netrw_liststyle=3
+let g:netrw_winsize=-28
+let g:netrw_banner=0
+
+function! Me_netrwToggle()
+  let instance = bufnr("$")
+  let netrwBuffed = 0
+  while (instance >= 1)
+    if (getbufvar(instance, "&filetype") == "netrw")
+      silent exe "bwipeout " . instance
+      let netrwBuffed = 1
+    endif
+    let instance-=1
+  endwhile
+  if !netrwBuffed
+    silent Lexplore
+  endif
+endfunction
+
+"}}}
+
 " == themes and UI vars == "{{{
 
 let g:tokyonight_style = 'night' " available: night, storm
@@ -76,7 +102,7 @@ let g:airline_skip_empty_sections = 1
 let g:coc_global_extensions = [
             \'coc-css',
             \'coc-flutter',
-            \'coc-git', 
+            \'coc-git',
             \'coc-html',
             \'coc-json',
             \'coc-lists',
@@ -202,6 +228,8 @@ command! -nargs=0 Prettier :CocCommand prettier.formatFile
 
 " open terminal
 nnoremap <silent> <leader><Enter> :rightbelow 5sp new<CR>:terminal<CR>
+" open netrw
+nnoremap <silent> <leader>f :call Me_netrwToggle()<CR>
 " reload config
 nnoremap <silent> <leader>sv :source $MYVIMRC <bar> :AirlineRefresh<CR>
 " unhighlight
