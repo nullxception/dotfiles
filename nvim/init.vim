@@ -83,6 +83,33 @@ endfunction
 
 "}}}
 
+" == custom key == "{{{
+
+" open terminal
+nnoremap <silent> <leader><CR> :rightbelow 5sp new<CR>:terminal<CR>
+" open netrw
+nnoremap <silent> <leader>f :call Me_netrwToggle()<CR>
+" reload config
+nnoremap <silent> <leader>sv :source $MYVIMRC <bar> :AirlineRefresh<CR>
+" unhighlight
+nnoremap <silent> <Esc><Esc> <Esc>:nohlsearch<CR>
+" open fzf
+nnoremap <silent> <leader><leader> :Files<CR>
+
+"}}}
+
+" == custom command == "{{{
+
+" Prettier
+command! -nargs=0 Prettier :CocCommand prettier.formatFile
+
+" flutter
+command! -nargs=0 Flutemu :CocCommand flutter.emulators
+command! -nargs=0 Flutlog :CocCommand flutter.dev.openDevLog
+command! -nargs=0 Flutrun :CocCommand flutter.run
+
+"}}}
+
 " == themes and UI vars == "{{{
 
 let g:tokyonight_style = 'night' " available: night, storm
@@ -201,26 +228,5 @@ nmap <leader>a  <Plug>(coc-codeaction-selected)
 nmap <leader>ac  <Plug>(coc-codeaction)
 " Apply AutoFix to problem on the current line.
 nmap <leader>qf  <Plug>(coc-fix-current)
-
-" Format On Save
-command! -nargs=0 Prettier :CocCommand prettier.formatFile
-
-"}}}
-
-" == custom key == "{{{
-
-" open terminal
-nnoremap <silent> <leader><Enter> :rightbelow 5sp new<CR>:terminal<CR>
-" open netrw
-nnoremap <silent> <leader>f :call Me_netrwToggle()<CR>
-" reload config
-nnoremap <silent> <leader>sv :source $MYVIMRC <bar> :AirlineRefresh<CR>
-" unhighlight
-nnoremap <silent> <Esc><Esc> <Esc>:nohlsearch<CR>
-" open fzf
-nnoremap <silent> <leader><leader> :Files<CR>
-" flutter
-nnoremap <silent> <F4> :CocCommand flutter.emulators<CR>
-nnoremap <silent> <F5> :CocCommand flutter.dev.openDevLog <bar> flutter.run<CR>
 
 "}}}
