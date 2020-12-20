@@ -10,7 +10,6 @@ endif
 call plug#begin('~/.local/share/nvim/plugged')
 
 " utilities and themes
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-fugitive'
 Plug 'vim-airline/vim-airline'
