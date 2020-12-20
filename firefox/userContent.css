@@ -1,9 +1,51 @@
 /* Override some elements appearance that mostly
  * screwed by Dark GTK Themes
  */
-input, textarea, select, button {
+button,
+textarea,
+select,
+input[type="button"],
+input[type="color"],
+input[type="date"],
+input[type="datetime-local"],
+input[type="email"],
+input[type="file"],
+input[type="hidden"],
+input[type="image"],
+input[type="month"],
+input[type="number"],
+input[type="password"],
+input[type="range"],
+input[type="reset"],
+input[type="search"],
+input[type="submit"],
+input[type="tel"],
+input[type="text"],
+input[type="time"],
+input[type="url"],
+input[type="week"] {
     background-color: white;
     color: black;
+    -moz-appearance: none !important;
+}
+
+button,
+input[type="button"],
+input[type="reset"],
+input[type="submit"] {
+    background-color: lightgray;
+    color: black;
+    -moz-appearance: none !important;
+}
+
+input[type="range"]::-moz-range-track {
+    background-color: black;
+    -moz-appearance: none !important;
+}
+
+input[type="range"]::-moz-range-thumb {
+    background-color: white;
+    border-color: black;
     -moz-appearance: none !important;
 }
 
