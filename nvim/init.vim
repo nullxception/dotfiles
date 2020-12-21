@@ -68,8 +68,6 @@ nnoremap <silent> <Esc><Esc> <Esc>:nohlsearch<CR>
 nnoremap <silent> <leader><CR> :rightbelow 5sp new<CR>:terminal<CR>
 " open netrw (space + e)
 nnoremap <silent> <leader>e :NERDTreeToggle<CR>
-" reload config (space + shift + r)
-nnoremap <silent> <leader>R :source $MYVIMRC<bar>:AirlineRefresh<bar>:echo "config reloaded"<CR>
 " open fzf (space + space)
 nnoremap <silent> <leader><leader> :Files<CR>
 
@@ -216,5 +214,12 @@ nmap <leader>a  <Plug>(coc-codeaction-selected)
 nmap <leader>ac  <Plug>(coc-codeaction)
 " Apply AutoFix to problem on the current line.
 nmap <leader>qf  <Plug>(coc-fix-current)
+
+"}}}
+
+" == misc == "{{{
+
+" auto re-source init.vim
+autocmd BufWritePost $MYVIMRC source $MYVIMRC
 
 "}}}
