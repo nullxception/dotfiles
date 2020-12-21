@@ -219,7 +219,13 @@ nmap <leader>qf  <Plug>(coc-fix-current)
 
 " == misc == "{{{
 
+" some UI stuff need to be refreshed when $MYVIMRC is sourced
+function! Me_RefreshUI()
+    call webdevicons#refresh()
+    AirlineRefresh
+endfunction
+
 " auto re-source init.vim
-autocmd BufWritePost $MYVIMRC source $MYVIMRC
+autocmd BufWritePost $MYVIMRC source $MYVIMRC | call Me_RefreshUI()
 
 "}}}
