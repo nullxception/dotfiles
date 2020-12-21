@@ -13,6 +13,7 @@ call plug#begin('~/.local/share/nvim/plugged')
 Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-fugitive'
 Plug 'vim-airline/vim-airline'
+Plug 'preservim/nerdtree'
 Plug 'ryanoasis/vim-devicons'
 Plug 'ghifarit53/tokyonight-vim'
 
@@ -57,32 +58,6 @@ set visualbell
 
 "}}}
 
-" == netrw == {{{
-
-set autochdir
-
-let g:netrw_altv=1
-let g:netrw_liststyle=3
-let g:netrw_winsize=-28
-let g:netrw_banner=0
-
-func! Me_netrwToggle()
-  let instance = bufnr("$")
-  let netrwBuffed = 0
-  while (instance >= 1)
-    if (getbufvar(instance, "&filetype") == "netrw")
-      silent exe "bwipeout " . instance
-      let netrwBuffed = 1
-    endif
-    let instance-=1
-  endwhile
-  if !netrwBuffed
-    silent Lexplore
-  endif
-endfunction
-
-"}}}
-
 " == custom key == "{{{
 
 " auto unhighlight at double esc
@@ -90,7 +65,7 @@ nnoremap <silent> <Esc><Esc> <Esc>:nohlsearch<CR>
 " open terminal (space + enter)
 nnoremap <silent> <leader><CR> :rightbelow 5sp new<CR>:terminal<CR>
 " open netrw (space + e)
-nnoremap <silent> <leader>e :call Me_netrwToggle()<CR>
+nnoremap <silent> <leader>e :NERDTreeToggle<CR>
 " reload config (space + shift + r)
 nnoremap <silent> <leader>R :source $MYVIMRC<bar>:AirlineRefresh<bar>:echo "config reloaded"<CR>
 " open fzf (space + space)
@@ -120,6 +95,21 @@ colorscheme tokyonight
 let g:airline_powerline_fonts = 1
 let g:airline_theme = "tokyonight"
 let g:airline_skip_empty_sections = 1
+
+"}}}
+
+" == NERDTree == {{{
+
+let g:NERDTreeQuitOnOpen = 1
+let g:NERDTreeShowHidden = 1
+let g:NERDTreeHijackNetrw = 1
+let g:NERDTreeMinimalUI = 1
+let g:NERDTreeShowBookmarks = 1
+let g:NERDTreeBookmarksFile = "$HOME/.config/nvim/NERDTreeBookmarks"
+let g:NERDTreeWinSize = 28
+let g:NERDTreeChDirMode = 2
+let g:NERDTreeDirArrowExpandable=""
+let g:NERDTreeDirArrowCollapsible=""
 
 "}}}
 
