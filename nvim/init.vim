@@ -66,7 +66,7 @@ let g:netrw_liststyle=3
 let g:netrw_winsize=-28
 let g:netrw_banner=0
 
-function! Me_netrwToggle()
+func! Me_netrwToggle()
   let instance = bufnr("$")
   let netrwBuffed = 0
   while (instance >= 1)
@@ -85,15 +85,15 @@ endfunction
 
 " == custom key == "{{{
 
-" open terminal
-nnoremap <silent> <leader><CR> :rightbelow 5sp new<CR>:terminal<CR>
-" open netrw
-nnoremap <silent> <leader>f :call Me_netrwToggle()<CR>
-" reload config
-nnoremap <silent> <leader>sv :source $MYVIMRC <bar> :AirlineRefresh<CR>
-" unhighlight
+" auto unhighlight at double esc
 nnoremap <silent> <Esc><Esc> <Esc>:nohlsearch<CR>
-" open fzf
+" open terminal (space + enter)
+nnoremap <silent> <leader><CR> :rightbelow 5sp new<CR>:terminal<CR>
+" open netrw (space + e)
+nnoremap <silent> <leader>e :call Me_netrwToggle()<CR>
+" reload config (space + shift + r)
+nnoremap <silent> <leader>R :source $MYVIMRC<bar>:AirlineRefresh<bar>:echo "config reloaded"<CR>
+" open fzf (space + space)
 nnoremap <silent> <leader><leader> :Files<CR>
 
 "}}}
@@ -206,10 +206,6 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 
 " Symbol renaming.
 nmap <leader>rn <Plug>(coc-rename)
-
-" Formatting selected code.
-xmap <leader>f  <Plug>(coc-format-selected)
-nmap <leader>f  <Plug>(coc-format-selected)
 
 augroup mygroup
   autocmd!
