@@ -15,3 +15,6 @@ switch_case_indent = true  # like -ci
 space_redirects    = false  # like -sr
 keep_padding       = true  # like -kp
 function_next_line = false  # like -fn
+
+[*.{json,yaml,yml}]
+indent_size = 2
