@@ -1,4 +1,0 @@
-system:
-  env:
-    DXVK_LOG_LEVEL: none
-    DXVK_SHADER_OPTIMIZE: "1"
