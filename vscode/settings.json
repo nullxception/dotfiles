@@ -25,7 +25,6 @@
   "C_Cpp.updateChannel": "Insiders",
   "C_Cpp.workspaceParsingPriority": "medium",
   "git.allowForcePush": true,
-  "git.alwaysSignOff": true,
   "git.terminalAuthentication": false,
   "github.gitAuthentication": false,
   "gitlens.advanced.telemetry.enabled": false,
