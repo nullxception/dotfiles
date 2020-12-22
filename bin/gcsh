@@ -1,9 +1,9 @@
 #!/bin/bash
 #
-# mosh-gcloud - wrapper for accessing gcloud vm instance with mosh
+# gcsh - wrapper for accessing gcloud vm instance with mosh
 #
 #  usage :
-#   $ mosh-gcloud <instance_name>
+#   $ gcsh <instance_name>
 #
 
 log() {
