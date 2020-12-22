@@ -12,16 +12,16 @@ log() {
 log "Configuring git"
 log "Previous user was : $(git config --global user.name) <$(git config --global user.email)>"
 
-read -p 'Name: ' name
-read -p 'email: ' email
-read -p 'Git credential cache time (in hours): ' $pwdtime
+read -p 'Name (leave blank to skip): ' name
+read -p 'email (leave blank to skip): ' email
+read -p 'Git credential cache time (in hours. leave blank to skip, 0 to disable): ' $pwdtime
 
-git config --global user.name "$name"
-git config --global user.email "$email"
+[[ -n "$name" ]] && git config --global user.name "$name"
+[[ -n "$email" ]] && git config --global user.email "$email"
 
-if [[ $pwtime -gt 0 ]]; then
+if [[ -n "$pwdtime" && $pwtime -gt 0 ]]; then
     git config --global credential.helper "cache --timeout $((3600 * pwtime))"
-else
+elif [[ -n "$pwdtime" && $pwtime == 0 ]]; then
     git config --global --unset credential.helper
 fi
 
