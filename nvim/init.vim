@@ -17,6 +17,7 @@ Plug 'preservim/nerdtree'
 Plug 'ryanoasis/vim-devicons'
 Plug 'ghifarit53/tokyonight-vim'
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
+Plug 'lambdalisue/suda.vim'
 
 " languages and stuff
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
