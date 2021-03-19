@@ -11,12 +11,12 @@ export USE_CCACHE=1
 
 # Idempotent executable path
 if [ "${PATH#*$HOME/.local/bin}" = "$PATH" ]; then
-    PATH="$PATH:$HOME/.local/bin"
-    PATH="$PATH:$HOME/.local/lib/node/bin"
-    PATH="$PATH:$HOME/.local/lib/flutter/bin"
-    PATH="$PATH:$ANDROID_SDK_ROOT/emulator"
-    PATH="$PATH:$ANDROID_SDK_ROOT/platform-tools"
-    PATH="$PATH:$ANDROID_SDK_ROOT/tools"
-    PATH="$PATH:$ANDROID_SDK_ROOT/tools/bin"
-    export PATH
+    USER_PATH="$HOME/.local/bin"
+    USER_PATH+=":$HOME/.local/lib/node/bin"
+    USER_PATH+=":$HOME/.local/lib/flutter/bin"
+    USER_PATH+=":$ANDROID_SDK_ROOT/emulator"
+    USER_PATH+=":$ANDROID_SDK_ROOT/platform-tools"
+    USER_PATH+=":$ANDROID_SDK_ROOT/tools"
+    USER_PATH+=":$ANDROID_SDK_ROOT/tools/bin"
+    export PATH="$USER_PATH:$PATH"
 fi
