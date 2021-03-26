@@ -53,7 +53,7 @@ deploy_topic() {
     fi
 
     find "$moddir" -type f | while read src; do
-        [ "${src#*.moduleinst}" != "$src" ] && continue
+        [ "${src#*.module-data.bash}" != "$src" ] && continue
 
         dest="$(printf ${src%/*} | sed "s|$moddir|$target|")/"
         log "copying $src to $dest"
@@ -66,12 +66,12 @@ install_mod() {
     local comm_prefix=""
     local mod=$(basename "$(realpath "$1")")
 
-    if [[ ! -f "$dotfiles/$1/.moduleinst" ]]; then
-        log ".moduleinst for \"$1\" doesn't exists. aborting"
+    if [[ ! -f "$dotfiles/$1/.module-data.bash" ]]; then
+        log ".module-data.bash for \"$1\" doesn't exists. aborting"
         exit 1
     fi
 
-    source "$dotfiles/$mod/.moduleinst"
+    source "$dotfiles/$mod/.module-data.bash"
     if fun_exists module_preinstall; then
         module_preinstall
     fi

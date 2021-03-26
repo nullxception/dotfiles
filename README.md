@@ -32,24 +32,24 @@ and that's pretty much it 😊
 ## 📑 Topic Structures
 As you can see, this dotfiles is grouped by topics.
 
-Each of it has their own `.moduleinst` files that will be used by `install.sh`. Here's some methods that currently supported by the `install.sh`.
+Each of it has their own `.module-data.bash` files that will be used by `install.sh`. Here's some methods that currently supported by the `install.sh`.
 
 * **basic copy-to-target**
 
-    For simple structures like the `audio` topic, `install.sh` will deploy all the files inside `audio` topic into `$HOME/.config/`, which's already defined in `audio/.moduleinst` by `module_target` variable.
+    For simple structures like the `audio` topic, `install.sh` will deploy all the files inside `audio` topic into `$HOME/.config/`, which's already defined in `audio/.module-data.bash` by `module_target` variable.
 
 * **custom install method**
 
-    For another topics that needs dynamic operation like `firefox`, `install.sh` will using `module_install()` function that already defined in `firefox/.moduleinst`.
+    For another topics that needs dynamic operation like `firefox`, `install.sh` will using `module_install()` function that already defined in `firefox/.module-data.bash`.
 
 * **dynamic destination**
 
-    Since `.moduleinst` are just merely a bash script that will be evaluated by `install.sh`, we can also utilize the power of shell script to extends it.
+    Since `.module-data.bash` are just merely a bash script that will be evaluated by `install.sh`, we can also utilize the power of shell script to extends it.
     For example, `vscode` topic has a simple prompt to choose the install destination.
 
 * or, **No install method at all.**
 
-    There's an another topic that has no `.moduleinst` file, the `script` topic.
+    There's an another topic that has no `.module-data.bash` file, the `script` topic.
 
     Unlike `bin`, this topic are only meant to store executable scripts, portably, no need to be installed on anywhere.
 

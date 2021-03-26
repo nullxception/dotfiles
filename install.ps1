@@ -8,7 +8,7 @@ param(
     [String] $Module
 )
 $DotfilesPath = Split-Path -parent $PSCommandPath
-$ModuleData = ".modinstall.ps1"
+$ModuleData = ".module-data.ps1"
 
 function Install-Mod($Name) {
     $ModuleName = Split-Path $Name -Leaf
