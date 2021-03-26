@@ -16,8 +16,10 @@ function Install-Mod($Name) {
 
     if ([System.IO.File]::Exists("$ModulePath\$ModuleData")) {
         . "$ModulePath\$ModuleData"
+        if (Get-Command 'PreInstall-Dotfiles' -errorAction SilentlyContinue) {
+            PreInstall-Dotfiles
+        }
         if (Get-Command 'Install-Dotfiles' -errorAction SilentlyContinue) {
-            "Install-Dotfiles declared, running custom install function"
             Install-Dotfiles
         } else {
             Write-Output "installing module $ModuleName to $Installtarget"
@@ -26,9 +28,19 @@ function Install-Mod($Name) {
             }
             Get-ChildItem -Path $ModulePath -Exclude $ModuleData | Copy-Item -Destination $Installtarget -Recurse
         }
+        if (Get-Command 'PostInstall-Dotfiles' -errorAction SilentlyContinue) {
+            PostInstall-Dotfiles
+        }
+
+        # Unregister modules functions
+        if (Get-Command 'PreInstall-Dotfiles' -errorAction SilentlyContinue) {
+            Remove-Item -Path Function:\PreInstall-Dotfiles
+        }
         if (Get-Command 'Install-Dotfiles' -errorAction SilentlyContinue) {
-            "Removing Install-Dotfiles"
             Remove-Item -Path Function:\Install-Dotfiles
+        }
+        if (Get-Command 'PostInstall-Dotfiles' -errorAction SilentlyContinue) {
+            Remove-Item -Path Function:\PostInstall-Dotfiles
         }
     } else {
         "Module $ModuleName does not exists or has no $ModuleData"
