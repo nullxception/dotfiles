@@ -26,7 +26,7 @@ function Install-Mod($Name) {
             if (![System.IO.Directory]::Exists($Installtarget)) {
                 New-Item -ItemType Directory -Path $Installtarget
             }
-            Get-ChildItem -Path $ModulePath -Exclude $ModuleData | Copy-Item -Destination $Installtarget -Recurse
+            Get-ChildItem -Path $ModulePath -Exclude $ModuleData,.module-data.bash | Copy-Item -Destination $Installtarget -Recurse
         }
         if (Get-Command 'PostInstall-Dotfiles' -errorAction SilentlyContinue) {
             PostInstall-Dotfiles

@@ -54,6 +54,7 @@ deploy_topic() {
 
     find "$moddir" -type f | while read src; do
         [ "${src#*.module-data.bash}" != "$src" ] && continue
+        [ "${src#*.module-data.ps1}" != "$src" ] && continue
 
         dest="$(printf ${src%/*} | sed "s|$moddir|$target|")/"
         log "copying $src to $dest"
