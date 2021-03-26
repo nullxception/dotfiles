@@ -1,0 +1,75 @@
+{
+    "$schema": "https://aka.ms/terminal-profiles-schema",
+    "defaultProfile": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+    "disableAnimations": true,
+    "initialCols": 80,
+    "initialRows": 18,
+    "profiles": {
+        "defaults": {
+            "fontFace": "JetBrainsMono NF",
+            "fontSize": 9,
+            "fontWeight": "medium",
+            "padding": 25,
+            "colorScheme": "Cherry"
+        },
+        "list": [
+            {
+                "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+                "name": "PowerShell",
+                "commandline": "pwsh.exe -NoLogo",
+                "hidden": false
+            },
+            {
+                "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
+                "name": "Command Prompt",
+                "commandline": "cmd.exe",
+                "hidden": true
+            },
+            {
+                "guid": "{a5a97cb8-8961-5535-816d-772efe0c6a3f}",
+                "hidden": false,
+                "name": "Arch",
+                "source": "Windows.Terminal.Wsl"
+            },
+            {
+                "guid": "{b453ae62-4e3d-5e58-b989-0a998ec441b8}",
+                "hidden": true,
+                "name": "Azure Cloud Shell",
+                "source": "Windows.Terminal.Azure"
+            },
+        ]
+    },
+    "schemes": [
+        {
+            "name": "Cherry",
+            "background": "#23232F",
+            "foreground": "#BDC3C7",
+            "black": "#3F3F4F",
+            "red": "#FF568E",
+            "green": "#64DE83",
+            "yellow": "#EFFF73",
+            "blue": "#73A9FF",
+            "purple": "#946FF7",
+            "cyan": "#46CFCC",
+            "white": "#DEE5E9",
+            "brightBlack": "#474756",
+            "brightRed": "#FF84A6",
+            "brightGreen": "#8BE39E",
+            "brightYellow": "#F1FF94",
+            "brightBlue": "#94B9FF",
+            "brightPurple": "#AA91F8",
+            "brightCyan": "#7CD7D5",
+            "brightWhite": "#EAF0F4"
+        }
+    ],
+    "actions": [
+        {
+            "command": "closeTab",
+            "keys": "ctrl+w"
+        },
+        {
+            "command": "newTab",
+            "keys": "ctrl+n"
+        },
+    ]
+}
