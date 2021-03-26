@@ -1,0 +1,1 @@
+$InstallTarget = Split-Path $profile
