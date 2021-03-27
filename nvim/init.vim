@@ -1,10 +1,14 @@
 set nocompatible "It's like a shebang of the vim 21st century - anon
 
+let is_win = has("win64") || has("win32") || has("win16")
+
 " == Plugins {{{
-if empty(glob("~/.local/share/nvim/site/autoload/plug.vim"))
-  silent !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim
-   \ --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  autocmd VimEnter * PlugInstall --sync
+if !is_win
+  if empty(glob("~/.local/share/nvim/site/autoload/plug.vim"))
+    silent !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim
+    \ --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    autocmd VimEnter * PlugInstall --sync
+  endif
 endif
 
 call plug#begin('~/.local/share/nvim/plugged')
@@ -17,7 +21,6 @@ Plug 'preservim/nerdtree'
 Plug 'ryanoasis/vim-devicons'
 Plug 'ghifarit53/tokyonight-vim'
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
-Plug 'lambdalisue/suda.vim'
 
 " languages and stuff
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -25,6 +28,9 @@ Plug 'dart-lang/dart-vim-plugin'
 Plug 'sheerun/vim-polyglot'
 Plug 'editorconfig/editorconfig-vim'
 
+if !is_win
+  Plug 'lambdalisue/suda.vim'
+endif
 call plug#end()
 "}}}
 
@@ -106,7 +112,11 @@ let g:NERDTreeShowHidden = 1
 let g:NERDTreeHijackNetrw = 1
 let g:NERDTreeMinimalUI = 1
 let g:NERDTreeShowBookmarks = 1
-let g:NERDTreeBookmarksFile = "$HOME/.config/nvim/NERDTreeBookmarks"
+if !is_win
+  let g:NERDTreeBookmarksFile = "$HOME/.config/nvim/NERDTreeBookmarks"
+else
+  let g:NERDTreeBookmarksFile = "%LOCALAPPDATA%/nvim/NERDTreeBookmarks"
+endif
 let g:NERDTreeWinSize = 28
 let g:NERDTreeChDirMode = 2
 let g:NERDTreeDirArrowExpandable=""
