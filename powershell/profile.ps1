@@ -15,19 +15,11 @@ Register-ArgumentCompleter -Native -CommandName winget -ScriptBlock {
         }
 }
 
-# Prompt with git integration
-Import-Module posh-git -ErrorAction SilentlyContinue
+# Prompt
 function prompt {
     $ESC = [char]27
     $Local:user = $env:USERNAME.ToLower()
-    if ($GitPromptSettings) {
-        $GitPromptSettings.DefaultPromptAbbreviateHomeDirectory = $true
-        $GitPromptSettings.EnableFileStatus = $false
-        $GitPromptSettings.DefaultPromptSuffix = ""
-        $Local:dirInfo = (& $GitPromptScriptBlock)
-    } else {
-        $Local:dirInfo = $PWD.Path.Replace($env:USERPROFILE, "~")
-    }
+    $Local:dirInfo = $PWD.Path.Replace($env:USERPROFILE, "~")
 
     "$ESC[31m$Local:user$ESC[34m at $ESC[0m$Local:dirInfo > "
 }
