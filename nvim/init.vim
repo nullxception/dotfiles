@@ -4,14 +4,21 @@ let is_win = has("win64") || has("win32") || has("win16")
 
 " == Plugins {{{
 if !is_win
-  if empty(glob("~/.local/share/nvim/site/autoload/plug.vim"))
-    silent !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim
-    \ --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    autocmd VimEnter * PlugInstall --sync
-  endif
+  let nvim_config = "~/.config/nvim"
+  let nvim_plug = "~/.local/share/nvim/site/autoload/plug.vim"
+  let nvim_plug_libs = "~/.local/share/nvim/plugged"
+else
+  let nvim_config = $localappdata."/nvim"
+  let nvim_plug = $localappdata."/nvim/autoload/plug.vim"
+  let nvim_plug_libs = $localappdata."/nvim-data/plugged"
 endif
 
-call plug#begin('~/.local/share/nvim/plugged')
+if empty(glob(nvim_plug))
+  silent execute '!curl -fLo '.nvim_plug .' --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  autocmd VimEnter * PlugInstall --sync
+endif
+
+call plug#begin(nvim_plug_libs)
 
 " utilities and themes
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
@@ -113,11 +120,7 @@ let g:NERDTreeShowHidden = 1
 let g:NERDTreeHijackNetrw = 1
 let g:NERDTreeMinimalUI = 1
 let g:NERDTreeShowBookmarks = 1
-if !is_win
-  let g:NERDTreeBookmarksFile = "$HOME/.config/nvim/NERDTreeBookmarks"
-else
-  let g:NERDTreeBookmarksFile = "%LOCALAPPDATA%/nvim/NERDTreeBookmarks"
-endif
+let g:NERDTreeBookmarksFile = nvim_config . "/NERDTreeBookmarks"
 let g:NERDTreeWinSize = 28
 let g:NERDTreeChDirMode = 2
 let g:NERDTreeDirArrowExpandable=""
