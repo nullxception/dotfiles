@@ -20,6 +20,11 @@ function prompt {
     $ESC = [char]27
     $Local:user = $env:USERNAME.ToLower()
     $Local:dirInfo = $PWD.Path.Replace($env:USERPROFILE, "~")
-
-    "$ESC[31m$Local:user$ESC[34m at $ESC[0m$Local:dirInfo > "
+    if (Get-Command git) {
+        $Local:gitBranch = git symbolic-ref --short HEAD
+        if (![string]::IsNullOrWhiteSpace($Local:gitBranch)) {
+            $Local:git = " $ESC[32m($Local:gitBranch)$ESC[0m"
+        }
+    }
+    "$ESC[31m$Local:user$ESC[34m at $ESC[0m$Local:dirInfo$Local:git > "
 }
