@@ -69,9 +69,13 @@ set nowrap
 set number
 set tabstop=4 softtabstop=4 shiftwidth=4 autoindent
 set termguicolors
-set undodir=/tmp
 set undofile
 set visualbell
+if is_win
+  set undodir=$TMP
+else
+  set undodir=/tmp
+endif
 
 "}}}
 
