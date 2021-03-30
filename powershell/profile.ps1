@@ -13,6 +13,9 @@ $CustomPath = @(
 
 $CustomPath | Where-Object { Register-Path -At $_ -Scope User }
 
+# Setup aliases
+Set-Alias vim nvim
+
 # Completions
 Register-ArgumentCompleter -Native -CommandName winget -ScriptBlock {
     param($wordToComplete, $commandAst, $cursorPosition)
