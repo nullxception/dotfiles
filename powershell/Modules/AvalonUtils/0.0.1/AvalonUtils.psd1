@@ -6,7 +6,7 @@
     CompanyName       = 'Chaldeastudio'
     Description       = 'Set of utilities for the chaldeans'
     Copyright         = '(c) Nauval. All rights reserved.'
-    FunctionsToExport = @("Register-Path", "Update-CurrentEnv")
+    FunctionsToExport = @("Register-Path", "Register-Env", "Update-CurrentEnv")
     CmdletsToExport   = @()
     VariablesToExport = '*'
     AliasesToExport   = @()

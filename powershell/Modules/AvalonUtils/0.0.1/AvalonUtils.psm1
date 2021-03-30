@@ -14,6 +14,19 @@ function Register-Path {
     }
 }
 
+function Register-Env {
+    param (
+        [Parameter(Mandatory = $true)] $Key,
+        [Parameter(Mandatory = $true)] $Value,
+        [System.EnvironmentVariableTarget] $Scope = 'User'
+    )
+    $CurrentValue = [Environment]::GetEnvironmentVariable($Key, $Scope)
+    if ($CurrentValue -ne $Value) {
+        [Environment]::SetEnvironmentVariable($Key, $Value, $Scope)
+    }
+    Set-Item "Env:\$Key" -Value $Value
+}
+
 function Update-CurrentEnv {
     $ignored = @('USERNAME', 'PSModulePath', 'Path')
 
