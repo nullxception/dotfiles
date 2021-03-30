@@ -4,6 +4,15 @@ Set-PSReadlineKeyHandler -Key Tab -Function MenuComplete
 Set-PSReadlineKeyHandler -Key UpArrow -Function HistorySearchBackward
 Set-PSReadlineKeyHandler -Key DownArrow -Function HistorySearchForward
 
+# Setup additional paths
+$CustomPath = @(
+    "$env:LOCALAPPDATA\Android\Sdk\cmdline-tools\latest\bin",
+    "$env:LOCALAPPDATA\Android\Sdk\emulator",
+    "$env:LOCALAPPDATA\Android\Sdk\platform-tools"
+)
+
+$CustomPath | Where-Object { Register-Path -At $_ -Scope User }
+
 # Completions
 Register-ArgumentCompleter -Native -CommandName winget -ScriptBlock {
     param($wordToComplete, $commandAst, $cursorPosition)
