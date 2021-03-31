@@ -1,11 +1,19 @@
 // Mozilla User Preferences
+user_pref("app.shield.optoutstudies.enabled", false);
+user_pref("browser.newtabpage.activity-stream.feeds.section.highlights", false);
+user_pref("browser.newtabpage.activity-stream.feeds.snippets", false);
+user_pref("browser.newtabpage.activity-stream.feeds.topsites", false);
+user_pref("datareporting.healthreport.uploadEnabled", false);
 user_pref("dom.webnotifications.enabled", false);
-user_pref("services.sync.engine.passwords", false);
-user_pref("services.sync.prefs.sync.signon.rememberSignons", false);
-user_pref("signon.rememberSignons", false);
+user_pref("geo.enabled", false);
 user_pref("privacy.donottrackheader.enable", true);
 user_pref("privacy.resistFingerprintin", true);
-user_pref("geo.enabled", false);
+user_pref("services.sync.engine.passwords", false);
+user_pref("services.sync.prefs.sync.signon.rememberSignons", false);
+user_pref("signon.autofillForms", false)
+user_pref("signon.generation.enabled", false)
+user_pref("signon.rememberSignons", false)
+user_pref("signon.rememberSignons", false);
 // Fix HTML5 video tearing
 user_pref("layers.acceleration.force-enabled", true);
 // Scrolling Tweaks
