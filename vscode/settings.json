@@ -19,6 +19,8 @@
   "editor.fontFamily": "'JetBrainsMono NF Medium', 'JetBrainsMono Nerd Font Medium', monospace",
   "editor.fontLigatures": true,
   "editor.fontSize": 12,
+  "editor.formatOnSave": true,
+  "editor.formatOnType": true,
   "editor.minimap.enabled": false,
   "files.eol": "\n",
   "files.insertFinalNewline": true,
