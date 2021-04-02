@@ -30,6 +30,8 @@
   "gitlens.advanced.telemetry.enabled": false,
   "gitlens.gitCommands.closeOnFocusOut": true,
   "gitlens.showWhatsNewAfterUpgrades": false,
+  "powershell.integratedConsole.showOnStartup": false,
+  "powershell.integratedConsole.suppressStartupBanner": true,
   "telemetry.enableCrashReporter": false,
   "telemetry.enableTelemetry": false,
   "terminal.integrated.cursorBlinking": true,
