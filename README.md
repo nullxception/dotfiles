@@ -24,34 +24,26 @@ So, don't be shy, give a ⭐️ if some configs can helps you :)
 
 After cloning the repo, you can run this command :
 
-```
-./install.sh <topic-name>
-```
+* Linux
+
+  ```bash
+  ./install.sh <topic_name>
+  ```
+
+* Windows (from pwsh)
+
+  ```powershell
+  .\install.ps1 <topic_name>
+  ```
+
 and that's pretty much it 😊
 
 ## 📑 Topic Structures
 As you can see, this dotfiles is grouped by topics.
 
-Each of it has their own `.module-data.bash` files that will be used by `install.sh`. Here's some methods that currently supported by the `install.sh`.
+Each of it has their own `.module-data` (either ended with `.bash` or `.ps1`, depending on the OS target) files that will be used by the install script.
 
-* **basic copy-to-target**
-
-    For simple structures like the `audio` topic, `install.sh` will deploy all the files inside `audio` topic into `$HOME/.config/`, which's already defined in `audio/.module-data.bash` by `module_target` variable.
-
-* **custom install method**
-
-    For another topics that needs dynamic operation like `firefox`, `install.sh` will using `module_install()` function that already defined in `firefox/.module-data.bash`.
-
-* **dynamic destination**
-
-    Since `.module-data.bash` are just merely a bash script that will be evaluated by `install.sh`, we can also utilize the power of shell script to extends it.
-    For example, `vscode` topic has a simple prompt to choose the install destination.
-
-* or, **No install method at all.**
-
-    There's an another topic that has no `.module-data.bash` file, the `script` topic.
-
-    Unlike `bin`, this topic are only meant to store executable scripts, portably, no need to be installed on anywhere.
+For complete example, take a look at [`.module-data.bash.example`](.module-data.bash.example) and [`.module-data.ps1.example`](.module-data.ps1.example) files in the root directory of this repository.
 
 ## 💬 FAQ
 
@@ -63,7 +55,7 @@ But for `etc` topic, I don't think you want to install it blatantly, since it's 
 
 🤔: _Why don't use ansible/stow/yadm/etc instead ?_
 
-All of my systems is using GNU/Linux, so I think simple bash script already enough for my cases.
+For simple task such installing files, I think shell script (bash/pwsh) is more than enough for me.
 
 🤔: _Is there any LDA or r/unixporn-able desktop suite configuration here ?_
 
