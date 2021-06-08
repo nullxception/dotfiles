@@ -24,3 +24,10 @@ alias lsport="sudo lsof -i"
 alias open="xdg-open"
 alias update-grub="sudo grub-mkconfig -o /boot/grub/grub.cfg"
 alias tmux="tmux a || tmux"
+
+#
+# Special aliases for WSL environment
+#
+if [ -n "$WSL_INTEROP" ]; then
+  alias adb="adb.exe"
+fi

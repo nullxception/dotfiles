@@ -20,3 +20,13 @@ if [ "${PATH#*$HOME/.local/bin}" = "$PATH" ]; then
     USER_PATH+=":$ANDROID_SDK_ROOT/tools/bin"
     export PATH="$USER_PATH:$PATH"
 fi
+
+#
+# Special setup for WSL environment
+#
+if [ -n "$WSL_INTEROP" ]; then
+    export WSL_HOST_IP=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}')
+    export DISPLAY=$WSL_HOST_IP:0.0
+    export PULSE_SERVER=tcp:$WSL_HOST_IP
+    export LIBGL_ALWAYS_INDIRECT=1
+fi
