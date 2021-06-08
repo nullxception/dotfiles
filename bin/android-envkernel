@@ -1,0 +1,130 @@
+#!/bin/bash
+if ! (return 0 2>/dev/null || [[ $ZSH_EVAL_CONTEXT =~ :file$ ]]); then
+    echo "Please load the file instead."
+    echo "example: source ./path/to/android-envkernel"
+    exit 1
+fi
+
+# set current directory as kernel dir
+export KERNEL_DIR=$(pwd)
+
+################
+# Example of .envkernel content
+#
+# export KBUILD_VERSION_REL=7.5
+# export KBUILD_DEFAULT_CONFIG=vayu_defconfig
+# export KBUILD_OUT=/tmp/buildkernel
+# export ANDROID_CLANG_HOME=$HOME/Android/prebuilts/clang-13/
+# export CROSS_COMPILE=$HOME/Android/prebuilts/aarch64-linux-android-4.9/bin/aarch64-linux-android-
+# export CROSS_COMPILE_ARM32=$HOME/Android/prebuilts/arm-linux-androideabi-4.9/bin/arm-linux-androideabi-
+#
+
+[[ -f "$KERNEL_DIR/../.envkernel" ]] && DOTENV="$KERNEL_DIR/../.envkernel"
+[[ -z $DOTENV ]] && {
+    echo "no .envkernel available. exiting"
+    return
+}
+
+source $DOTENV
+
+# set ccache and clang path
+# you should set ANDROID_CLANG_HOME with your path of clang before using it
+export PATH="/usr/lib/ccache/bin/:$ANDROID_CLANG_HOME/bin:$PATH"
+# also insert the clang's libs for additional shared library usage (e.g LTO)
+export LD_LIBRARY_PATH="$ANDROID_CLANG_HOME/lib64:$LD_LIBRARY_PATH"
+
+if [[ -z $KBUILD_COMPILER_STRING ]]; then
+    # remove unused links on clang's version from aosp-clang
+    export KBUILD_COMPILER_STRING=$(clang -v |& sed -e '1!d;s/ (http.\+)//g')
+fi
+
+if [[ -z $OLDPROMPT ]]; then
+    export OLDPROMPT="$PS1"
+    export PS1="(dev) $OLDPROMPT"
+fi
+
+# reset build version at the first time of sourcing this script
+if [[ -d $KBUILD_OUT ]]; then
+    echo 0 >$KBUILD_OUT/.version
+fi
+
+build() {
+    mkdir -p $KBUILD_OUT
+    if [[ -z $KBUILD_VERSION_REL ]]; then
+        KBUILD_VERSION_REL=$(git rev-list --tags --max-count=1 | xargs git describe --tags)
+    fi
+    echo "envsetup: Building Version $KBUILD_VERSION_REL."
+
+    echo "$KBUILD_VERSION_REL" > $KERNEL_DIR/.scmversion
+    echo "$KBUILD_VERSION_REL" > $KBUILD_OUT/.scmversion
+
+    make -j$(nproc --ignore=1) \
+        -C $KERNEL_DIR O=$KBUILD_OUT \
+        ARCH=arm64 \
+        CC=clang LD=ld.lld AR=llvm-ar NM=llvm-nm \
+        OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump STRIP=llvm-strip \
+        CLANG_TRIPLE=aarch64-linux-gnu- $@ \
+            |& tee ../mke.log
+
+    if [[ "$ENVKERNEL_BUILD_DTBO" == "true" ]]; then
+        test -z "$@" && mke_dtimg
+    fi
+}
+
+build-dtbo() {
+    DTOUT=$KBUILD_OUT/dtbo.img
+    MKDT=$(which mkdtboimg.py)
+
+    if [[ -f $MKDT ]]; then
+        echo "Building overlay dt using $MKDT"
+        python2 $MKDT \
+            create $DTOUT \
+            $(find $KBUILD_OUT/arch/arm64/boot/dts/ -iname '*-overlay.dtbo' -print)
+        echo "Build done: $DTOUT"
+    fi
+}
+
+saveconfig() {
+    if [[ -z $KBUILD_DEFAULT_CONFIG ]]; then
+        echo "envsetup: you have to set KBUILD_DEFAULT_CONFIG before, for example: "
+        echo "    $ export KBUILD_DEFAULT_CONFIG=vayu_defconfig"
+    else
+        build savedefconfig
+        cp $KBUILD_OUT/defconfig $KERNEL_DIR/arch/arm64/configs/$KBUILD_DEFAULT_CONFIG
+    fi
+}
+
+cherry-am() {
+    co=cherry.patch
+    uri=$(echo $1 | cut -d\# -f1)
+    curl -o $co $uri.patch && git am <$co && rm $co
+}
+
+env-info() {
+    echo "DotEnv : $DOTENV"
+    echo "Target Kernel : $KERNEL_DIR"
+    echo "Output : $KBUILD_OUT"
+    echo "Compiler: $KBUILD_COMPILER_STRING"
+    echo "Kernel Version: $KBUILD_VERSION_REL"
+}
+
+exit() {
+    export PS1="$OLDPROMPT"
+
+    set | grep -E '^(CROSS_CO|KBUILD_)' | cut -d= -f1 | while read line;do
+        unset $line;
+    done
+
+    unset ANDROID_CLANG_HOME \
+        OLDPROMPT
+
+    unset -f exit \
+        build \
+        build-dtbo \
+        cherry-am \
+        env-info \
+        saveconfig
+}
+
+clear
+env-info
