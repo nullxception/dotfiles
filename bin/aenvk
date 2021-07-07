@@ -1,0 +1,131 @@
+#!/bin/bash
+if ! (return 0 2>/dev/null || [[ $ZSH_EVAL_CONTEXT =~ :file$ ]]); then
+    echo "Please load the file instead."
+    echo "example: source ./path/to/aenvk"
+    exit 1
+fi
+
+# set current directory as kernel dir
+export KERNEL_DIR=$(pwd)
+
+################
+# Example of .aenvkconfig content
+#
+# export CROSS_COMPILE_ARM32=$HOME/Android/tools/arm-linux-androideabi-4.9/bin/arm-linux-androidkernel-
+# export CROSS_COMPILE=$HOME/Android/tools/aarch64-linux-android-4.9/bin/aarch64-linux-android-
+# export ENVK_ADDITIONAL_FLAGS="LLVM=1"
+# export ENVK_BUILD_CONFIG=vayu_defconfig
+# export ENVK_BUILD_DIR=$HOME/Android/build
+# export ENVK_BUILD_VERSION=r3
+# export ENVK_CLANG_PATH=$HOME/Android/tools/clang-aosp-11
+# export ENVK_WITH_DTBO=1
+
+[[ -f "$KERNEL_DIR/.aenvkconfig" ]] && DOTENV="$KERNEL_DIR/.aenvkconfig"
+[[ -z $DOTENV ]] && {
+    echo "no .aenvkconfig available. exiting"
+    return
+}
+
+clearvar() {
+    if [[ -n $ENVK_SAVED_PATH ]]; then
+        export PATH=$ENVK_SAVED_PATH
+        export LD_LIBRARY_PATH=$ENVK_SAVED_LD
+    fi
+    set | grep -E '^(CROSS_CO|KBUILD_|ENVK_)' | cut -d= -f1 | while read line;do
+        unset $line;
+    done
+}
+
+mk() {
+    local loginfo=$ENVK_BUILD_DIR/mk.build.log
+    local logerr=$ENVK_BUILD_DIR/mk.error.log
+
+    mkdir -p $ENVK_BUILD_DIR
+    if [[ -z $ENVK_BUILD_VERSION ]]; then
+        ENVK_BUILD_VERSION=$(git rev-list --tags --max-count=1 | xargs git describe --tags)
+    fi
+    echo "envkernels: Building Version $ENVK_BUILD_VERSION."
+
+    echo "-$ENVK_BUILD_VERSION" > $KERNEL_DIR/.scmversion
+
+    make -j$(nproc --ignore=1) \
+        -C $KERNEL_DIR O=$ENVK_BUILD_DIR \
+        ARCH=arm64 \
+        CLANG_TRIPLE=aarch64-linux-gnu- \
+        $ENVK_ADDITIONAL_FLAGS \
+            $@ > >(tee ${loginfo}) 2> >(tee ${logerr} >&2)
+
+    if [[ "$ENVK_WITH_DTBO" == "1" ]]; then
+        test -z "$@" && mkdtbo
+    fi
+}
+
+mkdtbo() {
+    DTOUT=$ENVK_BUILD_DIR/arch/arm64/boot/dtbo.img
+    MKDT=$(which mkdtboimg.py)
+
+    if [[ -f $MKDT ]]; then
+        echo "Building overlay dt using $MKDT"
+        python2 $MKDT \
+            create $DTOUT \
+            $(find $ENVK_BUILD_DIR/arch/arm64/boot/dts/ -iname '*-overlay.dtbo' -print)
+        echo "Build done: $DTOUT"
+    fi
+}
+
+saveconfig() {
+    if [[ -z $ENVK_BUILD_CONFIG ]]; then
+        echo "envkernels: you have to set ENVK_BUILD_CONFIG before, for example: "
+        echo "    $ export ENVK_BUILD_CONFIG=vayu_defconfig"
+    else
+        mkk savedefconfig
+        cp $ENVK_BUILD_DIR/defconfig $KERNEL_DIR/arch/arm64/configs/$ENVK_BUILD_CONFIG
+    fi
+}
+
+cherry-am() {
+    local co=cherry.patch
+    local uri=$(cut -d\# -f1 <<<$1)
+    curl -o $co $uri.patch && git am <$co && rm $co
+}
+
+env-info() {
+    local clang=$(clang -v |& sed -e '1!d;s/ (http.\+)//g')
+    echo "Compiler: $clang"
+    echo "Target: $KERNEL_DIR"
+    echo "Output: $ENVK_BUILD_DIR"
+    echo "Version: $ENVK_BUILD_VERSION"
+}
+
+exit() {
+    clearvar
+    unset -f exit \
+        mk \
+        mkdtbo \
+        cherry-am \
+        env-info \
+        saveconfig \
+        clearvar
+}
+
+clearvar
+source $DOTENV
+
+export ENVK_SAVED_PATH=$PATH
+export ENVK_SAVED_LD=$LD_LIBRARY_PATH
+if [[ -n ${ENVK_CLANG_PATH} ]]; then
+    # push ENVK_CLANG_PATH to path and shared libs
+    export PATH="$ENVK_CLANG_PATH/bin:$PATH"
+    export LD_LIBRARY_PATH="$ENVK_CLANG_PATH/lib64:$LD_LIBRARY_PATH"
+fi
+
+# set ccache
+export PATH="/usr/lib/ccache/bin/:$PATH"
+
+# reset build version at the first time of sourcing this script
+if [[ -d $ENVK_BUILD_DIR ]]; then
+    echo 0 >$ENVK_BUILD_DIR/.version
+fi
+
+clear
+env-info
