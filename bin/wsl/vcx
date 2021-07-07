@@ -1,0 +1,15 @@
+#!/bin/bash
+
+stop() {
+    taskkill.exe '/f' '/im' vcxsrv.exe
+}
+start() {
+    vcxsrv.exe -multiwindow -clipboard -wgl -ac -lesspointer & disown
+}
+
+if [[ "$1" == "-r" ]]; then
+    stop
+    start
+else
+    vcxsrv.exe $@
+fi
