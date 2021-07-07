@@ -29,4 +29,5 @@ if [ -n "$WSL_INTEROP" ]; then
     export DISPLAY=$WSL_HOST_IP:0.0
     export PULSE_SERVER=tcp:$WSL_HOST_IP
     export LIBGL_ALWAYS_INDIRECT=1
+    export PATH="$HOME/.local/bin/wsl:$PATH"
 fi
