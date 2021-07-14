@@ -125,29 +125,29 @@ applet_reset() {
 
 usage() {
 cat <<\EOF
+Usage:
+  aenvk [options] <parameters>
 
-Usage: aenvk <options> [...]
+Options:
+  -i, --print-info                    Print current kernel setup
+  -d, --dtbo                          Create DTBO image
+  -s, --save-defconfig                Save defconfig to $ENVK_BUILD_CONFIG
+  -b, --build-type <release|debug>    Switch $ENVK_BUILD_CONFIG,
+                                      valid params are : "release" or "debug"
+  -x, --execute <make-cmds>           Run make commands
 
-    -i | --print-info                         Print current kernel setup
-    -d | --dtbo                               Create DTBO image
-    -s | --save-defconfig                     Save defconfig to $ENVK_BUILD_CONFIG
-    -b | --build-type       <release|debug>   Switch $ENVK_BUILD_CONFIG, valid
-                                              options are : "release" or "debug"
-    -x | --execute          [make-cmds]       Run make commands
+Example workflow:
+  # Prepare for clean-build kernel
+  $ aenvk -x mrproper
 
-Example:
+  # Switch to production mode
+  $ aenvk -b release
 
-    ## Prepare for clean-build kernel
-    $ aenvk -x mrproper
+  # apply custom defconfig that stored at arch/arm64/configs
+  $ aenvk -x fischl_defconfig
 
-    ## Switch to production mode
-    $ aenvk -b release
-
-    ## apply custom defconfig that stored at arch/arm64/configs
-    $ aenvk -x fischl_defconfig
-
-    ## run build process
-    $ aenvk
+  # run build process
+  $ aenvk
 
 EOF
   exit
