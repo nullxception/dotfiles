@@ -37,6 +37,20 @@ env-clear() {
     done
 }
 
+env-switchmode() {
+    if [[ "$ENVK_BUILD_TYPE" == "debug" ]]; then
+        sed -i 's/ENVK_BUILD_TYPE=debug/ENVK_BUILD_TYPE=release/' $DOTENV
+    elif [[ "$ENVK_BUILD_TYPE" == "release" ]]; then
+        sed -i 's/ENVK_BUILD_TYPE=release/ENVK_BUILD_TYPE=debug/' $DOTENV
+    else
+        sed -i '/ENVK_BUILD_TYPE=/d' $DOTENV
+        echo 'export ENVK_BUILD_TYPE=debug' | tee -a $DOTENV
+    fi
+
+    source $DOTENV
+    echo ":: Switching to mode: $ENVK_BUILD_TYPE"
+}
+
 env-thinlto() {
     local cfg=$ENVK_BUILD_DIR/.config
     if [[ ! -f $cfg ]]; then
@@ -117,9 +131,10 @@ env-am() {
 
 env-info() {
     local clang=$(clang -v |& sed -e '1!d;s/ (http.\+)//g')
+    echo "Build type: $ENVK_BUILD_TYPE"
     echo "Compiler: $clang"
-    echo "Target: $KERNEL_DIR"
     echo "Output: $ENVK_BUILD_DIR"
+    echo "Target: $KERNEL_DIR"
     echo "Version: $ENVK_BUILD_VERSION"
 }
 
