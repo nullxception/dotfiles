@@ -14,6 +14,7 @@ export KERNEL_DIR=$(pwd)
 # export CROSS_COMPILE_ARM32=$HOME/Android/tools/arm-linux-androideabi-4.9/bin/arm-linux-androidkernel-
 # export CROSS_COMPILE=$HOME/Android/tools/aarch64-linux-android-4.9/bin/aarch64-linux-android-
 # export ENVK_ADDITIONAL_FLAGS="LLVM=1"
+# export ENVK_BUILD_TYPE=release
 # export ENVK_BUILD_CONFIG=vayu_defconfig
 # export ENVK_BUILD_DIR=$HOME/Android/build
 # export ENVK_BUILD_VERSION=r3
@@ -63,8 +64,15 @@ mk() {
         ENVK_BUILD_VERSION=$(git rev-list --tags --max-count=1 | xargs git describe --tags)
     fi
     echo "envkernels: Building Version $ENVK_BUILD_VERSION."
-
     echo "-$ENVK_BUILD_VERSION" > $KERNEL_DIR/.scmversion
+
+    if [[ -z "$@" ]]; then
+        if [[ "$ENVK_BUILD_TYPE" == "release" ]]; then
+            env-thinlto n
+        else
+            env-thinlto y
+        fi
+    fi
 
     make -j$(nproc --ignore=1) \
         -C $KERNEL_DIR O=$ENVK_BUILD_DIR \
