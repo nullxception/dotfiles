@@ -1,12 +1,4 @@
 #!/bin/bash
-if ! (return 0 2>/dev/null || [[ $ZSH_EVAL_CONTEXT =~ :file$ ]]); then
-    echo "aenvk: Please load the file instead."
-    echo "          example: source ./path/to/aenvk"
-    exit 1
-fi
-
-# set current directory as kernel dir
-export KERNEL_DIR=$(pwd)
 
 ################
 # Example of .aenvkconfig content
@@ -21,23 +13,7 @@ export KERNEL_DIR=$(pwd)
 # export ENVK_CLANG_PATH=$HOME/Android/tools/clang-aosp-11
 # export ENVK_WITH_DTBO=1
 
-[[ -f "$KERNEL_DIR/.aenvkconfig" ]] && DOTENV="$KERNEL_DIR/.aenvkconfig"
-[[ -z $DOTENV ]] && {
-    echo "aenvk: no .aenvkconfig available. exiting"
-    return
-}
-
-env-clear() {
-    if [[ -n $ENVK_SAVED_PATH ]]; then
-        export PATH=$ENVK_SAVED_PATH
-        export LD_LIBRARY_PATH=$ENVK_SAVED_LD
-    fi
-    set | grep -E '^(CROSS_CO|KBUILD_|ENVK_)' | cut -d= -f1 | while read line;do
-        unset $line;
-    done
-}
-
-env-switchmode() {
+buildtype_switch() {
     if [[ "$ENVK_BUILD_TYPE" == "debug" ]]; then
         sed -i 's/ENVK_BUILD_TYPE=debug/ENVK_BUILD_TYPE=release/' $DOTENV
     elif [[ "$ENVK_BUILD_TYPE" == "release" ]]; then
@@ -51,19 +27,19 @@ env-switchmode() {
     echo "aenvk: Switching to mode: $ENVK_BUILD_TYPE"
 }
 
-env-thinlto() {
+thinlto_switch() {
     local cfg=$ENVK_BUILD_DIR/.config
     if [[ ! -f $cfg ]]; then
         echo "aenvk: .config is not generated, apply your config first"
-        return 1
+        exit 1
     fi
 
     if [[ -n "$(grep _LTO $cfg)" ]]; then
         if [[ "$1" == "y" ]]; then
-            echo "aenvk: enabling THINLTO for development usage"
+            echo "aenvk: enabling Thin LTO for development usage"
             $KERNEL_DIR/scripts/config --file $cfg -e CONFIG_THINLTO
         else
-            echo "aenvk: disabling THINLTO for production release"
+            echo "aenvk: disabling Thin LTO for production release"
             $KERNEL_DIR/scripts/config --file $cfg -d CONFIG_THINLTO
         fi
     fi
@@ -82,9 +58,9 @@ mk() {
 
     if [[ -z "$@" ]]; then
         if [[ "$ENVK_BUILD_TYPE" == "release" ]]; then
-            env-thinlto n
+            thinlto_switch n
         else
-            env-thinlto y
+            thinlto_switch y
         fi
     fi
 
@@ -111,6 +87,7 @@ mkdtbo() {
             $(find $ENVK_BUILD_DIR/arch/arm64/boot/dts/ -iname '*-overlay.dtbo' -print)
         echo "aenvk: Build done: $DTOUT"
     fi
+    exit $?
 }
 
 mkcfg() {
@@ -121,39 +98,96 @@ mkcfg() {
         mk savedefconfig
         cp $ENVK_BUILD_DIR/defconfig $KERNEL_DIR/arch/arm64/configs/$ENVK_BUILD_CONFIG
     fi
+    exit $?
 }
 
-env-am() {
-    local co=cherry.patch
-    local uri=$(cut -d\# -f1 <<<$1)
-    curl -o $co $uri.patch && git am <$co && rm $co
-}
-
-env-info() {
+env_info() {
     local clang=$(clang -v |& sed -e '1!d;s/ (http.\+)//g')
     echo "Build type: $ENVK_BUILD_TYPE"
     echo "Compiler: $clang"
     echo "Output: $ENVK_BUILD_DIR"
     echo "Target: $KERNEL_DIR"
     echo "Version: $ENVK_BUILD_VERSION"
+    exit
 }
 
-env-exit() {
-    env-clear
-    unset -f mk \
-        mkcfg
-        mkdtbo \
-        env-am \
-        env-clear \
-        env-exit \
-        env-info
+applet_am() {
+    local co=cherry.patch
+    local uri=$(cut -d\# -f1 <<<$1)
+    curl -o $co $uri.patch && git am <$co && rm $co
 }
 
-env-clear
+applet_reset() {
+    if [[ -d $ENVK_BUILD_DIR ]]; then
+        echo 0 >$ENVK_BUILD_DIR/.version
+    fi
+}
+
+usage() {
+cat <<\EOF
+
+Usage: aenvk <options> [...]
+
+    -i | --print-info                         Print current kernel setup
+    -d | --dtbo                               Create DTBO image
+    -s | --save-defconfig                     Save defconfig to $ENVK_BUILD_CONFIG
+    -b | --build-type       <release|debug>   Switch $ENVK_BUILD_CONFIG, valid
+                                              options are : "release" or "debug"
+    -x | --execute          [make-cmds]       Run make commands
+
+Example:
+
+    ## Prepare for clean-build kernel
+    $ aenvk -x mrproper
+
+    ## Switch to production mode
+    $ aenvk -b release
+
+    ## apply custom defconfig that stored at arch/arm64/configs
+    $ aenvk -x fischl_defconfig
+
+    ## run build process
+    $ aenvk
+
+EOF
+  exit
+}
+
+if (return 0 2>/dev/null || [[ $ZSH_EVAL_CONTEXT =~ :file$ ]]); then
+    usage
+    exit 1
+fi
+
+KERNEL_DIR=$(pwd)
+[[ -f "$KERNEL_DIR/.aenvkconfig" ]] && DOTENV="$KERNEL_DIR/.aenvkconfig"
+[[ -z $DOTENV ]] && {
+    echo "aenvk: no .aenvkconfig available. exiting"
+    exit 1
+}
+
 source $DOTENV
 
-export ENVK_SAVED_PATH=$PATH
-export ENVK_SAVED_LD=$LD_LIBRARY_PATH
+opts=$(getopt -a -n aenvk -o hidsb:x: --long help,print-info,dtbo,save-defconfig,build-type:,execute: -- "$@")
+vopts=$?
+if [ "$vopts" != "0" ]; then
+  usage
+fi
+
+eval set -- "$opts"
+while :
+do
+  case "$1" in
+    -i | --print-info) env_info ;;
+    -d | --dtbo) mkdtbo ;;
+    -s | --save-defconfig) mkcfg ;;
+    -b | --build-type) task_buildtype="$2"; shift 2 ;;
+    -x | --execute) task_execute="$2"; shift 2 ;;
+    -h | --help) usage ;;
+    --) shift; break ;;
+    *) echo "Unexpected option: $1"; usage ;;
+  esac
+done
+
 if [[ -n ${ENVK_CLANG_PATH} ]]; then
     # push ENVK_CLANG_PATH to path and shared libs
     export PATH="$ENVK_CLANG_PATH/bin:$PATH"
@@ -163,10 +197,15 @@ fi
 # set ccache
 export PATH="/usr/lib/ccache/bin/:$PATH"
 
-# reset build version at the first time of sourcing this script
-if [[ -d $ENVK_BUILD_DIR ]]; then
-    echo 0 >$ENVK_BUILD_DIR/.version
+if [[ -n "$task_buildtype" ]]; then
+    buildtype_switch "$task_buildtype"
 fi
 
-clear
-env-info
+if [[ -n "$task_execute" ]]; then
+    mk "$task_execute"
+    exit $?
+fi
+
+if [[ "$vopts" == "0" ]]; then
+    mk
+fi
