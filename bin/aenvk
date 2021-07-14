@@ -36,6 +36,24 @@ clearvar() {
     done
 }
 
+env-thinlto() {
+    local cfg=$ENVK_BUILD_DIR/.config
+    if [[ ! -f $cfg ]]; then
+        echo ".config is not generated, apply your config first"
+        return 1
+    fi
+
+    if [[ -n "$(grep _LTO $cfg)" ]]; then
+        if [[ "$1" == "y" ]]; then
+            echo ":: enabling THINLTO for development usage"
+            $KERNEL_DIR/scripts/config --file $cfg -e CONFIG_THINLTO
+        else
+            echo ":: disabling THINLTO for production release"
+            $KERNEL_DIR/scripts/config --file $cfg -d CONFIG_THINLTO
+        fi
+    fi
+}
+
 mk() {
     local loginfo=$ENVK_BUILD_DIR/mk.build.log
     local logerr=$ENVK_BUILD_DIR/mk.error.log
@@ -78,7 +96,7 @@ saveconfig() {
         echo "envkernels: you have to set ENVK_BUILD_CONFIG before, for example: "
         echo "    $ export ENVK_BUILD_CONFIG=vayu_defconfig"
     else
-        mkk savedefconfig
+        mk savedefconfig
         cp $ENVK_BUILD_DIR/defconfig $KERNEL_DIR/arch/arm64/configs/$ENVK_BUILD_CONFIG
     fi
 }
