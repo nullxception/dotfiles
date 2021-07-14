@@ -26,7 +26,7 @@ export KERNEL_DIR=$(pwd)
     return
 }
 
-clearvar() {
+env-clear() {
     if [[ -n $ENVK_SAVED_PATH ]]; then
         export PATH=$ENVK_SAVED_PATH
         export LD_LIBRARY_PATH=$ENVK_SAVED_LD
@@ -91,7 +91,7 @@ mkdtbo() {
     fi
 }
 
-saveconfig() {
+mkcfg() {
     if [[ -z $ENVK_BUILD_CONFIG ]]; then
         echo "envkernels: you have to set ENVK_BUILD_CONFIG before, for example: "
         echo "    $ export ENVK_BUILD_CONFIG=vayu_defconfig"
@@ -101,7 +101,7 @@ saveconfig() {
     fi
 }
 
-cherry-am() {
+env-am() {
     local co=cherry.patch
     local uri=$(cut -d\# -f1 <<<$1)
     curl -o $co $uri.patch && git am <$co && rm $co
@@ -115,18 +115,18 @@ env-info() {
     echo "Version: $ENVK_BUILD_VERSION"
 }
 
-exit() {
-    clearvar
-    unset -f exit \
-        mk \
+env-exit() {
+    env-clear
+    unset -f mk \
+        mkcfg
         mkdtbo \
-        cherry-am \
-        env-info \
-        saveconfig \
-        clearvar
+        env-am \
+        env-clear \
+        env-exit \
+        env-info
 }
 
-clearvar
+env-clear
 source $DOTENV
 
 export ENVK_SAVED_PATH=$PATH
