@@ -22,6 +22,7 @@ buildtype_switch() {
         source $DOTENV
         echo "aenvk: Switching to mode: $ENVK_BUILD_TYPE"
     fi
+    exit
 }
 
 thinlto_switch() {
