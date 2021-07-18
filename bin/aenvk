@@ -109,13 +109,19 @@ env_info() {
     exit
 }
 
+#
+# aenvk's applets
+#
+
 applet_am() {
     local co=cherry.patch
     local uri=$(cut -d\# -f1 <<<$1)
+    echo "aenvk-am: Applying patch from $uri"
     curl -o $co $uri.patch && git am <$co && rm $co
 }
 
 applet_reset() {
+    echo "aenvk-reset: Resetting kernel build version"
     if [[ -d $ENVK_BUILD_DIR ]]; then
         echo 0 >$ENVK_BUILD_DIR/.version
     fi
@@ -133,6 +139,7 @@ Options:
   -b, --build-type <release|debug>    Switch $ENVK_BUILD_CONFIG,
                                       valid params are : "release" or "debug"
   -x, --execute <make-cmds>           Run make commands
+  -a, --applets <aenvk's-applet>      Run aenvk's applet functions
 
 Example workflow:
   # Prepare for clean-build kernel
@@ -146,6 +153,14 @@ Example workflow:
 
   # run build process
   $ aenvk
+
+Applets:
+    Applets are an internal functions that can be executed
+    directly for the sake of simplicity
+
+    Available :
+        - am (applying patch from url)
+        - reset (resetting kernel build version)
 
 EOF
   exit
@@ -165,7 +180,7 @@ KERNEL_DIR=$(pwd)
 
 source $DOTENV
 
-opts=$(getopt -a -n aenvk -o hidsb:x: --long help,print-info,dtbo,save-defconfig,build-type:,execute: -- "$@")
+opts=$(getopt -a -n aenvk -o hidsb:x:a: --long help,print-info,dtbo,save-defconfig,build-type:,execute:,applet:, -- "$@")
 vopts=$?
 if [ "$vopts" != "0" ]; then
   usage
@@ -180,6 +195,7 @@ do
     -s | --save-defconfig) mkcfg ;;
     -b | --build-type) task_buildtype="$2"; shift 2 ;;
     -x | --execute) task_execute="$2"; shift 2 ;;
+    -a | --applet) task_applet="$2"; shift 2 ;;
     -h | --help) usage ;;
     --) shift; break ;;
     *) echo "Unexpected option: $1"; usage ;;
@@ -197,6 +213,11 @@ export PATH="/usr/lib/ccache/bin/:$PATH"
 
 if [[ -n "$task_buildtype" ]]; then
     buildtype_switch "$task_buildtype"
+fi
+
+if [[ -n "$task_applet" ]]; then
+    applet_$task_applet
+    exit $?
 fi
 
 if [[ -n "$task_execute" ]]; then
