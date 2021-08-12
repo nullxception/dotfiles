@@ -3,17 +3,6 @@ mkcd(){
   cd "$1"
 }
 
-findstring(){
-  find $1 -type f | while read fi; do
-    if [[ -n $(cat $fi | strings | grep -i -E "$2") ]]; then
-        printf "\r\033[K Found : %s\n" $fi
-    else
-        printf "\r\033[K >> Looking at %s" $fi
-    fi
-  done
-  printf "\r\033[K Done\n"
-}
-
 # For applying patch from github/gitlab commit url
 urlam() {
     local patch=/tmp/urlam--$USER.patch
