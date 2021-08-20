@@ -1,18 +1,5 @@
 #!/bin/bash
 
-################
-# Example of .aenvkconfig content
-#
-# export CROSS_COMPILE_ARM32=$HOME/Android/tools/arm-linux-androideabi-4.9/bin/arm-linux-androidkernel-
-# export CROSS_COMPILE=$HOME/Android/tools/aarch64-linux-android-4.9/bin/aarch64-linux-android-
-# export ENVK_ADDITIONAL_FLAGS="LLVM=1"
-# export ENVK_BUILD_TYPE=release
-# export ENVK_BUILD_CONFIG=vayu_defconfig
-# export ENVK_BUILD_DIR=$HOME/Android/build
-# export ENVK_BUILD_VERSION=r3
-# export ENVK_CLANG_PATH=$HOME/Android/tools/clang-aosp-11
-# export ENVK_WITH_DTBO=1
-
 buildtype_switch() {
     local type=$1
 
@@ -76,11 +63,10 @@ mk() {
 
 mkdtbo() {
     DTOUT=$ENVK_BUILD_DIR/arch/arm64/boot/dtbo.img
-    MKDT=$(which mkdtboimg.py)
 
     if [[ -f $MKDT ]]; then
         echo "aenvk: Building overlay dt using $MKDT"
-        python2 $MKDT \
+        python2 $ENVK_LIBUFDT_PATH/utils/src/mkdtboimg.py \
             create $DTOUT \
             $(find $ENVK_BUILD_DIR/arch/arm64/boot/dts/ -iname '*-overlay.dtbo' -print)
         echo "aenvk: Build done: $DTOUT"
@@ -127,9 +113,35 @@ applet_reset() {
     fi
 }
 
+applet_initconfig() {
+cat <<\EOF > $KERNEL_DIR/.aenvkconfig
+#
+# aenvk build configuration
+#
+
+# tools paths
+ENVK_CLANG_PATH=$HOME/Android/tools/clang-aosp-11
+ENVK_LIBUFDT_PATH=$HOME/Android/system/libufdt
+ENVK_ADDITIONAL_FLAGS="LLVM=1"
+
+# cross-compile path (for vdso32)
+CROSS_COMPILE_ARM32=$HOME/Android/tools/arm-linux-androideabi-4.9/bin/arm-linux-androidkernel-
+CROSS_COMPILE=$HOME/Android/tools/aarch64-linux-android-4.9/bin/aarch64-linux-android-
+
+# build options
+ENVK_BUILD_TYPE=release # (release or debug)
+ENVK_BUILD_CONFIG=vayu_defconfig
+ENVK_BUILD_DIR=$HOME/Android/outdir
+ENVK_BUILD_VERSION=r1
+ENVK_WITH_DTBO=1
+EOF
+echo "aenvk: initial config created at $KERNEL_DIR/.aenvkconfig"
+}
+
 usage() {
 cat <<\EOF
 Usage:
+  aenvk init # initializing config for the kernel build
   aenvk [options] <parameters>
 
 Options:
@@ -172,6 +184,11 @@ if (return 0 2>/dev/null || [[ $ZSH_EVAL_CONTEXT =~ :file$ ]]); then
 fi
 
 KERNEL_DIR=$(pwd)
+if [[ "$1" == "init" ]]; then
+    applet_initconfig
+    exit
+fi
+
 [[ -f "$KERNEL_DIR/.aenvkconfig" ]] && DOTENV="$KERNEL_DIR/.aenvkconfig"
 [[ -z $DOTENV ]] && {
     echo "aenvk: no .aenvkconfig available. exiting"
