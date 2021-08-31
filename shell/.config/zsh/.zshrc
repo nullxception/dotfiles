@@ -57,3 +57,8 @@ fi
 
 # load command aliases
 [[ -f $ZDOTDIR/.aliases ]] && source $ZDOTDIR/.aliases || true
+
+# WSL2 workaround for default dir
+grep -qE '/mnt/c/Users/([a-zA-Z\ ]+)' <<<$PWD \
+    && grep -qE '/mnt/c/Users/([a-zA-Z\ ]+)' <<<$OLDPWD \
+    && cd ~
