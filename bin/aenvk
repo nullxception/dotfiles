@@ -64,12 +64,14 @@ mk() {
 mkdtbo() {
     DTOUT=$ENVK_BUILD_DIR/arch/arm64/boot/dtbo.img
 
-    if [[ -f $MKDT ]]; then
-        echo "aenvk: Building overlay dt using $MKDT"
+    if [[ -f $ENVK_LIBUFDT_PATH/utils/src/mkdtboimg.py ]]; then
+        echo "aenvk: Building dtbo.img"
         python2 $ENVK_LIBUFDT_PATH/utils/src/mkdtboimg.py \
             create $DTOUT \
             $(find $ENVK_BUILD_DIR/arch/arm64/boot/dts/ -iname '*-overlay.dtbo' -print)
         echo "aenvk: Build done: $DTOUT"
+    else
+        echo 'aenvk: $ENVK_LIBUFDT_PATH/utils/src/mkdtboimg.py not found, aborting'
     fi
     exit $?
 }
