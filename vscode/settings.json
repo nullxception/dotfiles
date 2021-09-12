@@ -34,6 +34,7 @@
   "gitlens.showWhatsNewAfterUpgrades": false,
   "powershell.integratedConsole.showOnStartup": false,
   "powershell.integratedConsole.suppressStartupBanner": true,
+  "security.workspace.trust.enabled": false,
   "telemetry.enableCrashReporter": false,
   "telemetry.enableTelemetry": false,
   "terminal.integrated.cursorBlinking": true,
