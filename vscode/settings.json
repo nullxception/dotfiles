@@ -42,8 +42,15 @@
   "terminal.integrated.fontSize": 12,
   "terminal.integrated.fontWeight": "bold",
   "terminal.integrated.rendererType": "dom",
-  "terminal.integrated.shell.windows": "C:\\Program Files\\PowerShell\\7\\pwsh.exe",
-  "terminal.integrated.shellArgs.windows": "-NoLogo",
+  "terminal.integrated.profiles.windows": {
+    "PowerShell": {
+      "source": "PowerShell",
+      "args": [
+        "-NoLogo"
+      ]
+    }
+  },
+  "terminal.integrated.defaultProfile.windows": "PowerShell",
   "update.mode": "manual",
   "window.newWindowDimensions": "maximized",
   "window.zoomLevel": 0,
