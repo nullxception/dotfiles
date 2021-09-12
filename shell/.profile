@@ -26,8 +26,5 @@ fi
 #
 if [ -n "$WSL_INTEROP" ]; then
     export WSL_HOST_IP=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}')
-    export DISPLAY=$WSL_HOST_IP:0.0
-    export PULSE_SERVER=tcp:$WSL_HOST_IP
-    export LIBGL_ALWAYS_INDIRECT=1
     export PATH="$HOME/.local/bin/wsl:$PATH"
 fi
