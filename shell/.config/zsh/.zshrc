@@ -50,8 +50,9 @@ if command -v pacman > /dev/null; then
     add-zsh-hook -Uz precmd rehash_precmd
 fi
 
-# load command aliases
+# load command aliases and functions
 [[ -f $ZDOTDIR/aliases ]] && source $ZDOTDIR/aliases || true
+[[ -f $ZDOTDIR/functions ]] && source $ZDOTDIR/functions || true
 
 # WSL2 workaround for default dir
 grep -qE '/mnt/c/Users/([a-zA-Z\ ]+)$' <<<$PWD \
