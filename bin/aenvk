@@ -127,13 +127,14 @@ cat <<\EOF > $KERNEL_DIR/.aenvkconfig
 #
 
 # tools paths
+ENVK_ADDITIONAL_PATH=$HOME/Android/tools/aarch64-linux-android-4.9/bin:$HOME/Android/tools/arm-linux-androideabi-4.9/bin
 ENVK_CLANG_PATH=$HOME/Android/tools/clang-aosp-11
 ENVK_LIBUFDT_PATH=$HOME/Android/system/libufdt
 ENVK_ADDITIONAL_FLAGS="LLVM=1"
 
 # cross-compile path (for vdso32)
-CROSS_COMPILE_ARM32=$HOME/Android/tools/arm-linux-androideabi-4.9/bin/arm-linux-androidkernel-
-CROSS_COMPILE=$HOME/Android/tools/aarch64-linux-android-4.9/bin/aarch64-linux-android-
+CROSS_COMPILE=aarch64-linux-android-
+CROSS_COMPILE_ARM32=arm-linux-androideabi-
 
 # build options
 ENVK_BUILD_TYPE=release # (release or debug)
