@@ -1,16 +1,18 @@
 {
     "$schema": "https://aka.ms/terminal-profiles-schema",
-    "defaultProfile": "{574e775e-4f2a-5b96-ac1e-a2962a402336}",
+    "defaultProfile": "{a5a97cb8-8961-5535-816d-772efe0c6a3f}",
     "disableAnimations": true,
-    "initialCols": 80,
-    "initialRows": 18,
+    "initialCols": 90,
+    "initialRows": 23,
     "profiles": {
         "defaults": {
+            "acrylicOpacity": 0.85,
             "colorScheme": "Cherry",
             "fontFace": "JetBrainsMono NF",
             "fontSize": 9,
             "fontWeight": "medium",
-            "padding": "25"
+            "padding": "25",
+            "useAcrylic": true
         },
         "list": [
             {
