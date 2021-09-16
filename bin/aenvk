@@ -221,6 +221,10 @@ do
   esac
 done
 
+if [[ -n ${ENVK_ADDITIONAL_PATH} ]]; then
+    export PATH="$ENVK_ADDITIONAL_PATH:$PATH"
+fi
+
 if [[ -n ${ENVK_CLANG_PATH} ]]; then
     # push ENVK_CLANG_PATH to path and shared libs
     export PATH="$ENVK_CLANG_PATH/bin:$PATH"
