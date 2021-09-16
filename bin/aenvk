@@ -62,16 +62,21 @@ mk() {
 }
 
 mkdtbo() {
-    DTOUT=$ENVK_BUILD_DIR/arch/arm64/boot/dtbo.img
+    local bootdir=$ENVK_BUILD_DIR/arch/arm64/boot
+    local dtout=$bootdir/dtbo.img
+    local mkdt=$ENVK_LIBUFDT_PATH/utils/src/mkdtboimg.py
+    local overlays=$(find $bootdir/dts -iname '*-overlay.dtbo' -print)
+    if [[ ! -f $mkdt ]]; then
+        echo "aenvk: $mkdt does not exists. exiting"
+        exit 1
+    fi
 
-    if [[ -f $ENVK_LIBUFDT_PATH/utils/src/mkdtboimg.py ]]; then
+    if [[ $(wc -l <<<$overlays) -gt 0 ]]; then
         echo "aenvk: Building dtbo.img"
-        python2 $ENVK_LIBUFDT_PATH/utils/src/mkdtboimg.py \
-            create $DTOUT \
-            $(find $ENVK_BUILD_DIR/arch/arm64/boot/dts/ -iname '*-overlay.dtbo' -print)
-        echo "aenvk: Build done: $DTOUT"
+        python2 $mkdt create $dtout $overlays
+        echo "aenvk: Build done: $dtout"
     else
-        echo 'aenvk: $ENVK_LIBUFDT_PATH/utils/src/mkdtboimg.py not found, aborting'
+        echo "aenvk: There's no overlays found at $bootdir/dts"
     fi
     exit $?
 }
