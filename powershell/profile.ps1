@@ -40,3 +40,6 @@ function prompt {
     }
     "$ESC[31m$Local:user$ESC[34m at $ESC[0m$Local:dirInfo$Local:git > "
 }
+
+# late-initialized modules
+Import-Module -ErrorAction SilentlyContinue posh-git
