@@ -41,3 +41,9 @@ scoop install `
 
 sudo scoop install --global JetBrainsMono-NF
 sudo "$(scoop prefix python)\install-pep-514.reg"
+
+# Register several path to machine path
+sudo Register-Path -Scope Machine $(scoop prefix python)
+sudo Register-Path -Scope Machine $(scoop prefix python)\Scripts
+sudo Register-Path -Scope Machine $(scoop prefix python)\Scripts
+sudo Register-Path -Scope Machine $(scoop prefix adopt11-hotspot)\bin
