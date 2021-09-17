@@ -3,9 +3,11 @@ function Register-Path {
         [Parameter(Mandatory = $true)] $At,
         [System.EnvironmentVariableTarget] $Scope = 'User'
     )
-    $CurrentPath = [Environment]::GetEnvironmentVariable("Path", $Scope)
-    if ($CurrentPath.Split(";") -notcontains "$At") {
-        [Environment]::SetEnvironmentVariable("Path", $CurrentPath + "$At;", $Scope)
+    $CurrentPath = [Environment]::GetEnvironmentVariable("Path", $Scope).Split(";")
+    if ($CurrentPath -notcontains "$At") {
+        $CurrentPath += $At
+        $CurrentPath = $CurrentPath -join ";"
+        [Environment]::SetEnvironmentVariable("Path", $CurrentPath, $Scope)
     }
 
     # Finally, add it to current session
