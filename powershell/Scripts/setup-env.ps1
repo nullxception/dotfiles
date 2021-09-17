@@ -35,6 +35,7 @@ scoop install `
     less `
     lsd `
     neovim `
+    nssm `
     python `
     ripgrep `
     spotify-latest
