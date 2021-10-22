@@ -58,3 +58,6 @@ fi
 grep -qE '/mnt/c/Users/([a-zA-Z\ ]+)$' <<<$PWD \
     && grep -qE '/mnt/c/Users/([a-zA-Z\ ]+)$' <<<$OLDPWD \
     && cd ~
+
+# configure ccache
+ccache -M ${CCACHE_MAX_SIZE:=50G} -F ccache ${CCACHE_MAX_FILES:=0} >/dev/null 2>&1
