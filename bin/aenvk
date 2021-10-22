@@ -86,6 +86,7 @@ mkcfg() {
         echo "aenvk: you have to set ENVK_BUILD_CONFIG before, for example: "
         echo "    $ export ENVK_BUILD_CONFIG=vayu_defconfig"
     else
+        thinlto_switch n
         mk savedefconfig
         cp $ENVK_BUILD_DIR/defconfig $KERNEL_DIR/arch/arm64/configs/$ENVK_BUILD_CONFIG
     fi
