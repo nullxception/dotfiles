@@ -5,7 +5,7 @@
 ZINITDIR=$ZDOTDIR/zinit
 [[ -f $ZINITDIR/bin/zinit.zsh ]] || {
     mkdir -p $ZINITDIR/bin
-    git clone --depth=1 https://github.com/zdharma/zinit.git $ZINITDIR/bin
+    git clone --depth=1 https://github.com/zdharma-continuum/zinit.git $ZINITDIR/bin
 }
 
 # Initialize zinit
@@ -21,7 +21,7 @@ zinit light nullxception/roundy
 zinit wait depth=1 lucid for \
     hlissner/zsh-autopair \
     atinit="zicompinit; zicdreplay" \
-        zdharma/fast-syntax-highlighting
+        zdharma-continuum/fast-syntax-highlighting
 
 # Snippets
 zinit lucid light-mode for \
