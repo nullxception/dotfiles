@@ -31,6 +31,25 @@ zinit lucid light-mode for \
     OMZL::key-bindings.zsh \
     OMZL::termsupport.zsh
 
+# Programs
+if [[ "$(uname -m)" == "x86_64" ]];then
+    # ripgrep
+    zinit ice as"program" from"gh-r" mv"ripgrep* -> rg" pick"rg/rg"
+    zinit light BurntSushi/ripgrep
+
+    # exa
+    zinit ice as"command" from"gh-r" bpick"exa-linux-x86_64-musl-*" pick"bin/exa"
+    zinit light ogham/exa
+
+    # bat
+    zinit ice as"program" from"gh-r" mv"bat* -> bat" pick"bat/bat"
+    zinit light sharkdp/bat
+
+    # sharkdp/fd
+    zinit ice as"command" from"gh-r" mv"fd* -> fd" bpick"*x86_64-unknown-linux-gnu*" pick"fd/fd"
+    zinit light sharkdp/fd
+fi
+
 # returning command and folder completion when line is empty
 # like a bash, but better
 blanktab() { [[ $#BUFFER == 0 ]] && CURSOR=3 zle list-choices || zle expand-or-complete }
