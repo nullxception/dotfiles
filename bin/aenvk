@@ -36,10 +36,12 @@ mk() {
 
     mkdir -p $ENVK_BUILD_DIR
     if [[ -z $ENVK_BUILD_VERSION ]]; then
-        ENVK_BUILD_VERSION=$(git rev-list --tags --max-count=1 | xargs git describe --tags)
+        echo "aenvk: Building kernel"
+        rm $KERNEL_DIR/.scmversion
+    else
+        echo "aenvk: Building kernel, version $ENVK_BUILD_VERSION"
+        echo "-$ENVK_BUILD_VERSION" > $KERNEL_DIR/.scmversion
     fi
-    echo "aenvk: Building Version $ENVK_BUILD_VERSION."
-    echo "-$ENVK_BUILD_VERSION" > $KERNEL_DIR/.scmversion
 
     if [[ -z "$@" ]]; then
         if [[ "$ENVK_BUILD_TYPE" == "release" ]]; then
