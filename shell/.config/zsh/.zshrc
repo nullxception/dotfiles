@@ -48,6 +48,10 @@ if [[ "$(uname -m)" == "x86_64" ]];then
     # sharkdp/fd
     zinit ice as"command" from"gh-r" mv"fd* -> fd" bpick"*x86_64-unknown-linux-gnu*" pick"fd/fd"
     zinit light sharkdp/fd
+
+    # fzf
+    zinit ice from"gh-r" as"program"
+    zinit light junegunn/fzf
 fi
 
 # returning command and folder completion when line is empty
