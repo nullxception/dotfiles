@@ -11,8 +11,3 @@ urlam() {
     curl -o $patch ${uri}.patch
     git am <$patch
 }
-
-openkeychain() {
-  keychain ~/.ssh/id_rsa -q
-  source ~/.keychain/$(hostname)-sh
-}
