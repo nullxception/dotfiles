@@ -32,3 +32,7 @@ if [ -n "$WSL_INTEROP" ]; then
     export WSL_HOST_IP=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}')
     export PATH="$HOME/.local/bin/wsl:$PATH"
 fi
+
+if [ -f "$XDG_RUNTIME_DIR/ssh-agent.socket" ]; then
+    export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
+fi
