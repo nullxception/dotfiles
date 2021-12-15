@@ -66,8 +66,10 @@ input[type="range"]::-moz-range-thumb {
 
 /* super minimal flat scrollbar */
 :root {
-    scrollbar-color: var(--color-border-overlay) transparent;
+    scrollbar-color: #999 #00000000;
+    scrollbar-width: thin;
 }
 * {
+    scrollbar-color: #999 #00000000;
     scrollbar-width: thin;
 }
