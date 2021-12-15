@@ -1,6 +1,9 @@
 /* Override some elements appearance that mostly
  * screwed by Dark GTK Themes
  */
+html {
+    background-color: white;
+}
 
 input,
 textarea,
