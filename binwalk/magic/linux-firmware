@@ -1,7 +1,6 @@
 0x10     string    \x40\x71\x02 Novatek Firmware for vayu,
->0x24    lelong    !0xA0        {invalid}
->0x28    byte      !0x02        {invalid}
 >0x19f32 byte      0x10         panel: tianma,
 >0x19f32 byte      0x12         panel: csot,
 >0x19f30 byte      x            version: %d,
->0x19f3D byte      x            mode: %d,
+>0x19f3D byte      x            prod: %d,
+>0x19f3D byte      !0x01        {invalid}
