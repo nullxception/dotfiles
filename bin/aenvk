@@ -223,7 +223,7 @@ do
     -s | --save-defconfig) mkcfg ;;
     -b | --build-type) task_buildtype="$2"; shift 2 ;;
     -x | --execute) task_execute="$2"; shift 2 ;;
-    -a | --applet) task_applet="$2"; shift 2 ;;
+    -a | --applet) task_applet="$2"; task_applet_args="$4"; shift 2 ;;
     -h | --help) usage ;;
     --) shift; break ;;
     *) echo "Unexpected option: $1"; usage ;;
@@ -246,7 +246,7 @@ if [[ -n "$task_buildtype" ]]; then
 fi
 
 if [[ -n "$task_applet" ]]; then
-    applet_$task_applet
+    applet_$task_applet $task_applet_args
     exit $?
 fi
 
