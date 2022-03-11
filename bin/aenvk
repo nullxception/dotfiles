@@ -1,35 +1,5 @@
 #!/bin/bash
 
-buildtype_switch() {
-    local type=$1
-
-    if [[ -n "$type" ]]; then
-        sed -i '/ENVK_BUILD_TYPE=/d' $DOTENV
-        echo "export ENVK_BUILD_TYPE=$type" >> $DOTENV
-        source $DOTENV
-        echo "aenvk: Switching to mode: $ENVK_BUILD_TYPE"
-    fi
-    exit
-}
-
-thinlto_switch() {
-    local cfg=$ENVK_BUILD_DIR/.config
-    if [[ ! -f $cfg ]]; then
-        echo "aenvk: .config is not generated, apply your config first"
-        exit 1
-    fi
-
-    if [[ -n "$(grep _LTO $cfg)" ]]; then
-        if [[ "$1" == "y" ]]; then
-            echo "aenvk: enabling Thin LTO for development usage"
-            $KERNEL_DIR/scripts/config --file $cfg -e CONFIG_THINLTO
-        else
-            echo "aenvk: disabling Thin LTO for production release"
-            $KERNEL_DIR/scripts/config --file $cfg -d CONFIG_THINLTO
-        fi
-    fi
-}
-
 mk() {
     local loginfo=$ENVK_BUILD_DIR/mk.build.log
     local logerr=$ENVK_BUILD_DIR/mk.error.log
@@ -41,14 +11,6 @@ mk() {
     else
         echo "aenvk: Building kernel, version $ENVK_BUILD_VERSION"
         echo "-$ENVK_BUILD_VERSION" > $KERNEL_DIR/.scmversion
-    fi
-
-    if [[ -z "$@" ]]; then
-        if [[ "$ENVK_BUILD_TYPE" == "release" ]]; then
-            thinlto_switch n
-        else
-            thinlto_switch y
-        fi
     fi
 
     make -j$(nproc --ignore=1) \
@@ -88,7 +50,6 @@ mkcfg() {
         echo "aenvk: you have to set ENVK_BUILD_CONFIG before, for example: "
         echo "    $ export ENVK_BUILD_CONFIG=vayu_defconfig"
     else
-        thinlto_switch n
         mk savedefconfig
         cp $ENVK_BUILD_DIR/defconfig $KERNEL_DIR/arch/arm64/configs/$ENVK_BUILD_CONFIG
     fi
@@ -97,7 +58,6 @@ mkcfg() {
 
 env_info() {
     local clang=$(clang -v |& sed -e '1!d;s/ (http.\+)//g')
-    echo "Build type: $ENVK_BUILD_TYPE"
     echo "Compiler: $clang"
     echo "Output: $ENVK_BUILD_DIR"
     echo "Target: $KERNEL_DIR"
@@ -143,7 +103,6 @@ ENVK_BUILD_CONFIG=vayu_defconfig
 ENVK_BUILD_DIR=/android/out/target/product/vayu/obj/KERNEL_OBJ
 # ENVK_BUILD_VERSION=r1
 ENVK_WITH_DTBO=1
-ENVK_BUILD_TYPE=debug
 
 EOF
 echo "aenvk: initial config created at $KERNEL_DIR/.aenvkconfig"
@@ -221,7 +180,6 @@ do
     -i | --print-info) env_info ;;
     -d | --dtbo) mkdtbo ;;
     -s | --save-defconfig) mkcfg ;;
-    -b | --build-type) task_buildtype="$2"; shift 2 ;;
     -x | --execute) task_execute="$2"; shift 2 ;;
     -a | --applet) task_applet="$2"; task_applet_args="$4"; shift 2 ;;
     -h | --help) usage ;;
@@ -240,10 +198,6 @@ fi
 
 # set ccache
 export PATH="/usr/lib/ccache/bin/:$PATH"
-
-if [[ -n "$task_buildtype" ]]; then
-    buildtype_switch "$task_buildtype"
-fi
 
 if [[ -n "$task_applet" ]]; then
     applet_$task_applet $task_applet_args
