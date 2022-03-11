@@ -37,7 +37,7 @@ mk() {
     mkdir -p $ENVK_BUILD_DIR
     if [[ -z $ENVK_BUILD_VERSION ]]; then
         echo "aenvk: Building kernel"
-        rm $KERNEL_DIR/.scmversion
+        rm -f $KERNEL_DIR/.scmversion
     else
         echo "aenvk: Building kernel, version $ENVK_BUILD_VERSION"
         echo "-$ENVK_BUILD_VERSION" > $KERNEL_DIR/.scmversion
@@ -130,9 +130,8 @@ cat <<\EOF > $KERNEL_DIR/.aenvkconfig
 #
 
 # tools paths
-ENVK_ADDITIONAL_PATH=$HOME/Android/tools/aarch64-linux-android-4.9/bin:$HOME/Android/tools/arm-linux-androideabi-4.9/bin
-ENVK_CLANG_PATH=$HOME/Android/tools/clang-aosp-11
-ENVK_LIBUFDT_PATH=$HOME/Android/system/libufdt
+ENVK_ADDITIONAL_PATH=/android/prebuilts/clang/host/linux-x86/clang-r416183b1/bin:/android/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9/bin:/android/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9/bin
+ENVK_LIBUFDT_PATH=/android/system/libufdt
 ENVK_ADDITIONAL_FLAGS="LLVM=1"
 
 # cross-compile path (for vdso32)
@@ -140,11 +139,12 @@ CROSS_COMPILE=aarch64-linux-android-
 CROSS_COMPILE_ARM32=arm-linux-androideabi-
 
 # build options
-ENVK_BUILD_TYPE=release # (release or debug)
 ENVK_BUILD_CONFIG=vayu_defconfig
-ENVK_BUILD_DIR=$HOME/Android/outdir
-ENVK_BUILD_VERSION=r1
+ENVK_BUILD_DIR=/android/out/target/product/vayu/obj/KERNEL_OBJ
+# ENVK_BUILD_VERSION=r1
 ENVK_WITH_DTBO=1
+ENVK_BUILD_TYPE=debug
+
 EOF
 echo "aenvk: initial config created at $KERNEL_DIR/.aenvkconfig"
 }
@@ -230,14 +230,12 @@ do
   esac
 done
 
+export CROSS_COMPILE CROSS_COMPILE_ARM32
+
 if [[ -n ${ENVK_ADDITIONAL_PATH} ]]; then
     export PATH="$ENVK_ADDITIONAL_PATH:$PATH"
-fi
-
-if [[ -n ${ENVK_CLANG_PATH} ]]; then
-    # push ENVK_CLANG_PATH to path and shared libs
-    export PATH="$ENVK_CLANG_PATH/bin:$PATH"
-    export LD_LIBRARY_PATH="$ENVK_CLANG_PATH/lib64:$LD_LIBRARY_PATH"
+    CLANG_PATH=$(realpath $(dirname $(which clang))/..)
+    export LD_LIBRARY_PATH="$CLANG_PATH/lib64:$LD_LIBRARY_PATH"
 fi
 
 # set ccache
