@@ -3,3 +3,7 @@
 grep -qE '/mnt/c/Users/([a-zA-Z\ ]+)$' <<<$PWD \
     && grep -qE '/mnt/c/Users/([a-zA-Z\ ]+)$' <<<$OLDPWD \
     && cd ~
+
+# Loading SSH key
+keychain -q --nogui ~/.ssh/id_rsa
+source ~/.keychain/$(hostname)-sh
