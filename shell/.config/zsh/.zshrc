@@ -77,10 +77,10 @@ fi
 [[ -f $ZDOTDIR/aliases ]] && source $ZDOTDIR/aliases || true
 [[ -f $ZDOTDIR/functions ]] && source $ZDOTDIR/functions || true
 
-# WSL2 workaround for default dir
-grep -qE '/mnt/c/Users/([a-zA-Z\ ]+)$' <<<$PWD \
-    && grep -qE '/mnt/c/Users/([a-zA-Z\ ]+)$' <<<$OLDPWD \
-    && cd ~
-
 # configure ccache
 ccache -M ${CCACHE_MAX_SIZE:=50G} -F ccache ${CCACHE_MAX_FILES:=0} >/dev/null 2>&1
+
+# Load special scripts for WSL2
+if [ -n "$WSL_INTEROP" ]; then
+    source $XDG_CONFIG_HOME/wsl2/shellrc
+fi
