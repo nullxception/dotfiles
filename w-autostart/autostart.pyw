@@ -16,3 +16,6 @@ start(["C:/Program Files/AutoHotkey/AutoHotkeyU64.exe", 'keyboard.ahk'])
 
 # mount disk to wsl2
 start(["wsl", "--mount", '\\\.\PHYSICALDRIVE0', '--bare'])
+
+# share ssh agent to wsl2
+start(["wsl-ssh-agent-gui.exe"])
