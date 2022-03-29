@@ -18,7 +18,6 @@ winget install --scope machine -e Git.Git
 winget install --scope machine -e GoLang.Go
 winget install --scope machine -e Lexikos.AutoHotkey
 winget install --scope machine -e Python.Python.3
-winget install --scope machine -e vim.vim
 
 # Setup aria2 for the scoop downloader
 scoop install aria2
@@ -36,7 +35,7 @@ gsudo scoop install `
     less `
     lsd `
     nssm `
-    vim `
+    neovim `
     ripgrep
 
 gsudo scoop install --global JetBrainsMono-NF
@@ -45,7 +44,6 @@ gsudo "$(scoop prefix python)\install-pep-514.reg"
 # Register things to $PATH
 gsudo Register-Path -Scope Machine "$env:ProgramFiles\7-Zip"
 gsudo Register-Path -Scope Machine "$env:ProgramFiles\AutoHotkey"
-gsudo Register-Path -Scope Machine "$env:ProgramFiles\Vim\vim82"
 
 # Housekeeping context menus
 gsudo Remove-Item -Force -ErrorAction SilentlyContinue -Path HKCR:\Directory\shell\git_gui

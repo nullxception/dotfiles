@@ -17,6 +17,7 @@ $CustomPath | Where-Object { Register-Path -At $_ -Scope User }
 Set-Alias ls lsd
 Set-Alias cat bat
 Set-Alias sudo gsudo
+Set-Alias vim nvim
 
 # Completions
 Register-ArgumentCompleter -Native -CommandName winget -ScriptBlock {
