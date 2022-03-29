@@ -153,20 +153,6 @@ if (return 0 2>/dev/null || [[ $ZSH_EVAL_CONTEXT =~ :file$ ]]); then
     exit 1
 fi
 
-KERNEL_DIR=$(pwd)
-if [[ "$1" == "init" ]]; then
-    applet_initconfig
-    exit
-fi
-
-[[ -f "$KERNEL_DIR/.aenvkconfig" ]] && DOTENV="$KERNEL_DIR/.aenvkconfig"
-[[ -z $DOTENV ]] && {
-    echo "aenvk: no .aenvkconfig available. exiting"
-    exit 1
-}
-
-source $DOTENV
-
 opts=$(getopt -a -n aenvk -o hidsb:x:a: --long help,print-info,dtbo,save-defconfig,build-type:,execute:,applet:, -- "$@")
 vopts=$?
 if [ "$vopts" != "0" ]; then
@@ -187,6 +173,20 @@ do
     *) echo "Unexpected option: $1"; usage ;;
   esac
 done
+
+KERNEL_DIR=$(pwd)
+if [[ "$1" == "init" ]]; then
+    applet_initconfig
+    exit
+fi
+
+[[ -f "$KERNEL_DIR/.aenvkconfig" ]] && DOTENV="$KERNEL_DIR/.aenvkconfig"
+[[ -z $DOTENV ]] && {
+    echo "aenvk: no .aenvkconfig available. exiting"
+    exit 1
+}
+
+source $DOTENV
 
 export CROSS_COMPILE CROSS_COMPILE_ARM32
 
