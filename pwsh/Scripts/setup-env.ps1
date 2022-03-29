@@ -30,7 +30,7 @@ scoop bucket add nerd-fonts
 scoop bucket add retools https://github.com/TheCjw/scoop-retools.git
 
 # Apps, fonts, runtime, etc
-sudo scoop install `
+gsudo scoop install `
     bat `
     jadx `
     less `

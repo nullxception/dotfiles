@@ -21,7 +21,7 @@ git config --global alias.onelog 'log --oneline --pretty=format:\"%h # %ai %s\"'
 git config --global alias.onebase 'log --oneline --pretty=format:\"GIT_COMMITTER_DATE=\\\"%ci\\\" GIT_AUTHOR_DATE=\\\"%ai\\\" git cherry-pick %h # %s\"'
 git config --global core.sshCommand 'C:/Windows/System32/OpenSSH/ssh.exe'
 
-sudo 'Get-Service ssh-agent | Set-Service -StartupType Automatic -PassThru | Start-Service'
+gsudo 'Get-Service ssh-agent | Set-Service -StartupType Automatic -PassThru | Start-Service'
 
 Write-Host "Getting wsl-ssh-agent"
 $Url = 'https://github.com/rupor-github/wsl-ssh-agent/releases/latest/download/wsl-ssh-agent.zip'
