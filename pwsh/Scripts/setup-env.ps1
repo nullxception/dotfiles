@@ -8,13 +8,11 @@ if (!(Get-Command scoop)) {
     Invoke-WebRequest -useb get.scoop.sh | Invoke-Expression
 }
 
-winget install --scope machine -e Git.Git
 winget install --scope machine -e gerardog.gsudo
 Update-CurrentEnv
 gsudo config CacheMode Auto
 
 winget install --scope machine -e 7zip.7zip
-winget install --scope machine -e Git.Git
 winget install --scope machine -e GoLang.Go
 winget install --scope machine -e Lexikos.AutoHotkey
 winget install --scope machine -e Python.Python.3
@@ -40,6 +38,11 @@ gsudo scoop install `
 
 gsudo scoop install --global JetBrainsMono-NF
 gsudo "$(scoop prefix python)\install-pep-514.reg"
+
+# Setup git and openssh
+gsudo scoop install -g openssh git
+gsudo "$env:ProgramData\scoop\apps\openssh\current\install-sshd.ps1"
+gsudo "Get-Service ssh-agent | Set-Service -StartupType Automatic -PassThru | Start-Service"
 
 # Register things to $PATH
 gsudo Register-Path -Scope Machine "$env:ProgramFiles\7-Zip"
