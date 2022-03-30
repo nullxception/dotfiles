@@ -4,15 +4,14 @@
 # ./install.ps1 <module-name>
 #
 param(
-    [Parameter(Mandatory=$True)]
+    [Parameter(Mandatory = $True)]
     [String] $Module
 )
-$DotfilesPath = Split-Path -parent $PSCommandPath
+
 $ModuleData = ".module-data.ps1"
 
-function Install-Mod($Name) {
-    $ModuleName = Split-Path $Name -Leaf
-    $ModulePath = $DotfilesPath + "\" + $ModuleName
+function Install-Mod($ModulePath) {
+    $ModuleName = Split-Path $ModulePath -Leaf
 
     if ([System.IO.File]::Exists("$ModulePath\$ModuleData")) {
         . "$ModulePath\$ModuleData"
@@ -21,12 +20,13 @@ function Install-Mod($Name) {
         }
         if (Get-Command 'Install-Dotfiles' -errorAction SilentlyContinue) {
             Install-Dotfiles
-        } else {
+        }
+        else {
             Write-Output "installing module $ModuleName to $Installtarget"
             if (![System.IO.Directory]::Exists($Installtarget)) {
                 New-Item -ItemType Directory -Path $Installtarget
             }
-            Get-ChildItem -Path $ModulePath -Exclude $ModuleData,.module-data.bash | Copy-Item -Destination $Installtarget -Recurse -Force
+            Get-ChildItem -Path $ModulePath -Exclude $ModuleData, .module-data.bash | Copy-Item -Destination $Installtarget -Recurse -Force
         }
         if (Get-Command 'PostInstall-Dotfiles' -errorAction SilentlyContinue) {
             PostInstall-Dotfiles
@@ -42,7 +42,8 @@ function Install-Mod($Name) {
         if (Get-Command 'PostInstall-Dotfiles' -errorAction SilentlyContinue) {
             Remove-Item -Path Function:\PostInstall-Dotfiles
         }
-    } else {
+    }
+    else {
         "Module $ModuleName does not exists or has no $ModuleData"
     }
 }
