@@ -4,12 +4,6 @@ grep -qE '/mnt/c/Users/([a-zA-Z\ ]+)$' <<<$PWD \
     && grep -qE '/mnt/c/Users/([a-zA-Z\ ]+)$' <<<$OLDPWD \
     && cd ~
 
-# using host ssh-agent
-export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
-ss -a | grep -q $SSH_AUTH_SOCK
-if [ $? -ne 0 ]; then
-    rm -f $SSH_AUTH_SOCK
-    ( setsid socat UNIX-LISTEN:$SSH_AUTH_SOCK,fork \
-    	EXEC:"npiperelay.exe -ei -s //./pipe/openssh-ssh-agent",nofork & \
-	) >/dev/null 2>&1
-fi
+# Loading SSH key
+keychain -q --nogui ~/.ssh/id_rsa
+source ~/.keychain/$(hostname)-sh
