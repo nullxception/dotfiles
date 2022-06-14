@@ -14,5 +14,5 @@ def start(args):
 # start autohotkeys
 start(["C:/Program Files/AutoHotkey/AutoHotkeyU64.exe", 'keyboard.ahk'])
 
-# mount disk to wsl2
-start(["wsl", "--mount", '\\\.\PHYSICALDRIVE0', '--bare'])
+# start adb server early to avoid stuck on first-time usage at WSL2
+start(["adb", "start-server"])
