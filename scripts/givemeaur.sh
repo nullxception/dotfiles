@@ -1,9 +1,9 @@
 #!/bin/bash
 #
 # a helper script to compile AUR Helper that I use extensively
-# currently: paru
+# currently: yay-git
 
-app="paru"
+app="yay-git"
 
 if ! command -v git >/dev/null 2>&1; then
     sudo pacman -S git
