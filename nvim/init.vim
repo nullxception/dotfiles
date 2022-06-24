@@ -24,10 +24,10 @@ call plug#begin(nvim_plug_libs)
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-fugitive'
-Plug 'vim-airline/vim-airline'
+Plug 'itchyny/lightline.vim'
 Plug 'preservim/nerdtree'
 Plug 'ryanoasis/vim-devicons'
-Plug 'ghifarit53/tokyonight-vim'
+Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 
 if !is_win
@@ -60,7 +60,7 @@ set list listchars=tab:»·,trail:·,nbsp:·
 set mouse=a
 set noshowmode
 set nowrap
-set number
+set number relativenumber
 set tabstop=4 softtabstop=4 shiftwidth=4 autoindent
 set termguicolors
 set undofile
@@ -89,14 +89,18 @@ nnoremap <silent> <leader><leader> :Files<CR>
 " == themes and UI vars == "{{{
 
 let g:tokyonight_style = 'night' " available: night, storm
-let g:tokyonight_enable_italic = 1
-let g:tokyonight_transparent_background = 1
+let g:tokyonight_italic_comments = 1
+let g:tokyonight_transparent = 1
+let g:tokyonight_colors = {
+\   'comment' : '#767f99'
+\}
 colorscheme tokyonight
 
-let g:airline_powerline_fonts = 1
-let g:airline_theme = "tokyonight"
-let g:airline_skip_empty_sections = 1
-
+let g:lightline = {
+\   'colorscheme': 'tokyonight',
+\   'separator': { 'left': "\ue0b4", 'right': "\ue0ba" },
+\   'subseparator': { 'left': "\ue0b5", 'right': "\ue0bd" },
+\}
 "}}}
 
 " == NERDTree == {{{
@@ -119,7 +123,9 @@ let g:NERDTreeDirArrowCollapsible=""
 " some UI stuff need to be refreshed when $MYVIMRC is sourced
 function! Me_RefreshUI()
     call webdevicons#refresh()
-    AirlineRefresh
+    call lightline#init()
+    call lightline#colorscheme()
+    call lightline#update()
 endfunction
 
 " auto re-source init.vim
