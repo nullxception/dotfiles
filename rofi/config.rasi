@@ -1,0 +1,6 @@
+
+configuration {
+  font: "Sans Semibold 9";
+}
+
+@theme "~/.config/rofi/cherry.rasi"

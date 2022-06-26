@@ -1,0 +1,73 @@
+configuration {
+    show-icons: false;
+    display-run: ">_";
+}
+
+* {
+    bg: #23232f;
+    fg: #bdc3c7;
+    fg-bright: #e0e8ee;
+    accent: #ff568e;
+    accent-dark: #be446d;
+    background-color: @bg;
+    color: @fg;
+    highlight: underline bold #be446d;
+}
+
+window {
+    location: south;
+    width: 100%;
+    padding: 0;
+    children: [horibox];
+
+}
+
+horibox {
+    orientation: horizontal;
+    children: [prompt, entry, listview];
+}
+
+entry {
+    expand: false;
+    width: 10em;
+}
+
+inputbar {
+    color: @fg;
+    padding: 11px;
+}
+
+entry,
+prompt {
+    padding: 0.4em;
+    color: inherit;
+}
+
+prompt {
+    margin: 0px 0.9em 0em 0em;
+    background-color: @accent;
+    color: @bg;
+}
+
+listview {
+    dynamic: false;
+    layout: horizontal;
+    spacing: 0px;
+    lines: 100;
+}
+
+element {
+    padding: 0.4em;
+    color: @fg;
+}
+
+element selected.normal {
+    background-color: @fg;
+    color: @bg;
+}
+
+element-text,
+element-icon {
+    background-color: inherit;
+    text-color: inherit;
+}
