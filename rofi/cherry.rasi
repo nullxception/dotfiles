@@ -1,73 +1,69 @@
 configuration {
-    show-icons: false;
+    show-icons: true;
     display-run: ">_";
 }
 
 * {
     bg: #23232f;
     fg: #bdc3c7;
-    fg-bright: #e0e8ee;
     accent: #ff568e;
-    accent-dark: #be446d;
-    background-color: @bg;
+    background-color: transparent;
     color: @fg;
-    highlight: underline bold #be446d;
+    highlight: underline bold #ff568e;
+    padding: 0;
+    margin: 0;
+    border: 0;
 }
 
 window {
-    location: south;
-    width: 100%;
-    padding: 0;
-    children: [horibox];
-
+    width: 30%;
+    children: [ mainbox ];
+    location: center;
+    transparency: "screenshot";
+    background-color: rgba(35, 35, 47, 0.9);
+    border-radius: 7px;
+    border:  0 0 2px 0;
+    border-color: @accent;
 }
 
-horibox {
-    orientation: horizontal;
-    children: [prompt, entry, listview];
-}
-
-entry {
-    expand: false;
-    width: 10em;
+mainbox {
+    orientation: vertical;
+    children: [ inputbar, message, listview ];
 }
 
 inputbar {
     color: @fg;
-    padding: 11px;
 }
 
-entry,
-prompt {
-    padding: 0.4em;
-    color: inherit;
+listview {
+	lines: 4;
 }
 
 prompt {
-    margin: 0px 0.9em 0em 0em;
+    padding: 0.5em;
+    margin: 0 0.2em 0 0.5em;
     background-color: @accent;
     color: @bg;
 }
 
-listview {
-    dynamic: false;
-    layout: horizontal;
-    spacing: 0px;
-    lines: 100;
+entry {
+    padding: 0.5em;
+    color: inherit;
 }
 
 element {
-    padding: 0.4em;
+    padding: 0.5em;
     color: @fg;
 }
 
 element selected.normal {
-    background-color: @fg;
-    color: @bg;
+    background-color: rgba(58, 58, 80, 0.9);
+    color: @fg;
 }
 
 element-text,
 element-icon {
     background-color: inherit;
     text-color: inherit;
+    padding: 0 0.5em;
 }
