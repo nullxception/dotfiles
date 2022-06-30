@@ -26,7 +26,7 @@ Since this dotfiles is grouped by topic, you can just run the install script fol
 
 As you can see, the configs is grouped by topic.
 
-Each of it has their own `.install` script that will be used by the [`.install.sh`](.install.sh).
+Each of it has their own `.install` script that will be used by the [`install.sh`](install.sh).
 
 For complete example, take a look at [`.install.example`](.install.example).
 
