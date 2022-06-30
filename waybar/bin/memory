@@ -1,0 +1,29 @@
+#!/bin/sh
+# MemUsed = Memtotal + Shmem - MemFree - Buffers - Cached - SReclaimable
+# Source: https://github.com/KittyKatt/screenFetch/issues/386#issuecomment-249312716
+
+while IFS=":" read -r a b; do
+    case "$a" in
+        "MemTotal")
+            used="$((used+=${b/kB}))"
+            total="${b/kB}"
+            ;;
+        "Shmem")
+            used="$((used+=${b/kB}))"
+            ;;
+        "MemFree" | "Buffers" | "Cached" | "SReclaimable")
+            used="$((used-=${b/kB}))"
+            ;;
+    esac
+done < /proc/meminfo
+
+normalize() {
+    if [ $1 -gt 1048576 ]; then
+        echo $(bc <<<"scale=2; $1 / 1024^2")GB
+    else
+        echo $(($1 / 1024))MB
+    fi
+}
+
+printf '{"text":"%s","tooltip":"$tooltip","class":"$class"}' \
+    "$(normalize $used)/$(normalize $total)"

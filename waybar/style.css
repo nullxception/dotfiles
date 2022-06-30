@@ -89,6 +89,7 @@ window#waybar.hidden {
 
 #mode,
 #custom-player,
+#custom-memory,
 #tray,
 #temperature,
 #cpu,
@@ -119,6 +120,7 @@ window#waybar.hidden {
     color: @color2;
 }
 
+#custom-memory,
 #memory {
     color: @color1;
 }

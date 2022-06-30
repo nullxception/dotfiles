@@ -10,7 +10,7 @@
         "custom/player",
         "temperature",
         "cpu",
-        "memory",
+        "custom/memory",
         "network",
         "pulseaudio",
         "clock"
@@ -45,6 +45,12 @@
     },
     "memory": {
         "format": "porn: {used:0.1f}GB"
+    },
+    "custom/memory": {
+        "format": "porn: {}",
+        "return-type": "json",
+        "interval": 1,
+        "exec": "$HOME/.config/waybar/bin/memory"
     },
     "custom/player": {
         "format": "{alt}: {}",
