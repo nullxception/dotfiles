@@ -1,5 +1,1 @@
 module_target="/etc"
-
-dot_postinstall() {
-    sudo sysctl -p /etc/sysctl.d/*
-}
