@@ -26,4 +26,4 @@ normalize() {
 }
 
 printf '{"text":"%s","tooltip":"$tooltip","class":"$class"}' \
-    "$(normalize $used)/$(normalize $total)"
+    "$(normalize $used)"
