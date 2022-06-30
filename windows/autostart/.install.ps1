@@ -1,4 +1,4 @@
 $InstallTarget = "$env:USERPROFILE\Documents\autostart"
-function PostInstall-Dotfiles {
+function Dot-PostInstall {
     & $InstallTarget\schedule.ps1
 }

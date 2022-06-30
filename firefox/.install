@@ -1,5 +1,5 @@
 #!/bin/bash
-module_install() {
+dot_install() {
   ff_dir=$HOME/.mozilla/firefox
 
   if [[ ! -f $ff_dir/profiles.ini ]]; then

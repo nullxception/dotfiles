@@ -8,7 +8,7 @@ param(
     [String] $Module
 )
 
-$ModuleData = ".module-data.ps1"
+$ModuleData = ".install.ps1"
 
 function Install-Mod($ModulePath) {
     $ModuleName = Split-Path $ModulePath -Leaf
@@ -18,32 +18,32 @@ function Install-Mod($ModulePath) {
     }
 
     . $ModuleRPath
-    if (Get-Command 'PreInstall-Dotfiles' -errorAction SilentlyContinue) {
-        PreInstall-Dotfiles
+    if (Get-Command 'Dot-PreInstall' -errorAction SilentlyContinue) {
+        Dot-PreInstall
     }
-    if (Get-Command 'Install-Dotfiles' -errorAction SilentlyContinue) {
-        Install-Dotfiles
+    if (Get-Command 'Dot-Install' -errorAction SilentlyContinue) {
+        Dot-Install
     }
     else {
         Write-Output "installing module $ModuleName to $Installtarget"
         if (![System.IO.Directory]::Exists($Installtarget)) {
             New-Item -ItemType Directory -Path $Installtarget
         }
-        Get-ChildItem -Path $ModulePath -Exclude $ModuleData, .module-data.bash | Copy-Item -Destination $Installtarget -Recurse -Force
+        Get-ChildItem -Path $ModulePath -Exclude $ModuleData, .install | Copy-Item -Destination $Installtarget -Recurse -Force
     }
-    if (Get-Command 'PostInstall-Dotfiles' -errorAction SilentlyContinue) {
-        PostInstall-Dotfiles
+    if (Get-Command 'Dot-PostInstall' -errorAction SilentlyContinue) {
+        Dot-PostInstall
     }
 
     # Unregister modules functions
-    if (Get-Command 'PreInstall-Dotfiles' -errorAction SilentlyContinue) {
-        Remove-Item -Path Function:\PreInstall-Dotfiles
+    if (Get-Command 'Dot-PreInstall' -errorAction SilentlyContinue) {
+        Remove-Item -Path Function:\Dot-PreInstall
     }
-    if (Get-Command 'Install-Dotfiles' -errorAction SilentlyContinue) {
-        Remove-Item -Path Function:\Install-Dotfiles
+    if (Get-Command 'Dot-Install' -errorAction SilentlyContinue) {
+        Remove-Item -Path Function:\Dot-Install
     }
-    if (Get-Command 'PostInstall-Dotfiles' -errorAction SilentlyContinue) {
-        Remove-Item -Path Function:\PostInstall-Dotfiles
+    if (Get-Command 'Dot-PostInstall' -errorAction SilentlyContinue) {
+        Remove-Item -Path Function:\Dot-PostInstall
     }
 }
 

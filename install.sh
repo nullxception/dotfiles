@@ -53,8 +53,8 @@ deploy_topic() {
     fi
 
     find "$moddir" -type f | while read src; do
-        [ "${src#*.module-data.bash}" != "$src" ] && continue
-        [ "${src#*.module-data.ps1}" != "$src" ] && continue
+        [ "${src#*.install}" != "$src" ] && continue
+        [ "${src#*.install.ps1}" != "$src" ] && continue
 
         dest="$(printf ${src%/*} | sed "s|$moddir|$target|")/"
         log "copying $src to $dest"
@@ -67,19 +67,19 @@ install_mod() {
     local comm_prefix=""
     local mod=$(basename "$(realpath "$1")")
 
-    if [[ ! -f "$dotfiles/$1/.module-data.bash" ]]; then
-        log ".module-data.bash for \"$1\" doesn't exists. aborting"
+    if [[ ! -f "$dotfiles/$1/.install" ]]; then
+        log ".install for \"$1\" doesn't exists. aborting"
         exit 1
     fi
 
-    source "$dotfiles/$mod/.module-data.bash"
-    if fun_exists module_preinstall; then
-        module_preinstall
+    source "$dotfiles/$mod/.install"
+    if fun_exists dot_preinstall; then
+        dot_preinstall
     fi
 
-    if fun_exists module_install; then
+    if fun_exists dot_install; then
         log "using custom install method for topic '$mod'"
-        module_install
+        dot_install
     else
         local target=$(realpath -mq "$module_target")
         if [ -z "$target" ]; then
@@ -93,8 +93,8 @@ install_mod() {
     fi
 
     # Execute module's post-install
-    if fun_exists module_postinstall; then
-        module_postinstall
+    if fun_exists dot_postinstall; then
+        dot_postinstall
     fi
 }
 

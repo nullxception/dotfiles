@@ -27,39 +27,35 @@ After cloning the repo, you can run this command :
 * Linux
 
   ```bash
-  ./install.sh <topic_name>
+  ./install.sh <topic>
   ```
 
 * Windows (from pwsh)
 
   ```powershell
-  .\install.ps1 <topic_name>
+  .\install.ps1 <topic>
   ```
 
 and that's pretty much it 😊
 
-## 📑 Topic Structures
-As you can see, this dotfiles is grouped by topics.
+## 📑 Structures
+As you can see, this dotfiles is grouped by topic.
 
-Each of it has their own `.module-data` (either ended with `.bash` or `.ps1`, depending on the OS target) files that will be used by the install script.
+Each of it has their own `.install` (`.install.ps1` if the topic is usable on Windows) script that will be used by the [`.install.sh`](.install.sh)
 
-For complete example, take a look at [`.module-data.bash.example`](.module-data.bash.example) and [`.module-data.ps1.example`](.module-data.ps1.example) files in the root directory of this repository.
+For complete example, take a look at [`.install.example`](.install.example) and [`.install.ps1.example`](.install.ps1.example).
 
 ## 💬 FAQ
 
 🤔: _Can I use it on my machine ?_
 
-For some topic like `shell` or `firefox`, yes.
+For some topic like `audio` or `firefox`, yes.
 
 But for `etc` topic, I don't think you want to install it blatantly, since it's a system configuration, tho you can still use it as a references (maybe ?) :)
 
 🤔: _Why don't use ansible/stow/yadm/etc instead ?_
 
-For simple task such installing files, I think shell script (bash/pwsh) is more than enough for me.
-
-🤔: _Is there any LDA or r/unixporn-able desktop suite configuration here ?_
-
-I'm just your regular desktop-environment neighbor (ATM) :)
+For simple task such installing dotfiles, I think shell script is more than enough for me.
 
 ## 📄 License
 

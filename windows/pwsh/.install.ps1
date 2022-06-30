@@ -1,6 +1,6 @@
 $InstallTarget = Split-Path $profile
 
-function PostInstall-Dotfiles {
+function Dot-PostInstall {
     Install-Module posh-git -Scope CurrentUser -Force
     Update-Module posh-git
 }

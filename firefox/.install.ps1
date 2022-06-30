@@ -24,7 +24,7 @@ function Get-IniContent ($filePath) {
 }
 
 
-function Install-Dotfiles {
+function Dot-Install {
     $FirefoxDir = "$env:APPDATA\Mozilla\Firefox"
     if (!(Test-Path $FirefoxDir\profiles.ini)) {
         "no firefox profile detected, open firefox first before restoring tweaks"

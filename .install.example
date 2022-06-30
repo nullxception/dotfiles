@@ -1,15 +1,14 @@
-#!/bin/bash
 module_target="/path/to/target"
 
-module_preinstall() {
+dot_preinstall() {
     # custom action before install process (default/custom method)
 }
 
-module_install() {
+dot_install() {
     # custom install method that will replace the default method
     # Note: remove it if you want to use the default method
 }
 
-module_postinstall() {
+dot_postinstall() {
     # custom action after install process (default/custom method)
 }

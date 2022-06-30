@@ -1,14 +1,14 @@
 $InstallTarget = "Z:\path\to\files"
 
-function PreInstall-Dotfiles {
+function Dot-PreInstall {
     # custom action before install process (default/custom method)
 }
 
-function Install-Dotfiles {
+function Dot-Install {
     # custom install method that will replace the default method
     # Note: remove it if you want to use the default method
 }
 
-function PostInstall-Dotfiles {
+function Dot-PostInstall {
     # custom action after install process (default/custom method)
 }
