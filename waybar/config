@@ -1,0 +1,56 @@
+{
+    "modules-left": [
+        "sway/workspaces",
+        "custom/arrow-right",
+        "sway/mode",
+        "sway/window"
+    ],
+    "modules-right": [
+        "tray",
+        "custom/player",
+        "temperature",
+        "cpu",
+        "memory",
+        "network",
+        "pulseaudio",
+        "clock"
+    ],
+    "tray": {
+        "spacing": 10
+    },
+    "clock": {
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        "format": "{:%I:%M %p}",
+        "format-alt": "{:%Y-%m-%d}"
+    },
+    "temperature": {
+        "format": "coffee: {temperatureC}°C"
+    },
+    "pulseaudio": {
+        "scroll-step": 2,
+        "format": "volume: {volume}%",
+        "format-bluetooth": "{volume}% [bt]",
+        "on-click": "pavucontrol"
+    },
+    "network": {
+        "format-wifi": "net: {essid}",
+        "format-ethernet": "net: {ipaddr}",
+        "format-linked": "net: no IP",
+        "format-disconnected": "net: offline",
+        "format-alt": "{ifname}: {ipaddr}"
+    },
+    "cpu": {
+        "format": "brain: {usage}%",
+        "tooltip": false
+    },
+    "memory": {
+        "format": "porn: {used:0.1f}GB"
+    },
+    "custom/player": {
+        "format": "{alt}: {}",
+        "return-type": "json",
+        "max-length": 60,
+        "escape": true,
+        "exec": "$HOME/.config/waybar/bin/mediaplayer.py 2> /dev/null"
+    }
+}

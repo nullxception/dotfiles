@@ -1,0 +1,148 @@
+@define-color colorbg #23232f;
+@define-color colorfg #bdc3c7;
+@define-color color0 #3f3f4f;
+@define-color color1 #ff568e;
+@define-color color2 #64de83;
+@define-color color3 #efff73;
+@define-color color4 #73a9ff;
+@define-color color5 #946ff7;
+@define-color color6 #62c6da;
+@define-color color7 #dedeef;
+
+* {
+    font-family: "Sans";
+    font-weight: 600;
+    font-size: 11px;
+
+    /* reset */
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    margin: 0;
+}
+
+window#waybar {
+    background-color: alpha(@colorbg, 0.95);
+    color: @colorfg;
+}
+
+window#waybar.hidden {
+    opacity: 0.2;
+}
+
+.modules-left {
+    margin-left: 15px;
+}
+
+.modules-right {
+    margin-right: 15px;
+}
+
+#workspaces {
+    border-radius: 10px;
+    margin: 6px 3px;
+}
+
+#workspaces button {
+    color: @colorfg;
+    margin: 0;
+    padding: 0 6px;
+    border-radius: 0;
+    border: none;
+    background: shade(@colorbg, 0.5);
+    transition-property: background-color;
+    transition-duration: .2s;
+}
+
+#workspaces button:first-child {
+    border-radius: 10px 0 0 10px;
+}
+
+#workspaces button:last-child {
+    border-radius: 0 10px 10px 0;
+}
+
+#workspaces button:hover {
+    box-shadow: inherit;
+    text-shadow: inherit;
+    border: none;
+    background: alpha(@color4, 0.4);
+}
+
+#workspaces button.focused {
+    background-color: alpha(@colorfg, 0.3);
+}
+
+#workspaces button.urgent {
+    background-color: alpha(@color2, 0.8);
+}
+
+#workspaces button:only-child {
+    border-radius: 10px;
+    background: shade(@colorbg, 0.5);
+    color: @colorfg;
+}
+
+#window {
+    padding: 5px 10px;
+}
+
+#mode,
+#custom-player,
+#tray,
+#temperature,
+#cpu,
+#memory,
+#pulseaudio,
+#network,
+#clock {
+    padding: 4px 12px;
+    border-radius: 10px;
+    margin: 5px 3px;
+    background: shade(@colorbg, 0.5);
+    color: @colorfg;
+}
+
+#mode {
+    background-color: alpha(@color5, 0.5);
+}
+
+#custom-player {
+    color: @color1;
+}
+
+#temperature {
+    color: @color4;
+}
+
+#cpu {
+    color: @color2;
+}
+
+#memory {
+    color: @color1;
+}
+
+#network {
+    color: @color5;
+}
+
+#pulseaudio {
+    color: @color6;
+}
+
+#clock {
+    color: @color3;
+}
+
+#tray {
+    background: inherit;
+}
+
+#tray>.passive {
+    -gtk-icon-effect: dim;
+}
+
+#tray>.needs-attention {
+    -gtk-icon-effect: highlight;
+}
