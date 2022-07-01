@@ -1,0 +1,85 @@
+configuration {
+    show-icons: true;
+    display-run:  ">_";
+}
+
+* {
+    bg: #23232f;
+    fg: #bdc3c7;
+    accent: #ff568e;
+    background-color: transparent;
+    color: @fg;
+    highlight: underline bold #ff568e;
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+
+window {
+    width: 25%;
+    children: [ mainbox ];
+    location: center;
+    transparency: "screenshot";
+    background-color: #23232ff0;
+}
+
+mainbox {
+    orientation: vertical;
+    children: [ inputbar, message, listview, mode-switcher ];
+    border: 1px;
+    border-color: #43434f;
+}
+
+inputbar {
+    background-color: #ff568e55;
+    border-radius: 50%;
+    margin: 1em;
+    padding: 0.5em;
+}
+
+prompt {
+    margin: 0 0.3em;
+}
+
+case-indicator {
+    margin: 0 0.5em;
+}
+
+message {
+    padding: 0 0 1em 0;
+}
+
+textbox {
+    padding: 0 1.5em;
+}
+
+listview {
+	lines: 6;
+}
+
+element {
+    padding: 0.5em;
+    color: @fg;
+}
+
+element selected.normal {
+    background-color: #43434f;
+}
+
+element-icon {
+    padding: 0 0.5em 0 1em;
+}
+
+mode-switcher {
+    padding: 0 1em;
+}
+
+button {
+    margin: 0.3em 0 0.5em;
+    padding: 0.3em;
+    border-radius: 50%;
+}
+
+button selected {
+    background-color: #946ff755;
+}
