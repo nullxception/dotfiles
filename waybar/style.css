@@ -1,6 +1,6 @@
 @define-color colorbg #23232f;
 @define-color colorfg #bdc3c7;
-@define-color color0 #3f3f4f;
+@define-color color0 #43434f;
 @define-color color1 #ff568e;
 @define-color color2 #64de83;
 @define-color color3 #efff73;
@@ -8,6 +8,14 @@
 @define-color color5 #946ff7;
 @define-color color6 #62c6da;
 @define-color color7 #dedeef;
+@define-color color8 #53535f;
+@define-color color9 #ff69a2;
+@define-color color10 #73de8a;
+@define-color color11 #f3ff85;
+@define-color color12 #85b6ff;
+@define-color color13 #a481f7;
+@define-color color14 #71c2d9;
+@define-color color15 #ebebf0;
 
 * {
     font-family: "Sans";
