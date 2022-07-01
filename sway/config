@@ -3,6 +3,7 @@ include ~/.config/sway/colors
 set $mod Mod4
 set $term kitty
 set $menu rofi -show run
+set $lock ~/.config/sway/bin/lock
 
 set $left h
 set $down j
@@ -30,9 +31,9 @@ for_window [app_id=".*iwgtk"] floating enable
 
 exec rofi-polkit-agent
 exec swayidle -w \
-          timeout 300 'swaylock -f -c 000000' \
+          timeout 300 $lock \
           timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
-          before-sleep 'swaylock -f -c 000000'
+          before-sleep $lock
 
 exec_always ~/.config/sway/bin/import-gsettings
 
@@ -47,6 +48,7 @@ bindsym $mod+Insert exec grim - | wl-copy
 bindsym Mod1+Insert exec slurp | grim -g - - | wl-copy
 bindsym $mod+Home exec pactl set-sink-volume @DEFAULT_SINK@ +2%
 bindsym $mod+End exec pactl set-sink-volume @DEFAULT_SINK@ -2%
+bindsym Ctrl+Mod1+l exec $lock
 
 bindsym $mod+$left focus left
 bindsym $mod+$down focus down

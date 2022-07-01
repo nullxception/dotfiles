@@ -1,0 +1,63 @@
+#!/bin/sh
+# wrapper for swaylock [swaylock-effect]
+#
+# to set background, link your favorite image into
+# ~/.cache/lockscreen-background
+#
+
+image=~/.cache/lockscreen-background
+if [ ! -f $image ] && [ -f ~/.cache/wallpaper ]; then
+    # use sway wallpaper as fallback
+    ln -s ~/.cache/wallpaper $image
+fi
+
+colorfile=~/.config/sway/colors
+get_color() {
+    grep color${1} $colorfile | sed 's/^.*#//'
+}
+
+colorbg=$(get_color bg)
+colorfg=$(get_color fg)
+color0=$(get_color 0)
+color1=$(get_color 1)
+color2=$(get_color 2)
+color3=$(get_color 3)
+color4=$(get_color 4)
+color5=$(get_color 5)
+color6=$(get_color 6)
+color7=$(get_color 7)
+
+ring=${colorbg}a0
+inside=000000a0
+
+exec swaylock ${CONF} \
+    --font "Noto Sans Light" \
+    --image ${image} \
+    --inside-color=$inside \
+        --inside-clear-color=$inside \
+        --inside-caps-lock-color=$inside \
+        --inside-ver-color=$inside \
+        --inside-wrong-color=$inside \
+    --ring-color=$ring \
+        --ring-clear-color=$ring \
+        --ring-ver-color=$ring \
+        --ring-wrong-color=$ring \
+    --text-color=$colorfg \
+        --text-ver-color=$color4 \
+        --text-wrong-color=$color1 \
+        --text-caps-lock-color=$colorfg \
+        --text-clear-color=$colorfg \
+    --line-uses-ring \
+    --indicator-idle-visible \
+    --indicator-radius=150 \
+    --indicator-thickness=6 \
+    --key-hl-color=$color6 \
+    --bs-hl-color=$color5 \
+    --separator-color=$color6 \
+    --fade-in 0.2 \
+    --effect-vignette 0:0.3 \
+    --clock \
+        --timestr="%-I:%-M %p" \
+        --datestr="%A, %B %-d" \
+    --ignore-empty-password \
+    --daemonize
