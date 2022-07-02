@@ -39,7 +39,7 @@ For complete example, take a look at [`.install.example`](.install.example).
 
 Yup, especially for some topic like [`nvim`](nvim) or [`kitty`](kitty).
 
-But for things like [`etc`](etc) or [`hw`](hw), I suggest you to NOT INSTALL it blatantly since it is a system configuration.
+But for things like [`sys/hw`](sys/hw) or [`sys/systemd`](sys/systemd), I suggest you to NOT INSTALL it blatantly since it is a system-wide configuration.
 
 > Why don't use ansible/stow/yadm/etc instead ?
 
