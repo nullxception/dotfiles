@@ -43,62 +43,61 @@ comm_prefix_gen() {
     fi
 }
 
-deploy_topic() {
-    local target=$1
-    local comm_prefix=$(comm_prefix_gen "$target")
-    local moddir="$dotfiles/$mod"
+deploy() {
+    local src=$1
+    local dest=$2
+    local comm_prefix=$(comm_prefix_gen "$dest")
 
     if [ "$comm_prefix" = "sudo" ]; then
         log "using sudo to install module..."
     fi
 
-    find "$moddir" -type f | while read src; do
-        [ "${src#*.install}" != "$src" ] && continue
-        [ "${src#*.install.ps1}" != "$src" ] && continue
+    find "$src" -type f | while read f_src; do
+        [ "${f_src#*.install}" != "$f_src" ] && continue
+        [ "${f_src#*.install.ps1}" != "$f_src" ] && continue
 
-        dest="$(printf ${src%/*} | sed "s|$moddir|$target|")/"
-        log "copying $src to $dest"
-        [ -d "$dest" ] || $comm_prefix mkdir -p "$dest"
-        $comm_prefix cp "$src" "$dest"
+        f_dest="$(printf ${f_src%/*} | sed "s|$src|$dest|")"
+        log "copying $f_src to $f_dest"
+        [ -d "$f_dest" ] || $comm_prefix mkdir -p "$f_dest"
+        $comm_prefix cp "$f_src" "$f_dest"
     done
 }
 
 install_mod() {
-    local comm_prefix=""
-    local mod=$(basename "$(realpath "$1")")
+    local target="$(realpath $1)"
+    local name=$(basename $(realpath $target))
+    local inst="$target/.install"
 
-    if [[ ! -f "$dotfiles/$1/.install" ]]; then
-        log ".install for \"$1\" doesn't exists. aborting"
+    if [ ! -f "$inst" ]; then
+        log ".install for $name doesn't exists. aborting"
         exit 1
     fi
 
-    source "$dotfiles/$mod/.install"
+    . $inst
     if fun_exists dot_preinstall; then
         dot_preinstall
     fi
 
     if fun_exists dot_install; then
-        log "using custom install method for topic '$mod'"
+        log "using custom install method for topic $name"
         dot_install
     else
-        local target=$(realpath -mq "$module_target")
-        if [ -z "$target" ]; then
+        local dest=$(realpath -mq "$module_target")
+        if [ -z "$dest" ]; then
             log "Invalid module_target entry. aborting"
             exit 1
         fi
 
-        # Execute install procedure
-        log "installing topic '$mod' to $target"
-        deploy_topic "$target"
+        log "installing topic $name to $dest"
+        deploy "$target" "$dest"
     fi
 
-    # Execute module's post-install
     if fun_exists dot_postinstall; then
         dot_postinstall
     fi
 }
 
-if [[ -z "$@" ]]; then
+if [ -z "$1" ]; then
     usage
     exit 1
 fi
