@@ -1,0 +1,11 @@
+#!/bin/sh
+# sway session wrapper
+
+export XDG_SESSION_TYPE=wayland \
+    XDG_SESSION_DESKTOP=sway \
+    XDG_CURRENT_DESKTOP=sway
+
+user_env="${XDG_CONFIG_HOME:-$HOME/.config}/sway/env"
+[ -f "$user_env" ] && . "$user_env"
+
+exec dbus-run-session sway $@

@@ -1,0 +1,5 @@
+module_target="/usr/local/bin"
+
+module_postinstall {
+    chmod +x ${module_target}/*
+}
