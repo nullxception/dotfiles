@@ -1,7 +1,6 @@
 {
     "modules-left": [
         "sway/workspaces",
-        "custom/arrow-right",
         "sway/mode",
         "sway/window"
     ],
@@ -51,14 +50,12 @@
         "format": "brain: {usage}%",
         "tooltip": false
     },
-    "memory": {
-        "format": "porn: {used:0.1f}GB"
-    },
     "custom/memory": {
         "format": "porn: {}",
         "return-type": "json",
         "interval": 1,
-        "exec": "$HOME/.config/waybar/bin/memory"
+        "exec": "$HOME/.config/waybar/bin/memory",
+        "tooltip": false
     },
     "custom/player": {
         "format": "{alt}: {}",
