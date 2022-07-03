@@ -18,7 +18,7 @@ client.urgent               $colorbg     $colorbg     $colorfg    $color5    $co
 client.placeholder          $colorbg     $colorbg     $colorfg    $color5    $colorbg
 client.background           $colorbg
 
-font pango:Sans Semibold 9
+font pango:sans-serif 13px
 bar swaybar_command waybar
 output * bg ~/.cache/wallpaper fill
 

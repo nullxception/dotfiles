@@ -18,9 +18,8 @@
 @define-color color15 #ebebf0;
 
 * {
-    font-family: "Sans";
-    font-weight: 600;
-    font-size: 11px;
+    font-family: sans-serif;
+    font-size: 13px;
 
     /* reset */
     border: none;
