@@ -1,6 +1,0 @@
-module_target="$HOME/.config"
-
-dot_postinstall() {
-    # enable the service
-    systemctl enable --user ssh-agent.service
-}
