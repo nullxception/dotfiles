@@ -15,6 +15,14 @@
         "pulseaudio",
         "clock"
     ],
+    "sway/workspaces": {
+        "persistent_workspaces": {
+            "1": [],
+            "2": [],
+            "3": [],
+            "4": []
+        }
+    },
     "tray": {
         "spacing": 10
     },
