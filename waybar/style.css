@@ -18,7 +18,7 @@
 @define-color color15 #ebebf0;
 
 * {
-    font-family: sans-serif;
+    font-family: Inter Semibold, sans-serif;
     font-size: 13px;
 
     /* reset */
