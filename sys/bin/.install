@@ -2,4 +2,7 @@ module_target="/usr/local/bin"
 
 module_postinstall() {
     sudo chmod +x ${module_target}/*
+
+    # Registering sway
+    sudo ln -sf ${module_target}/run-desktop ${module_target}/run-sway
 }
