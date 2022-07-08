@@ -1,5 +1,5 @@
 module_target="/usr/local/bin"
 
-module_postinstall {
-    chmod +x ${module_target}/*
+module_postinstall() {
+    sudo chmod +x ${module_target}/*
 }
