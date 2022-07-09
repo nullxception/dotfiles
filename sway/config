@@ -129,4 +129,10 @@ mode $quit {
 }
 bindsym $mod+Shift+e mode $quit
 
+
+input type:pointer {
+    accel_profile flat
+    pointer_accel 0
+}
+
 include /etc/sway/config.d/*
