@@ -48,7 +48,9 @@ function Update-CurrentEnv {
         }
     }
 
-    $env:Path = 'Machine', 'User' | ForEach-Object {
+    $allpath = 'Machine', 'User' | ForEach-Object {
         [Environment]::GetEnvironmentVariable('Path', $_) -split ';'
-    } | Select-Object -Unique | Join-String -Separator ";"
+    } | Select-Object -Unique
+
+    $env:Path = $allpath -join ";"
 }
