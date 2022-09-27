@@ -14,8 +14,8 @@ $CustomPath = @(
 $CustomPath | Where-Object { Register-Path -At $_ -Scope User }
 
 # Setup aliases
-Set-Alias ls lsd
-Set-Alias cat bat
+Set-Alias ls lsd -Option AllScope
+Set-Alias cat bat -Option AllScope
 Set-Alias sudo gsudo
 Set-Alias vim nvim
 
