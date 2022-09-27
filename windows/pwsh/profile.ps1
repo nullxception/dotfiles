@@ -30,6 +30,13 @@ Register-ArgumentCompleter -Native -CommandName winget -ScriptBlock {
     }
 }
 
+# Colors
+Set-PSReadLineOption -Colors @{
+    "Parameter" = [ConsoleColor]::Yellow
+    "Operator"  = [ConsoleColor]::DarkYellow
+    "Command"   = [ConsoleColor]::DarkBlue
+}
+
 # Prompt
 function prompt {
     $ESC = [char]27
