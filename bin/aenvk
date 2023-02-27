@@ -14,7 +14,12 @@ mk() {
         echo "-$ENVK_BUILD_VERSION" > $KERNEL_DIR/.scmversion
     fi
 
-    make -j$(nproc --ignore=1) \
+    local proc=$(nproc --all)
+    if [[ "$proc" -lt 8 ]]; then
+        proc=$((proc-1))
+    fi
+
+    make -j$proc \
         -C $KERNEL_DIR O=$ENVK_BUILD_DIR \
         ARCH=arm64 \
         CLANG_TRIPLE=aarch64-linux-gnu- \
