@@ -1,6 +1,7 @@
 #!/bin/bash
 
 mk() {
+    local msbegin=$(date +%s.%N)
     local loginfo=$ENVK_BUILD_DIR/mk.build.log
     local logerr=$ENVK_BUILD_DIR/mk.error.log
 
@@ -23,6 +24,9 @@ mk() {
     if [[ "$ENVK_WITH_DTBO" == "1" ]]; then
         test -z "$@" && mkdtbo
     fi
+
+    local msdiff=$(echo "$(date +%s.%N) - $msbegin" | bc)
+    echo "aenvk: Took $msdiff seconds"
 }
 
 mkdtbo() {
