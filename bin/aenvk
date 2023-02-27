@@ -42,7 +42,7 @@ mkdtbo() {
     else
         echo "aenvk: There's no overlays found at $bootdir/dts"
     fi
-    exit $?
+    return $?
 }
 
 mkcfg() {
