@@ -11,9 +11,8 @@ dot_install() {
     if [[ -f $ff_dir/$profile/prefs.js ]]; then
       echo ":: Install user.js to $profile"
       cp -f $dotfiles/$mod/user.js $ff_dir/$profile
-      mkdir -p $ff_dir/$profile/chrome
-      echo ":: Install user css to $profile"
-      cp -f $dotfiles/$mod/*.css $ff_dir/$profile/chrome/
+      echo ":: Install css tweaks to $profile"
+      cp -f $dotfiles/$mod/chrome $ff_dir/$profile
     fi
   done
 }
