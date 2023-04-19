@@ -39,7 +39,7 @@ function Install-Files($DotDir, $Target) {
     Copy-Item -Force -Recurse $DotDir\chrome $Dest
 }
 
-function Dot-Install {
+function dot_install {
     if (!(Test-Path $FFDir\profiles.ini)) {
         "no firefox profile detected, open firefox first before restoring tweaks"
         exit

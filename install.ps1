@@ -18,11 +18,11 @@ function Install-Mod($ModulePath) {
     }
 
     . $ModuleRPath
-    if (Get-Command 'Dot-PreInstall' -errorAction SilentlyContinue) {
-        Dot-PreInstall
+    if (Get-Command 'dot_preinstall' -errorAction SilentlyContinue) {
+        dot_preinstall
     }
-    if (Get-Command 'Dot-Install' -errorAction SilentlyContinue) {
-        Dot-Install
+    if (Get-Command 'dot_install' -errorAction SilentlyContinue) {
+        dot_install
     }
     else {
         Write-Output "installing module $ModuleName to $Installtarget"
@@ -31,19 +31,19 @@ function Install-Mod($ModulePath) {
         }
         Get-ChildItem -Path $ModulePath -Exclude $ModuleData, .install | Copy-Item -Destination $Installtarget -Recurse -Force
     }
-    if (Get-Command 'Dot-PostInstall' -errorAction SilentlyContinue) {
-        Dot-PostInstall
+    if (Get-Command 'dot_postinstall' -errorAction SilentlyContinue) {
+        dot_postinstall
     }
 
     # Unregister modules functions
-    if (Get-Command 'Dot-PreInstall' -errorAction SilentlyContinue) {
-        Remove-Item -Path Function:\Dot-PreInstall
+    if (Get-Command 'dot_preinstall' -errorAction SilentlyContinue) {
+        Remove-Item -Path Function:\dot_preinstall
     }
-    if (Get-Command 'Dot-Install' -errorAction SilentlyContinue) {
-        Remove-Item -Path Function:\Dot-Install
+    if (Get-Command 'dot_install' -errorAction SilentlyContinue) {
+        Remove-Item -Path Function:\dot_install
     }
-    if (Get-Command 'Dot-PostInstall' -errorAction SilentlyContinue) {
-        Remove-Item -Path Function:\Dot-PostInstall
+    if (Get-Command 'dot_postinstall' -errorAction SilentlyContinue) {
+        Remove-Item -Path Function:\dot_postinstall
     }
 }
 
