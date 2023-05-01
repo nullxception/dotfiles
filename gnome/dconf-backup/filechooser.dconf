@@ -1,5 +1,0 @@
-[org/gtk/settings/file-chooser]
-show-hidden=true
-
-[org/gtk/settings/file-chooser]
-sort-directories-first=true

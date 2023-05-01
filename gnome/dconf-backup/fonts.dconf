@@ -1,8 +1,0 @@
-[org/gnome/desktop/wm/preferences]
-titlebar-font='Sans Bold 9'
-titlebar-uses-system-font=true
-
-[org/gnome/desktop/interface]
-document-font-name='Sans 9'
-font-name='Sans 9'
-monospace-font-name='Monospace 9'
