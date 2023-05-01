@@ -27,6 +27,7 @@ zinit wait depth=1 lucid for \
 
 # Snippets
 zinit lucid light-mode for \
+    OMZL::functions.zsh \
     OMZL::completion.zsh \
     OMZL::directories.zsh \
     OMZL::history.zsh \
