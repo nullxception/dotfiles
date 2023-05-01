@@ -14,8 +14,6 @@ autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 
 # Theme
-ROUNDY_COLORS_BG_USER=0
-ROUNDY_COLORS_BG_DIR=0
 zinit ice pick="lib/async.zsh" src="roundy.zsh" compile"{lib/async,roundy}.zsh"
 zinit light nullxception/roundy
 
