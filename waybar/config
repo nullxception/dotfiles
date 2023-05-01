@@ -1,8 +1,7 @@
 {
     "modules-left": [
-        "sway/workspaces",
-        "sway/mode",
-        "sway/window"
+        "wlr/workspaces",
+        "hyprland/window"
     ],
     "modules-right": [
         "tray",
@@ -14,7 +13,10 @@
         "pulseaudio",
         "clock"
     ],
-    "sway/workspaces": {
+    "wlr/workspaces": {
+        "on-click": "activate",
+        "on-scroll-up": "hyprctl dispatch workspace e+1",
+        "on-scroll-down": "hyprctl dispatch workspace e-1",
         "persistent_workspaces": {
             "1": [],
             "2": [],

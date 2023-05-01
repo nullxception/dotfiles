@@ -76,7 +76,7 @@ window#waybar.hidden {
     background: alpha(@color4, 0.4);
 }
 
-#workspaces button.focused {
+#workspaces button.active {
     background-color: alpha(@colorfg, 0.3);
 }
 
