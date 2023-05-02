@@ -1,0 +1,1 @@
+$InstallTarget = "$env:LOCALAPPDATA\nvim"

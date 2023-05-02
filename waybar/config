@@ -1,0 +1,69 @@
+{
+    "modules-left": [
+        "wlr/workspaces",
+        "hyprland/window"
+    ],
+    "modules-right": [
+        "tray",
+        "custom/player",
+        "temperature",
+        "cpu",
+        "custom/memory",
+        "network",
+        "pulseaudio",
+        "clock"
+    ],
+    "wlr/workspaces": {
+        "on-click": "activate",
+        "on-scroll-up": "hyprctl dispatch workspace e+1",
+        "on-scroll-down": "hyprctl dispatch workspace e-1",
+        "persistent_workspaces": {
+            "1": [],
+            "2": [],
+            "3": [],
+            "4": []
+        }
+    },
+    "tray": {
+        "spacing": 10
+    },
+    "clock": {
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        "format": "{:%I:%M %p}",
+        "format-alt": "{:%Y-%m-%d}"
+    },
+    "temperature": {
+        "format": "coffee: {temperatureC}°C"
+    },
+    "pulseaudio": {
+        "scroll-step": 2,
+        "format": "volume: {volume}%",
+        "format-bluetooth": "{volume}% [bt]",
+        "on-click": "pavucontrol"
+    },
+    "network": {
+        "format-wifi": "net: {essid}",
+        "format-ethernet": "net: {ipaddr}",
+        "format-linked": "net: no IP",
+        "format-disconnected": "net: offline",
+        "format-alt": "{ifname}: {ipaddr}"
+    },
+    "cpu": {
+        "format": "brain: {usage}%",
+        "tooltip": false
+    },
+    "custom/memory": {
+        "format": "porn: {}",
+        "return-type": "json",
+        "interval": 1,
+        "exec": "$HOME/.config/waybar/bin/memory",
+        "tooltip": false
+    },
+    "custom/player": {
+        "format": "{alt}: {}",
+        "return-type": "json",
+        "max-length": 60,
+        "escape": true,
+        "exec": "$HOME/.config/waybar/bin/mediaplayer.py 2> /dev/null"
+    }
+}

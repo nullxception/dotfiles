@@ -1,0 +1,23 @@
+@-moz-document url(about:newtab), url(about:home) {
+    body {
+        background-image: url(newtab-bg.jpg);
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
+
+    .search-wrapper .search-handoff-button {
+        border-radius: 2rem !important;
+        backdrop-filter: blur(2rem);
+        background-color: #fff6 !important;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        .search-wrapper .search-handoff-button {
+            background-color: #0006 !important;
+        }
+    }
+
+    .outer-wrapper.only-search {
+        padding-top: 35vh !important;
+    }
+}

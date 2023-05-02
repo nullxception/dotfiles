@@ -1,0 +1,5 @@
+/* Remove blue outline */
+#urlbar[focused="true"]:not([suppress-focus-border]) > #urlbar-background,
+#searchbar:focus-within {
+    outline: none !important;
+}

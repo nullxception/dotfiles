@@ -1,0 +1,10 @@
+vim.g.NERDTreeQuitOnOpen = 1
+vim.g.NERDTreeShowHidden = 1
+vim.g.NERDTreeHijackNetrw = 1
+vim.g.NERDTreeMinimalUI = 1
+vim.g.NERDTreeShowBookmarks = 1
+vim.g.NERDTreeBookmarksFile = vim.fn.stdpath('config')..'/bookmarks'
+vim.g.NERDTreeWinSize = 28
+vim.g.NERDTreeChDirMode = 2
+vim.g.NERDTreeDirArrowExpandable = ''
+vim.g.NERDTreeDirArrowCollapsible = ''

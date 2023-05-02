@@ -1,0 +1,228 @@
+#!/bin/bash
+
+mk() {
+    local msbegin=$(date +%s.%N)
+    local loginfo=$ENVK_BUILD_DIR/mk.build.log
+    local logerr=$ENVK_BUILD_DIR/mk.error.log
+
+    mkdir -p $ENVK_BUILD_DIR
+    if [[ -z $ENVK_BUILD_VERSION ]]; then
+        echo "aenvk: Building kernel"
+        rm -f $KERNEL_DIR/.scmversion
+    else
+        echo "aenvk: Building kernel, version $ENVK_BUILD_VERSION"
+        echo "-$ENVK_BUILD_VERSION" > $KERNEL_DIR/.scmversion
+    fi
+
+    local proc=$(nproc --all)
+    if [[ "$proc" -lt 8 ]]; then
+        proc=$((proc-1))
+    fi
+
+    make -j$proc \
+        -C $KERNEL_DIR O=$ENVK_BUILD_DIR \
+        ARCH=arm64 \
+        CLANG_TRIPLE=aarch64-linux-gnu- \
+        $ENVK_ADDITIONAL_FLAGS \
+            $@ > >(tee ${loginfo}) 2> >(tee ${logerr} >&2)
+
+    if [[ "$ENVK_WITH_DTBO" == "1" ]]; then
+        test -z "$@" && mkdtbo
+    fi
+
+    local msdiff=$(echo "$(date +%s.%N) - $msbegin" | bc)
+    echo "aenvk: Took $msdiff seconds"
+}
+
+mkdtbo() {
+    local bootdir=$ENVK_BUILD_DIR/arch/arm64/boot
+    local dtout=$bootdir/dtbo.img
+    local mkdt=$ENVK_LIBUFDT_PATH/utils/src/mkdtboimg.py
+    local overlays=$(find $bootdir/dts -iname '*-overlay.dtbo' -print)
+    if [[ ! -f $mkdt ]]; then
+        echo "aenvk: $mkdt does not exists. exiting"
+        exit 1
+    fi
+
+    if [[ $(wc -l <<<$overlays) -gt 0 ]]; then
+        echo "aenvk: Building dtbo.img"
+        python2 $mkdt create $dtout $overlays
+        echo "aenvk: Build done: $dtout"
+    else
+        echo "aenvk: There's no overlays found at $bootdir/dts"
+    fi
+    return $?
+}
+
+mkcfg() {
+    if [[ -z $ENVK_BUILD_CONFIG ]]; then
+        echo "aenvk: you have to set ENVK_BUILD_CONFIG before, for example: "
+        echo "    $ export ENVK_BUILD_CONFIG=vayu_defconfig"
+    else
+        mk savedefconfig
+        cp $ENVK_BUILD_DIR/defconfig $KERNEL_DIR/arch/arm64/configs/$ENVK_BUILD_CONFIG
+    fi
+    exit $?
+}
+
+env_info() {
+    local clang=$(clang -v |& sed -e '1!d;s/ (http.\+)//g')
+    echo "Compiler: $clang"
+    echo "Output: $ENVK_BUILD_DIR"
+    echo "Target: $KERNEL_DIR"
+    echo "Version: $ENVK_BUILD_VERSION"
+    exit
+}
+
+#
+# aenvk's applets
+#
+
+applet_am() {
+    local co=cherry.patch
+    local uri=$(cut -d\# -f1 <<<$1)
+    echo "aenvk-am: Applying patch from $uri"
+    curl -o $co $uri.patch && git am <$co && rm $co
+}
+
+applet_reset() {
+    echo "aenvk-reset: Resetting kernel build version"
+    if [[ -d $ENVK_BUILD_DIR ]]; then
+        echo 0 >$ENVK_BUILD_DIR/.version
+    fi
+}
+
+applet_initconfig() {
+cat <<\EOF > $KERNEL_DIR/.aenvkconfig
+#
+# aenvk build configuration
+#
+
+# tools paths
+ENVK_ADDITIONAL_PATH=/android/prebuilts/clang/host/linux-x86/clang-r416183b1/bin:/android/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9/bin:/android/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9/bin
+ENVK_LIBUFDT_PATH=/android/system/libufdt
+ENVK_ADDITIONAL_FLAGS="LLVM=1"
+
+# cross-compile path (for vdso32)
+CROSS_COMPILE=aarch64-linux-android-
+CROSS_COMPILE_ARM32=arm-linux-androideabi-
+
+# build options
+ENVK_BUILD_CONFIG=vayu_defconfig
+ENVK_BUILD_DIR=/android/out/target/product/vayu/obj/KERNEL_OBJ
+# ENVK_BUILD_VERSION=r1
+ENVK_WITH_DTBO=1
+
+EOF
+echo "aenvk: initial config created at $KERNEL_DIR/.aenvkconfig"
+}
+
+usage() {
+cat <<\EOF
+Usage:
+  aenvk init # initializing config for the kernel build
+  aenvk [options] <parameters>
+
+Options:
+  -i, --print-info                    Print current kernel setup
+  -d, --dtbo                          Create DTBO image
+  -s, --save-defconfig                Save defconfig to $ENVK_BUILD_CONFIG
+  -b, --build-type <release|debug>    Switch $ENVK_BUILD_CONFIG,
+                                      valid params are : "release" or "debug"
+  -x, --execute <make-cmds>           Run make commands
+  -a, --applets <aenvk's-applet>      Run aenvk's applet functions
+
+Example workflow:
+  # Prepare for clean-build kernel
+  $ aenvk -x mrproper
+
+  # Switch to production mode
+  $ aenvk -b release
+
+  # apply custom defconfig that stored at arch/arm64/configs
+  $ aenvk -x fischl_defconfig
+
+  # run build process
+  $ aenvk
+
+Applets:
+    Applets are an internal functions that can be executed
+    directly for the sake of simplicity
+
+    Available :
+        - am (applying patch from url)
+        - reset (resetting kernel build version)
+
+EOF
+  exit
+}
+
+if (return 0 2>/dev/null || [[ $ZSH_EVAL_CONTEXT =~ :file$ ]]); then
+    usage
+    exit 1
+fi
+
+opts=$(getopt -a -n aenvk -o hidsb:x:a: --long help,print-info,dtbo,save-defconfig,build-type:,execute:,applet:, -- "$@")
+vopts=$?
+if [ "$vopts" != "0" ]; then
+  usage
+fi
+
+eval set -- "$opts"
+while :
+do
+  case "$1" in
+    -i | --print-info) task="env_info"; shift ;;
+    -d | --dtbo) task="mkdtbo"; shift ;;
+    -s | --save-defconfig) task="mkcfg"; shift ;;
+    -x | --execute) task_execute="$2"; shift 2 ;;
+    -a | --applet) task_applet="$2"; task_applet_args="$4"; shift 2 ;;
+    -h | --help) usage ;;
+    --) shift; break ;;
+    *) echo "Unexpected option: $1"; usage ;;
+  esac
+done
+
+KERNEL_DIR=$(pwd)
+if [[ "$1" == "init" ]]; then
+    applet_initconfig
+    exit
+fi
+
+[[ -f "$KERNEL_DIR/.aenvkconfig" ]] && DOTENV="$KERNEL_DIR/.aenvkconfig"
+[[ -z $DOTENV ]] && {
+    echo "aenvk: no .aenvkconfig available. exiting"
+    exit 1
+}
+
+source $DOTENV
+
+export CROSS_COMPILE CROSS_COMPILE_ARM32
+
+if [[ -n ${ENVK_ADDITIONAL_PATH} ]]; then
+    export PATH="$ENVK_ADDITIONAL_PATH:$PATH"
+    CLANG_PATH=$(realpath $(dirname $(which clang))/..)
+    export LD_LIBRARY_PATH="$CLANG_PATH/lib64:$LD_LIBRARY_PATH"
+fi
+
+# set ccache
+export PATH="/usr/lib/ccache/bin/:$PATH"
+
+if [[ -n "$task_applet" ]]; then
+    applet_$task_applet $task_applet_args
+    exit $?
+fi
+
+if [[ -n "$task_execute" ]]; then
+    mk "$task_execute"
+    exit $?
+fi
+
+if [[ -n "$task" ]]; then
+    $task
+    exit $?
+fi
+
+if [[ "$vopts" == "0" ]]; then
+    mk
+fi

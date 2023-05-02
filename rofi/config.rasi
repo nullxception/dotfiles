@@ -1,0 +1,5 @@
+configuration {
+  font: "Inter Semibold 13px";
+}
+
+@theme "~/.config/rofi/theme/cherry.rasi"
