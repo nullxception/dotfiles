@@ -29,6 +29,7 @@ vim.o.backup = false
 vim.o.undofile = true
 vim.o.visualbell = true
 vim.g.mapleader = ' '
+vim.wo.fillchars='eob: '
 
 if vim.fn.has('gui_running') ~= 1 then
     vim.o.t_Co=256
@@ -39,4 +40,3 @@ vim.cmd [[
     syntax on
 ]]
 
-vim.api.nvim_set_hl(0, "NormalFloat", { bg = "#0f0f0f" })
