@@ -14,8 +14,7 @@ Since this dotfiles is grouped by topic, you can just run the install script fol
 
 > for example, installing kitty and nvim config
 ```bash
-./install.sh kitty
-./install.sh nvim
+./install.sh kitty nvim
 ```
 
 # Structures

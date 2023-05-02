@@ -102,4 +102,7 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-install_mod "$1"
+for mod in $@;do
+    install_mod "$mod"
+done
+
