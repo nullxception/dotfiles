@@ -12,7 +12,7 @@ dot_install() {
       echo ":: Install user.js to $profile"
       cp -f $dotfiles/$mod/user.js $ff_dir/$profile
       echo ":: Install css tweaks to $profile"
-      cp -f $dotfiles/$mod/chrome $ff_dir/$profile
+      cp -rf $dotfiles/$mod/chrome $ff_dir/$profile
     fi
   done
 }
