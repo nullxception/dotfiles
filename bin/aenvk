@@ -244,8 +244,10 @@ if [[ -n $CROSS_COMPILE_COMPAT ]]; then
 fi
 if [[ -n $ENVK_ADDITIONAL_PATH ]]; then
     export PATH="$ENVK_ADDITIONAL_PATH:$PATH"
-    CLANG_PATH=$(realpath $(dirname $(which clang))/..)
-    export LD_LIBRARY_PATH="$CLANG_PATH/lib64:$LD_LIBRARY_PATH"
+    if which clang 2&>/dev/null; then
+        CLANG_PATH=$(realpath $(dirname $(which clang))/..)
+        export LD_LIBRARY_PATH="$CLANG_PATH/lib64:$LD_LIBRARY_PATH"
+    fi
 fi
 
 # set ccache
