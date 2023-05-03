@@ -27,14 +27,31 @@ mk() {
             $@ > >(tee ${loginfo}) 2> >(tee ${logerr} >&2)
 
     if [[ "$ENVK_WITH_DTBO" == "1" && "$@" == "" ]]; then
-        mkdtbo
+        applet_dtbo
     fi
 
     local msdiff=$(echo "$(date +%s.%N) - $msbegin" | bc)
     echo "aenvk: Took $msdiff seconds"
 }
 
-mkdtbo() {
+
+
+#
+# aenvk's applets
+#
+
+applet_info() {
+    local clang=$(clang -v |& sed -e '1!d;s/ (http.\+)//g')
+    echo "Compiler: $clang"
+    echo "Output: $ENVK_BUILD_DIR"
+    echo "Target: $KERNEL_DIR"
+    if [[ -z ENVK_BUILD_VERSION ]]; then
+        echo "Version: $ENVK_BUILD_VERSION"
+    fi
+    exit
+}
+
+applet_dtbo() {
     local bootdir=$ENVK_BUILD_DIR/arch/arm64/boot
     local dtout=$bootdir/dtbo.img
     local mkdt=$ENVK_LIBUFDT_PATH/utils/src/mkdtboimg.py
@@ -54,7 +71,7 @@ mkdtbo() {
     return $?
 }
 
-mkcfg() {
+applet_saveconf() {
     if [[ -z $ENVK_BUILD_CONFIG ]]; then
         echo "aenvk: you have to set ENVK_BUILD_CONFIG before, for example: "
         echo "    $ export ENVK_BUILD_CONFIG=vayu_defconfig"
@@ -64,19 +81,6 @@ mkcfg() {
     fi
     exit $?
 }
-
-env_info() {
-    local clang=$(clang -v |& sed -e '1!d;s/ (http.\+)//g')
-    echo "Compiler: $clang"
-    echo "Output: $ENVK_BUILD_DIR"
-    echo "Target: $KERNEL_DIR"
-    echo "Version: $ENVK_BUILD_VERSION"
-    exit
-}
-
-#
-# aenvk's applets
-#
 
 applet_am() {
     local co=cherry.patch
@@ -112,7 +116,12 @@ applet_aospbin() {
     find $bootdir/dts/qcom -name "*.dtb" -exec cat {} + > $target/dtb.img
 }
 
-applet_initconfig() {
+applet_init() {
+    if [[ -f "$KERNEL_DIR/.aenvkconfig" ]]; then
+        echo "aenvk: init: .aenvkconfig already exists"
+        exit 1
+    fi
+
 cat <<\EOF > $KERNEL_DIR/.aenvkconfig
 #
 # aenvk build configuration
@@ -140,24 +149,15 @@ echo "aenvk: initial config created at $KERNEL_DIR/.aenvkconfig"
 usage() {
 cat <<\EOF
 Usage:
-  aenvk init # initializing config for the kernel build
   aenvk [options] <parameters>
 
 Options:
-  -i, --print-info                    Print current kernel setup
-  -d, --dtbo                          Create DTBO image
-  -s, --save-defconfig                Save defconfig to $ENVK_BUILD_CONFIG
-  -b, --build-type <release|debug>    Switch $ENVK_BUILD_CONFIG,
-                                      valid params are : "release" or "debug"
-  -x, --execute <make-cmds>           Run make commands
   -a, --applets <aenvk's-applet>      Run aenvk's applet functions
+  -x, --execute <make-cmds>           Run make commands
 
 Example workflow:
   # Prepare for clean-build kernel
   $ aenvk -x mrproper
-
-  # Switch to production mode
-  $ aenvk -b release
 
   # apply custom defconfig that stored at arch/arm64/configs
   $ aenvk -x fischl_defconfig
@@ -169,15 +169,17 @@ Applets:
     Applets are an internal functions that can be executed
     directly for the sake of simplicity
 
+    - init (Initializing config for the kernel build)
+    - info (Print current kernel setup)
+    - dtbo (Create DTBO image)
     - am (applying patch from url)
-
+    - saveconf (Save defconfig to $ENVK_BUILD_CONFIG)
     - reset (resetting kernel build version)
-
     - aospbin (Install binary and headers for AOSP)
         Usage:
-            aenvk -a aospbin <path/to/kernel/binary/tree> <soc-name>
+            aenvk -a aospbin <path/to/kernel/binary/tree>
         Example:
-            aenvk -a aospbin /android/device/xiaomi/vayu-kernel sm8150
+            aenvk -a aospbin /android/device/xiaomi/vayu-kernel
 
 EOF
   exit
@@ -200,9 +202,6 @@ fullargs=($@)
 while :
 do
   case "$1" in
-    -i | --print-info) task="env_info"; shift ;;
-    -d | --dtbo) task="mkdtbo"; shift ;;
-    -s | --save-defconfig) task="mkcfg"; shift ;;
     -x | --execute) task_execute="$2"; shift 2 ;;
     -a | --applet) task_applet="$2"; task_applet_args=${fullargs[@]:3}; shift 2 ;;
     -h | --help) usage ;;
@@ -213,7 +212,7 @@ done
 
 KERNEL_DIR=$(pwd)
 if [[ "$1" == "init" ]]; then
-    applet_initconfig
+    applet_init
     exit
 fi
 
