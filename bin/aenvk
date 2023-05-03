@@ -217,6 +217,11 @@ else
     KERNEL_DIR=$(pwd)
 fi
 
+if [[ "$applet" == "init" ]]; then
+    applet_${applet} $applet_args
+    exit $?
+fi
+
 if [[ -f "$KERNEL_DIR/.aenvkconfig" ]]; then
     DOTENV="$KERNEL_DIR/.aenvkconfig"
 fi
