@@ -5,6 +5,11 @@ mk() {
     local loginfo=$ENVK_BUILD_DIR/mk.build.log
     local logerr=$ENVK_BUILD_DIR/mk.error.log
 
+    if ! mkdir -p $ENVK_BUILD_DIR 2&>/dev/null; then
+        echo "aenvk: failed to prepare build dir at $ENVK_BUILD_DIR. exiting"
+        exit 1
+    fi
+
     mkdir -p $ENVK_BUILD_DIR
     if [[ -z $ENVK_BUILD_VERSION ]]; then
         echo "aenvk: Building kernel"
