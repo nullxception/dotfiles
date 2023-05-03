@@ -195,6 +195,7 @@ if (return 0 2>/dev/null || [[ $ZSH_EVAL_CONTEXT =~ :file$ ]]); then
     exit 1
 fi
 
+KERNEL_DIR=${KERNEL_DIR:-$(pwd)}
 opts=$(getopt -a -n aenvk -o hk:x:a: --long help,kernel:,exec:,applet:, -- "$@")
 vopts=$?
 if [ "$vopts" != "0" ]; then
@@ -207,7 +208,7 @@ fullargs=($@)
 while :
 do
   case "$1" in
-    -k | --kernel) target_kernel="$2" ; shift 2 ;;
+    -k | --kernel) KERNEL_DIR="$2" ; shift 2 ;;
     -x | --exec) make_exec="$2"; shift 2 ;;
     -a | --applet) applet="$2"; applet_args=${fullargs[@]:3}; shift 2 ;;
     -h | --help) usage ;;
@@ -216,11 +217,7 @@ do
   esac
 done
 
-if [[ -n "$target_kernel" ]]; then
-    KERNEL_DIR=$target_kernel
-else
-    KERNEL_DIR=$(pwd)
-fi
+echo "aenvk: Using $KERNEL_DIR as kernel source"
 
 if [[ "$applet" == "init" ]]; then
     applet_${applet} $applet_args
