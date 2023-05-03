@@ -139,7 +139,7 @@ CROSS_COMPILE_ARM32=arm-linux-androideabi-
 # build options
 ENVK_BUILD_CONFIG=vayu_defconfig
 ENVK_BUILD_DIR=/android/out/target/product/vayu/obj/KERNEL_OBJ
-# ENVK_BUILD_VERSION=r1
+# export ENVK_BUILD_VERSION=r1
 ENVK_WITH_DTBO=1
 
 EOF
@@ -152,8 +152,8 @@ Usage:
   aenvk [options] <parameters>
 
 Options:
-  -a, --applets <aenvk's-applet>      Run aenvk's applet functions
-  -x, --execute <make-cmds>           Run make commands
+  -a, --applet <aenvk's-applet>      Run aenvk's applet functions
+  -x, --exec <make-cmds>           Run make commands
 
 Example workflow:
   # Prepare for clean-build kernel
@@ -190,7 +190,7 @@ if (return 0 2>/dev/null || [[ $ZSH_EVAL_CONTEXT =~ :file$ ]]); then
     exit 1
 fi
 
-opts=$(getopt -a -n aenvk -o hidsb:x:a: --long help,print-info,dtbo,save-defconfig,build-type:,execute:,applet:, -- "$@")
+opts=$(getopt -a -n aenvk -o hk:x:a: --long help,kernel:,exec:,applet:, -- "$@")
 vopts=$?
 if [ "$vopts" != "0" ]; then
   usage
@@ -202,31 +202,42 @@ fullargs=($@)
 while :
 do
   case "$1" in
-    -x | --execute) task_execute="$2"; shift 2 ;;
-    -a | --applet) task_applet="$2"; task_applet_args=${fullargs[@]:3}; shift 2 ;;
+    -k | --kernel) target_kernel="$2" ; shift 2 ;;
+    -x | --exec) make_exec="$2"; shift 2 ;;
+    -a | --applet) applet="$2"; applet_args=${fullargs[@]:3}; shift 2 ;;
     -h | --help) usage ;;
     --) shift; break ;;
     *) echo "Unexpected option: $1"; usage ;;
   esac
 done
 
-KERNEL_DIR=$(pwd)
-if [[ "$1" == "init" ]]; then
-    applet_init
-    exit
+if [[ -n "$target_kernel" ]]; then
+    KERNEL_DIR=$target_kernel
+else
+    KERNEL_DIR=$(pwd)
 fi
 
-[[ -f "$KERNEL_DIR/.aenvkconfig" ]] && DOTENV="$KERNEL_DIR/.aenvkconfig"
-[[ -z $DOTENV ]] && {
+if [[ -f "$KERNEL_DIR/.aenvkconfig" ]]; then
+    DOTENV="$KERNEL_DIR/.aenvkconfig"
+fi
+
+if [[ -z $DOTENV ]]; then 
     echo "aenvk: no .aenvkconfig available. exiting"
     exit 1
-}
+fi
 
 source $DOTENV
 
-export CROSS_COMPILE CROSS_COMPILE_ARM32
-
-if [[ -n ${ENVK_ADDITIONAL_PATH} ]]; then
+if [[ -n $CROSS_COMPILE ]]; then
+    export CROSS_COMPILE
+fi
+if [[ -n $CROSS_COMPILE_ARM32 ]]; then
+    export CROSS_COMPILE_ARM32 
+fi
+if [[ -n $CROSS_COMPILE_COMPAT ]]; then
+    export CROSS_COMPILE_COMPAT
+fi
+if [[ -n $ENVK_ADDITIONAL_PATH ]]; then
     export PATH="$ENVK_ADDITIONAL_PATH:$PATH"
     CLANG_PATH=$(realpath $(dirname $(which clang))/..)
     export LD_LIBRARY_PATH="$CLANG_PATH/lib64:$LD_LIBRARY_PATH"
@@ -235,18 +246,13 @@ fi
 # set ccache
 export PATH="/usr/lib/ccache/bin/:$PATH"
 
-if [[ -n "$task_applet" ]]; then
-    applet_$task_applet $task_applet_args
+if [[ -n "$applet" ]]; then
+    applet_${applet} $applet_args
     exit $?
 fi
 
-if [[ -n "$task_execute" ]]; then
-    mk "$task_execute"
-    exit $?
-fi
-
-if [[ -n "$task" ]]; then
-    $task
+if [[ -n "$make_exec" ]]; then
+    mk "$make_exec"
     exit $?
 fi
 
