@@ -26,8 +26,8 @@ mk() {
         $ENVK_ADDITIONAL_FLAGS \
             $@ > >(tee ${loginfo}) 2> >(tee ${logerr} >&2)
 
-    if [[ "$ENVK_WITH_DTBO" == "1" ]]; then
-        test -z "$@" && mkdtbo
+    if [[ "$ENVK_WITH_DTBO" == "1" && "$@" == "" ]]; then
+        mkdtbo
     fi
 
     local msdiff=$(echo "$(date +%s.%N) - $msbegin" | bc)
@@ -46,7 +46,7 @@ mkdtbo() {
 
     if [[ $(wc -l <<<$overlays) -gt 0 ]]; then
         echo "aenvk: Building dtbo.img"
-        python2 $mkdt create $dtout $overlays
+        python $mkdt create $dtout $overlays
         echo "aenvk: Build done: $dtout"
     else
         echo "aenvk: There's no overlays found at $bootdir/dts"
@@ -90,6 +90,26 @@ applet_reset() {
     if [[ -d $ENVK_BUILD_DIR ]]; then
         echo 0 >$ENVK_BUILD_DIR/.version
     fi
+}
+
+applet_aospbin() {
+    local target=$1
+    local result=$target/kernel-headers
+    echo "aenvk: aospbin: Install binary and headers for AOSP at $target"
+    mkdir -p $result
+
+    mk headers_install ARCH=arm64 INSTALL_HDR_PATH=$result
+    find $result  -type f | grep -vE ".h$" | xargs rm
+
+    local bootdir=$ENVK_BUILD_DIR/arch/arm64/boot
+    local kernel=$bootdir/Image
+    if [ ! -f "$kernel" ]; then
+        echo "aenvk: aospbin: kernel binary cannot be found, build it first"
+        exit 1
+    fi
+
+    cp $kernel $bootdir/dtbo.img $target
+    find $bootdir/dts/qcom -name "*.dtb" -exec cat {} + > $target/dtb.img
 }
 
 applet_initconfig() {
@@ -149,9 +169,15 @@ Applets:
     Applets are an internal functions that can be executed
     directly for the sake of simplicity
 
-    Available :
-        - am (applying patch from url)
-        - reset (resetting kernel build version)
+    - am (applying patch from url)
+
+    - reset (resetting kernel build version)
+
+    - aospbin (Install binary and headers for AOSP)
+        Usage:
+            aenvk -a aospbin <path/to/kernel/binary/tree> <soc-name>
+        Example:
+            aenvk -a aospbin /android/device/xiaomi/vayu-kernel sm8150
 
 EOF
   exit
@@ -169,6 +195,8 @@ if [ "$vopts" != "0" ]; then
 fi
 
 eval set -- "$opts"
+
+fullargs=($@)
 while :
 do
   case "$1" in
@@ -176,7 +204,7 @@ do
     -d | --dtbo) task="mkdtbo"; shift ;;
     -s | --save-defconfig) task="mkcfg"; shift ;;
     -x | --execute) task_execute="$2"; shift 2 ;;
-    -a | --applet) task_applet="$2"; task_applet_args="$4"; shift 2 ;;
+    -a | --applet) task_applet="$2"; task_applet_args=${fullargs[@]:3}; shift 2 ;;
     -h | --help) usage ;;
     --) shift; break ;;
     *) echo "Unexpected option: $1"; usage ;;
