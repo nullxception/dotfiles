@@ -1,21 +1,43 @@
 #!/bin/bash
 
+col() {
+    if [[ -z "$1" ]]; then
+        echo -e "\033[0m"
+    else
+        echo -e "\033[0;3${1}m"
+    fi
+}
+
+log() {
+    local app="$(col 5)aenvk$(col)"
+    if [[ -z "$TAG" ]]; then
+        echo -e "$app: $@"
+    else
+        echo -e "$app-$(col 4)$TAG$(col): $@"
+    fi
+}
+
+abort() {
+    log "$(col 1)$@$(col)"
+    exit 1
+}
+
 mk() {
+    local TAG=build
     local msbegin=$(date +%s.%N)
     local loginfo=$ENVK_BUILD_DIR/mk.build.log
     local logerr=$ENVK_BUILD_DIR/mk.error.log
 
     if ! mkdir -p $ENVK_BUILD_DIR 2&>/dev/null; then
-        echo "aenvk: failed to prepare build dir at $ENVK_BUILD_DIR. exiting"
-        exit 1
+        abort "failed to prepare build dir at $ENVK_BUILD_DIR. exiting"
     fi
 
     mkdir -p $ENVK_BUILD_DIR
     if [[ -z $ENVK_BUILD_VERSION ]]; then
-        echo "aenvk: Building kernel"
+        log "Building kernel"
         rm -f $KERNEL_DIR/.scmversion
     else
-        echo "aenvk: Building kernel, version $ENVK_BUILD_VERSION"
+        log "Building kernel, version $ENVK_BUILD_VERSION"
         echo "-$ENVK_BUILD_VERSION" > $KERNEL_DIR/.scmversion
     fi
 
@@ -36,7 +58,7 @@ mk() {
     fi
 
     local msdiff=$(echo "$(date +%s.%N) - $msbegin" | bc)
-    echo "aenvk: Took $msdiff seconds"
+    log "Took $msdiff seconds"
 }
 
 
@@ -57,29 +79,30 @@ applet_info() {
 }
 
 applet_dtbo() {
+    local TAG=dtbo
     local bootdir=$ENVK_BUILD_DIR/arch/arm64/boot
     local dtout=$bootdir/dtbo.img
     local mkdt=$ENVK_LIBUFDT_PATH/utils/src/mkdtboimg.py
     local overlays=$(find $bootdir/dts -iname '*-overlay.dtbo' -print)
     if [[ ! -f $mkdt ]]; then
-        echo "aenvk: $mkdt does not exists. exiting"
-        exit 1
+        abort "$mkdt does not exists. exiting"
     fi
 
     if [[ $(wc -l <<<$overlays) -gt 0 ]]; then
-        echo "aenvk: Building dtbo.img"
+        log "Building dtbo.img"
         python $mkdt create $dtout $overlays
-        echo "aenvk: Build done: $dtout"
+        log "Build done: $dtout"
     else
-        echo "aenvk: There's no overlays found at $bootdir/dts"
+        log "There's no overlays found at $bootdir/dts"
     fi
     return $?
 }
 
 applet_saveconf() {
+    local TAG=saveconf
     if [[ -z $ENVK_BUILD_CONFIG ]]; then
-        echo "aenvk: you have to set ENVK_BUILD_CONFIG before, for example: "
-        echo "    $ export ENVK_BUILD_CONFIG=vayu_defconfig"
+        log "You have to set ENVK_BUILD_CONFIG before, for example: "
+        log "    $ export ENVK_BUILD_CONFIG=vayu_defconfig"
     else
         mk savedefconfig
         cp $ENVK_BUILD_DIR/defconfig $KERNEL_DIR/arch/arm64/configs/$ENVK_BUILD_CONFIG
@@ -88,23 +111,26 @@ applet_saveconf() {
 }
 
 applet_am() {
+    local TAG=am
     local co=cherry.patch
     local uri=$(cut -d\# -f1 <<<$1)
-    echo "aenvk-am: Applying patch from $uri"
+    log "Applying patch from $uri"
     curl -o $co $uri.patch && git am <$co && rm $co
 }
 
 applet_reset() {
-    echo "aenvk-reset: Resetting kernel build version"
+    local TAG=reset
+    log "Resetting kernel build version"
     if [[ -d $ENVK_BUILD_DIR ]]; then
         echo 0 >$ENVK_BUILD_DIR/.version
     fi
 }
 
 applet_aospbin() {
+    local TAG=aospbin
     local target=$1
     local result=$target/kernel-headers
-    echo "aenvk: aospbin: Install binary and headers for AOSP at $target"
+    log "Install binary and headers for AOSP at $target"
     mkdir -p $result
 
     mk headers_install ARCH=arm64 INSTALL_HDR_PATH=$result
@@ -113,8 +139,7 @@ applet_aospbin() {
     local bootdir=$ENVK_BUILD_DIR/arch/arm64/boot
     local kernel=$bootdir/Image
     if [ ! -f "$kernel" ]; then
-        echo "aenvk: aospbin: kernel binary cannot be found, build it first"
-        exit 1
+        abort "kernel binary cannot be found, build it first"
     fi
 
     cp $kernel $bootdir/dtbo.img $target
@@ -122,9 +147,9 @@ applet_aospbin() {
 }
 
 applet_init() {
+    local TAG=init
     if [[ -f "$KERNEL_DIR/.aenvkconfig" ]]; then
-        echo "aenvk: init: .aenvkconfig already exists"
-        exit 1
+        abort ".aenvkconfig already exists"
     fi
 
 cat <<\EOF > $KERNEL_DIR/.aenvkconfig
@@ -148,7 +173,7 @@ ENVK_BUILD_DIR=/android/out/target/product/vayu/obj/KERNEL_OBJ
 ENVK_WITH_DTBO=1
 
 EOF
-echo "aenvk: initial config created at $KERNEL_DIR/.aenvkconfig"
+log "Initial config created at $KERNEL_DIR/.aenvkconfig"
 }
 
 usage() {
@@ -195,6 +220,7 @@ if (return 0 2>/dev/null || [[ $ZSH_EVAL_CONTEXT =~ :file$ ]]); then
     exit 1
 fi
 
+unset TAG
 KERNEL_DIR=${KERNEL_DIR:-$(pwd)}
 opts=$(getopt -a -n aenvk -o hk:x:a: --long help,kernel:,exec:,applet:, -- "$@")
 vopts=$?
@@ -217,7 +243,7 @@ do
   esac
 done
 
-echo "aenvk: Using $KERNEL_DIR as kernel source"
+log "Using $KERNEL_DIR as kernel source"
 
 if [[ "$applet" == "init" ]]; then
     applet_${applet} $applet_args
@@ -229,8 +255,7 @@ if [[ -f "$KERNEL_DIR/.aenvkconfig" ]]; then
 fi
 
 if [[ -z $DOTENV ]]; then 
-    echo "aenvk: no .aenvkconfig available. exiting"
-    exit 1
+    abort "No .aenvkconfig available. exiting"
 fi
 
 source $DOTENV
