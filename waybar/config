@@ -5,18 +5,17 @@
     ],
     "modules-right": [
         "tray",
-        "custom/player",
         "temperature",
         "cpu",
-        "custom/memory",
+        "memory",
         "network",
         "pulseaudio",
         "clock"
     ],
     "wlr/workspaces": {
         "on-click": "activate",
-        "on-scroll-up": "hyprctl dispatch workspace e+1",
-        "on-scroll-down": "hyprctl dispatch workspace e-1",
+        "on-scroll-up": "hyprctl dispatch workspace r+1",
+        "on-scroll-down": "hyprctl dispatch workspace r-1",
         "persistent_workspaces": {
             "1": [],
             "2": [],
@@ -25,6 +24,7 @@
         }
     },
     "tray": {
+        "icon-size": 16,
         "spacing": 10
     },
     "clock": {
@@ -52,18 +52,9 @@
         "format": "brain: {usage}%",
         "tooltip": false
     },
-    "custom/memory": {
-        "format": "porn: {}",
-        "return-type": "json",
-        "interval": 1,
-        "exec": "$HOME/.config/waybar/bin/memory",
+    "memory": {
+        "interval": 30,
+        "format": "porn: {used:0.2f} GB",
         "tooltip": false
     },
-    "custom/player": {
-        "format": "{alt}: {}",
-        "return-type": "json",
-        "max-length": 60,
-        "escape": true,
-        "exec": "$HOME/.config/waybar/bin/mediaplayer.py 2> /dev/null"
-    }
 }

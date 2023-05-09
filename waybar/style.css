@@ -19,7 +19,7 @@
 
 * {
     font-family: Inter Semibold, sans-serif;
-    font-size: 13px;
+    font-size: 10px;
 
     /* reset */
     border: none;
@@ -31,10 +31,15 @@
 window#waybar {
     background-color: alpha(@colorbg, 0.95);
     color: @colorfg;
+    border-bottom: 2px solid alpha(black, 0.3);
 }
 
 window#waybar.hidden {
     opacity: 0.2;
+}
+
+.modules-left, .modules-right, .modules-center {
+  padding: 3px 0 5px;
 }
 
 .modules-left {
@@ -47,13 +52,13 @@ window#waybar.hidden {
 
 #workspaces {
     border-radius: 10px;
-    margin: 6px 3px;
+    margin: 0;
+    padding: 0;
 }
 
 #workspaces button {
     color: @colorfg;
-    margin: 0;
-    padding: 0 6px;
+    padding: 0 5px;
     border-radius: 0;
     border: none;
     background: shade(@colorbg, 0.5);
@@ -73,15 +78,16 @@ window#waybar.hidden {
     box-shadow: inherit;
     text-shadow: inherit;
     border: none;
-    background: alpha(@color4, 0.4);
+    background: alpha(@color4, 0.2);
 }
 
 #workspaces button.active {
-    background-color: alpha(@colorfg, 0.3);
+    background-color: @color4;
+    color: @colorbg;
 }
 
 #workspaces button.urgent {
-    background-color: alpha(@color2, 0.8);
+    background-color: alpha(@color2, 0.5);
 }
 
 #workspaces button:only-child {
@@ -91,12 +97,10 @@ window#waybar.hidden {
 }
 
 #window {
-    padding: 5px 10px;
+    padding: 0px 10px;
 }
 
 #mode,
-#custom-player,
-#custom-memory,
 #tray,
 #temperature,
 #cpu,
@@ -104,19 +108,15 @@ window#waybar.hidden {
 #pulseaudio,
 #network,
 #clock {
-    padding: 4px 12px;
+    padding: 0px 10px;
     border-radius: 10px;
-    margin: 5px 3px;
+    margin: 0px 2px;
     background: shade(@colorbg, 0.5);
     color: @colorfg;
 }
 
 #mode {
     background-color: alpha(@color5, 0.5);
-}
-
-#custom-player {
-    color: @color1;
 }
 
 #temperature {
@@ -127,7 +127,6 @@ window#waybar.hidden {
     color: @color2;
 }
 
-#custom-memory,
 #memory {
     color: @color1;
 }
@@ -142,10 +141,6 @@ window#waybar.hidden {
 
 #clock {
     color: @color3;
-}
-
-#tray {
-    background: inherit;
 }
 
 #tray>.passive {
