@@ -1,14 +1,24 @@
 configuration {
     show-icons: true;
-    display-run:  ">_";
+    display-run: ">_";
 }
 
 * {
-    bg: #101017;
+    color0: #33333f;
+    color1: #ff568e;
+    color2: #64de83;
+    color3: #efff73;
+    color4: #73a9ff;
+    color5: #946ff7;
+    color6: #62c6da;
+    color7: #dedeef;
+
+    bg: #101017f0;
+    bg-alt: #1f222e;
     fg: #bdc3c7;
-    accent: #ff568e;
-    background-color: transparent;
+
     color: @fg;
+    background-color: transparent;
     highlight: underline bold #ff568e;
     padding: 0;
     margin: 0;
@@ -16,33 +26,40 @@ configuration {
 }
 
 window {
-    width: 25%;
-    children: [ mainbox ];
+    width: 480px;
+    children: [ mainbox];
     location: center;
-    transparency: "screenshot";
-    background-color: #101017f0;
+    transparency: "real";
+    background-color: @bg;
 }
 
 mainbox {
     orientation: vertical;
-    children: [ inputbar, message, listview, mode-switcher ];
+    children: [ inputbar, message, listview, mode-switcher];
     border: 1px;
-    border-color: #33333f;
+    border-color: @color0;
 }
 
 inputbar {
-    background-color: #ff568e55;
-    border-radius: 50%;
-    margin: 1em;
-    padding: 0.5em;
+    padding: 3em;
+    background-image: url("~/.config/rofi/images/header-1.jpg", width);
+    children: [prompt,entry];
+    spacing: -1px;
 }
 
 prompt {
-    margin: 0 0.3em;
+    background-color: @color1;
+    padding: 15px;
+    text-color: @bg;
+    border-radius: 50% 0 0 50%;
 }
 
-case-indicator {
-    margin: 0 0.5em;
+entry {
+    padding: 15px 30px 15px 15px;
+    border: 0px;
+    border-radius: 0 100% 100% 0;
+    background-color: @bg;
+    text-color: @fg;
 }
 
 message {
@@ -50,11 +67,13 @@ message {
 }
 
 textbox {
+    background-color: @color1;
     padding: 0 1.5em;
 }
 
 listview {
-	lines: 6;
+    margin: 0.5em 0 0 0;
+    lines: 6;
 }
 
 element {
@@ -63,7 +82,7 @@ element {
 }
 
 element selected.normal {
-    background-color: #33333f;
+    background-color: @bg-alt;
 }
 
 element-icon {
@@ -81,5 +100,6 @@ button {
 }
 
 button selected {
-    background-color: #946ff755;
+    background-color: @color5;
+    text-color: @color0;
 }
