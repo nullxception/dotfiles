@@ -38,12 +38,12 @@ mk() {
         rm -f $KERNEL_DIR/.scmversion
     else
         log "Building kernel, version $ENVK_BUILD_VERSION"
-        echo "-$ENVK_BUILD_VERSION" > $KERNEL_DIR/.scmversion
+        echo "-$ENVK_BUILD_VERSION" >$KERNEL_DIR/.scmversion
     fi
 
     local proc=$(nproc --all)
     if [[ "$proc" -lt 8 ]]; then
-        proc=$((proc-1))
+        proc=$((proc - 1))
     fi
 
     make -j$proc \
@@ -51,7 +51,7 @@ mk() {
         ARCH=arm64 \
         CLANG_TRIPLE=aarch64-linux-gnu- \
         $ENVK_ADDITIONAL_FLAGS \
-            $@ > >(tee ${loginfo}) 2> >(tee ${logerr} >&2)
+        $@ > >(tee ${loginfo}) 2> >(tee ${logerr} >&2)
 
     if [[ "$ENVK_WITH_DTBO" == "1" && "$@" == "" ]]; then
         applet_dtbo
@@ -60,8 +60,6 @@ mk() {
     local msdiff=$(echo "$(date +%s.%N) - $msbegin" | bc)
     log "Took $msdiff seconds"
 }
-
-
 
 #
 # aenvk's applets
@@ -136,7 +134,7 @@ applet_aospbin() {
     mk headers_install ARCH=arm64 INSTALL_HDR_PATH=$result
     log "Removing unused files"
     find $result -type f -not -iname "*.h" -delete
-    find $result -empty -type d -delete 
+    find $result -empty -type d -delete
 
     local bootdir=$ENVK_BUILD_DIR/arch/arm64/boot
     local kernel=$bootdir/Image
@@ -145,7 +143,7 @@ applet_aospbin() {
     fi
 
     cp $kernel $bootdir/dtbo.img $target
-    find $bootdir/dts/qcom -name "*.dtb" -exec cat {} + > $target/dtb.img
+    find $bootdir/dts/qcom -name "*.dtb" -exec cat {} + >$target/dtb.img
 }
 
 applet_init() {
@@ -154,7 +152,7 @@ applet_init() {
         abort ".aenvkconfig already exists"
     fi
 
-cat <<\EOF > $KERNEL_DIR/.aenvkconfig
+    cat <<\EOF >$KERNEL_DIR/.aenvkconfig
 #
 # aenvk build configuration
 #
@@ -175,11 +173,11 @@ ENVK_BUILD_DIR=/android/out/target/product/vayu/obj/KERNEL_OBJ
 ENVK_WITH_DTBO=1
 
 EOF
-log "Initial config created at $KERNEL_DIR/.aenvkconfig"
+    log "Initial config created at $KERNEL_DIR/.aenvkconfig"
 }
 
 usage() {
-cat <<\EOF
+    cat <<\EOF
 Usage:
   aenvk [options] <parameters>
 
@@ -214,7 +212,7 @@ Applets:
             aenvk -a aospbin /android/device/xiaomi/vayu-kernel
 
 EOF
-  exit
+    exit
 }
 
 if (return 0 2>/dev/null || [[ $ZSH_EVAL_CONTEXT =~ :file$ ]]); then
@@ -227,22 +225,37 @@ KERNEL_DIR=${KERNEL_DIR:-$(pwd)}
 opts=$(getopt -a -n aenvk -o hk:x:a: --long help,kernel:,exec:,applet:, -- "$@")
 vopts=$?
 if [ "$vopts" != "0" ]; then
-  usage
+    usage
 fi
 
 eval set -- "$opts"
 
 fullargs=($@)
-while :
-do
-  case "$1" in
-    -k | --kernel) KERNEL_DIR="$2" ; shift 2 ;;
-    -x | --exec) make_exec="$2"; shift 2 ;;
-    -a | --applet) applet="$2"; applet_args="$4"; shift 2 ;;
+while :; do
+    case "$1" in
+    -k | --kernel)
+        KERNEL_DIR="$2"
+        shift 2
+        ;;
+    -x | --exec)
+        make_exec="$2"
+        shift 2
+        ;;
+    -a | --applet)
+        applet="$2"
+        applet_args="$4"
+        shift 2
+        ;;
     -h | --help) usage ;;
-    --) shift; break ;;
-    *) echo "Unexpected option: $1"; usage ;;
-  esac
+    --)
+        shift
+        break
+        ;;
+    *)
+        echo "Unexpected option: $1"
+        usage
+        ;;
+    esac
 done
 
 log "Using $KERNEL_DIR as kernel source"
@@ -256,7 +269,7 @@ if [[ -f "$KERNEL_DIR/.aenvkconfig" ]]; then
     DOTENV="$KERNEL_DIR/.aenvkconfig"
 fi
 
-if [[ -z $DOTENV ]]; then 
+if [[ -z $DOTENV ]]; then
     abort "No .aenvkconfig available. exiting"
 fi
 
@@ -266,14 +279,14 @@ if [[ -n $CROSS_COMPILE ]]; then
     export CROSS_COMPILE
 fi
 if [[ -n $CROSS_COMPILE_ARM32 ]]; then
-    export CROSS_COMPILE_ARM32 
+    export CROSS_COMPILE_ARM32
 fi
 if [[ -n $CROSS_COMPILE_COMPAT ]]; then
     export CROSS_COMPILE_COMPAT
 fi
 if [[ -n $ENVK_ADDITIONAL_PATH ]]; then
     export PATH="$ENVK_ADDITIONAL_PATH:$PATH"
-    if which clang 2&>/dev/null; then
+    if which clang 2 &>/dev/null; then
         CLANG_PATH=$(realpath $(dirname $(which clang))/..)
         export LD_LIBRARY_PATH="$CLANG_PATH/lib64:$LD_LIBRARY_PATH"
     fi

@@ -22,18 +22,29 @@ restoresdk() {
 opts=$(getopt -a -n acustsdk -o rp: --long restore,platform-ver:, -- "$@")
 vopts=$?
 if [ "$vopts" != "0" ]; then
-  usage
+    usage
 fi
 
 eval set -- "$opts"
-while :
-do
-  case "$1" in
-    -r | --restore) arg_restore=1; shift ;;
-    -p | --platform-ver) arg_platver="$2"; shift 2 ;;
-    --) shift; break ;;
-    *) echo "Unexpected option: $1"; exit 1 ;;
-  esac
+while :; do
+    case "$1" in
+    -r | --restore)
+        arg_restore=1
+        shift
+        ;;
+    -p | --platform-ver)
+        arg_platver="$2"
+        shift 2
+        ;;
+    --)
+        shift
+        break
+        ;;
+    *)
+        echo "Unexpected option: $1"
+        exit 1
+        ;;
+    esac
 done
 
 lastpath=$(pwd)
