@@ -1,6 +1,0 @@
-#!/bin/sh
-extraparam="-NoLogo -MTA -ExecutionPolicy Bypass"
-pwsh=pwsh.exe
-command -v $pwsh >/dev/null 2>&1 || pwsh=powershell.exe
-$pwsh $extraparam $@
-exit $?
