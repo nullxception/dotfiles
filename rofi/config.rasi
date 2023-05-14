@@ -1,5 +1,6 @@
 configuration {
   font: "Inter Semibold 13px";
+  icon-theme: "Papirus";
 }
 
 @theme "~/.config/rofi/theme/cherry.rasi"
