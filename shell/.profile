@@ -26,13 +26,5 @@ if [ "${PATH#*$HOME/.local/bin}" = "$PATH" ]; then
 fi
 
 #
-# Special setup for WSL environment
-#
-if [ -n "$WSL_INTEROP" ]; then
-    export WSL_HOST_IP=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}')
-    export PATH="$HOME/.local/bin/wsl:$PATH"
-fi
-
-if [ -e "$XDG_RUNTIME_DIR/ssh-agent.socket" ]; then
-    export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
-fi
+# Load WSL2-specific env
+[ -n "$WSL_INTEROP" ] && 

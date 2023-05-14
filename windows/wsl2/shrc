@@ -7,3 +7,4 @@ grep -qE '/mnt/c/Users/([a-zA-Z\ ]+)$' <<<$PWD \
 # Loading SSH key
 keychain -q --nogui ~/.ssh/id_rsa
 source ~/.keychain/$(hostname)-sh
+sh $XDG_CONFIG_HOME/wsl2/link-android-tools
