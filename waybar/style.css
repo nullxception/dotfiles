@@ -1,6 +1,8 @@
-@define-color colorbg #23232f;
-@define-color colorfg #bdc3c7;
-@define-color color0 #43434f;
+@define-color colorBackground #101017;
+@define-color colorForeground #bdc3c7;
+@define-color colorSecondaryBackground #1f222e;
+
+@define-color color0 #33333f;
 @define-color color1 #ff568e;
 @define-color color2 #64de83;
 @define-color color3 #efff73;
@@ -8,38 +10,27 @@
 @define-color color5 #946ff7;
 @define-color color6 #62c6da;
 @define-color color7 #dedeef;
-@define-color color8 #53535f;
-@define-color color9 #ff69a2;
-@define-color color10 #73de8a;
-@define-color color11 #f3ff85;
-@define-color color12 #85b6ff;
-@define-color color13 #a481f7;
-@define-color color14 #71c2d9;
-@define-color color15 #ebebf0;
 
 * {
-    font-family: Inter Semibold, sans-serif;
-    font-size: 10px;
-
-    /* reset */
-    border: none;
-    border-radius: 0;
-    padding: 0;
-    margin: 0;
+    all: unset;
+    font-weight: 600;
+    font-size: 11;
 }
 
 window#waybar {
-    background-color: alpha(@colorbg, 0.95);
-    color: @colorfg;
-    border-bottom: 2px solid alpha(black, 0.3);
+    background-color: alpha(@colorBackground, 0.95);
+    color: @colorForeground;
+    border-bottom: 1px solid @color0;
 }
 
 window#waybar.hidden {
     opacity: 0.2;
 }
 
-.modules-left, .modules-right, .modules-center {
-  padding: 3px 0 5px;
+.modules-left,
+.modules-right,
+.modules-center {
+    padding: 5px 0 6px;
 }
 
 .modules-left {
@@ -51,27 +42,19 @@ window#waybar.hidden {
 }
 
 #workspaces {
+    margin: 1px 0px;
     border-radius: 10px;
-    margin: 0;
-    padding: 0;
+    background: @colorSecondaryBackground;
 }
 
 #workspaces button {
-    color: @colorfg;
-    padding: 0 5px;
-    border-radius: 0;
+    color: @colorForeground;
+    padding: 2px 8px;
     border: none;
-    background: shade(@colorbg, 0.5);
+    background: @colorSecondaryBackground;
     transition-property: background-color;
-    transition-duration: .2s;
-}
-
-#workspaces button:first-child {
-    border-radius: 10px 0 0 10px;
-}
-
-#workspaces button:last-child {
-    border-radius: 0 10px 10px 0;
+    transition-duration: 0.2s;
+    border-radius: 9px;
 }
 
 #workspaces button:hover {
@@ -83,70 +66,59 @@ window#waybar.hidden {
 
 #workspaces button.active {
     background-color: @color4;
-    color: @colorbg;
+    color: @colorBackground;
 }
 
 #workspaces button.urgent {
-    background-color: alpha(@color2, 0.5);
-}
-
-#workspaces button:only-child {
-    border-radius: 10px;
-    background: shade(@colorbg, 0.5);
-    color: @colorfg;
+    background-color: @color1;
+    color: @colorBackground;
 }
 
 #window {
     padding: 0px 10px;
 }
 
-#mode,
-#tray,
-#temperature,
-#cpu,
-#memory,
-#pulseaudio,
-#network,
-#clock {
-    padding: 0px 10px;
-    border-radius: 10px;
-    margin: 0px 2px;
-    background: shade(@colorbg, 0.5);
-    color: @colorfg;
+#tray {
+    margin-right: 15px;
 }
 
-#mode {
-    background-color: alpha(@color5, 0.5);
-}
-
-#temperature {
-    color: @color4;
-}
-
-#cpu {
-    color: @color2;
-}
-
-#memory {
-    color: @color1;
-}
-
-#network {
-    color: @color5;
-}
-
-#pulseaudio {
-    color: @color6;
-}
-
-#clock {
-    color: @color3;
-}
-
-#tray>.passive {
+#tray > .passive {
     -gtk-icon-effect: dim;
 }
 
-#tray>.needs-attention {
+#tray > .needs-attention {
     -gtk-icon-effect: highlight;
+}
+
+#temperature,
+#cpu,
+#custom-memory,
+#pulseaudio,
+#network {
+    padding: 2px 10px;
+    border-left: 2px solid @colorSecondaryBackground;
+    border-radius: 0 10px 10px 0;
+    margin: 1px 10px 1px 0px;
+    background: @colorSecondaryBackground;
+    color: @color7;
+}
+
+#temperature {
+    border-color: @color3;
+}
+
+#cpu {
+    border-color: @color2;
+}
+
+#custom-memory {
+    border-color: @color1;
+}
+
+#network {
+    border-color: @color6;
+}
+
+#pulseaudio {
+    border-color: @color5;
 }
