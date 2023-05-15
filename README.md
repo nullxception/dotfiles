@@ -6,20 +6,21 @@ It was supposed to helps me config my fresh machine faster, but also act as an a
 
 # Installation
 
-Since this dotfiles is grouped by topic, you can just run the install script followed by the topic name (or path, to be precise).
+Since this dotfiles is grouped by module, you can just run the install script followed by the module path.
 
 ```bash
-./install.sh <topic>
+./install.sh <module>
 ```
 
 > for example, installing kitty and nvim config
+
 ```bash
 ./install.sh kitty nvim
 ```
 
 # Structures
 
-As you can see, the configs is grouped by topic.
+As you can see, the configs is grouped by module.
 
 Each of it has their own `.install` script that will be used by the [`install.sh`](install.sh).
 
@@ -29,7 +30,7 @@ For complete example, take a look at [`.install.example`](.install.example).
 
 > Can I use this on my machine ?
 
-Yup, especially for some topic like [`nvim`](nvim) or [`kitty`](kitty).
+Yup, especially for some module like [`nvim`](nvim) or [`kitty`](kitty).
 
 But for things like [`sys/hw`](sys/hw) or [`sys/systemd`](sys/systemd), I suggest you to NOT INSTALL it blatantly since it is a system-wide configuration.
 
