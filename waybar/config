@@ -3,14 +3,16 @@
         "wlr/workspaces",
         "hyprland/window"
     ],
+    "modules-center": [
+        "clock"
+    ],
     "modules-right": [
         "tray",
         "temperature",
         "cpu",
-        "memory",
+        "custom/memory",
         "network",
-        "pulseaudio",
-        "clock"
+        "pulseaudio"
     ],
     "wlr/workspaces": {
         "on-click": "activate",
@@ -25,36 +27,47 @@
     },
     "tray": {
         "icon-size": 16,
-        "spacing": 10
+        "spacing": 10,
+        "show-passive-items": true
     },
     "clock": {
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-        "format": "{:%I:%M %p}",
-        "format-alt": "{:%Y-%m-%d}"
+        "format": "{:%A, %b %d | %I:%M %p}"
     },
     "temperature": {
-        "format": "coffee: {temperatureC}°C"
+        "format": "󰜗\u2001{temperatureC}°C",
+        "tooltip": false
     },
     "pulseaudio": {
         "scroll-step": 2,
-        "format": "volume: {volume}%",
-        "format-bluetooth": "{volume}% [bt]",
-        "on-click": "pavucontrol"
+        "format": "{icon}\u2001{volume}%",
+        "format-bluetooth": "{icon}\u2001{volume}%\u2001",
+        "format-muted": "",
+        "format-icons": {
+            "default": [
+                "",
+                ""
+            ]
+        },
+        "on-click": "pavucontrol",
+        "tooltip": false
     },
     "network": {
-        "format-wifi": "net: {essid}",
-        "format-ethernet": "net: {ipaddr}",
-        "format-linked": "net: no IP",
-        "format-disconnected": "net: offline",
-        "format-alt": "{ifname}: {ipaddr}"
+        "format-wifi": "󰤥\u2001{essid}",
+        "format-ethernet": "󰌘\u2001{ipaddr}",
+        "format-disconnected": "󰌙\u2001offline",
+        "format-alt": "󰇧\u2001{ifname}: {ipaddr}",
+        "tooltip": false
     },
     "cpu": {
-        "format": "brain: {usage}%",
+        "format": "\u2001{usage}%",
         "tooltip": false
     },
-    "memory": {
-        "interval": 30,
-        "format": "porn: {used:0.2f} GB",
+    "custom/memory": {
+        "format": "\u2001{}",
+        "return-type": "json",
+        "interval": 1,
+        "exec": "$HOME/.config/waybar/bin/memory",
         "tooltip": false
-    },
+    }
 }
