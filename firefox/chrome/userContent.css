@@ -1,4 +1,18 @@
 @-moz-document url(about:newtab), url(about:home) {
+    :root {
+        --preferred-fg: #111;
+        --preferred-bg: #fff6;
+        --preferred-bg-opaque: #fff;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --preferred-fg: #eee;
+            --preferred-bg: #0006;
+            --preferred-bg-opaque: #000;
+        }
+    }
+
     body {
         background-image: url(newtab-bg.jpg);
         background-size: cover;
@@ -8,13 +22,15 @@
     .search-wrapper .search-handoff-button {
         border-radius: 2rem !important;
         backdrop-filter: blur(2rem);
-        background-color: #fff6 !important;
+        background-color: var(--preferred-bg) !important;
     }
 
-    @media (prefers-color-scheme: dark) {
-        .search-wrapper .search-handoff-button {
-            background-color: #0006 !important;
-        }
+    .search-wrapper .wordmark {
+        background-color: var(--preferred-bg-opaque) !important;
+        padding: 10px !important;
+        height: 72px !important;
+        width: 200px !important;
+        background-size: 180px !important;
     }
 
     .outer-wrapper.only-search {
