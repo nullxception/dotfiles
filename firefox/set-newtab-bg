@@ -1,0 +1,31 @@
+#!/bin/bash
+ff_dir=$HOME/.mozilla/firefox
+imgname="newtab-bg.jpg"
+
+if [ ! -f "$ff_dir/profiles.ini" ]; then
+    echo "no firefox profile detected, open firefox first"
+    exit 1
+fi
+
+if [ ! -f "$1" ]; then
+    echo "Please provide a file"
+    echo "example: set-newtab-bg ~/Pictures/coolwallpaper.jpg"
+    exit 1
+fi
+
+img="$1"
+
+echo "Searching for profile that has custom css..."
+grep -l -r "url($imgname)" $ff_dir | while read -r filepath; do
+    if ! (grep -q '/chrome/' <<<$filepath); then
+        continue
+    fi
+
+    target="${filepath%/*}/$imgname"
+    echo "Found: $filepath"
+    echo "copying $img to $target"
+    cp -f "$img" "$target"
+    chmod 644 "$target"
+done
+
+echo "done"
