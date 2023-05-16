@@ -1,0 +1,13 @@
+on-button-middle=exec makoctl menu -n "$id" rofi -dmenu -p 'Select action: '
+font=Sans Semibold 9
+icon-path=/usr/share/icons/Papirus-Dark
+background-color=#101017ec
+border-size=1
+border-radius=20
+border-color=#33333f
+progress-color=over #946ff780
+margin=25
+padding=10
+width=350
+anchor=top-center
+default-timeout=2500
