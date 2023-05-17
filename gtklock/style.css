@@ -1,0 +1,75 @@
+@define-color color0 #33333f;
+@define-color color1 #ff568e;
+@define-color color2 #64de83;
+@define-color color3 #efff73;
+@define-color color4 #73a9ff;
+@define-color color5 #946ff7;
+@define-color color6 #62c6da;
+@define-color color7 #dedeef;
+
+@define-color bg #101017;
+@define-color bg-alt #1f222e;
+@define-color fg #bdc3c7;
+
+* {
+  all: unset;
+}
+
+window {
+  background-color: @bg;
+  background-image: url("wallpaper.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+#window-box {
+  background-color: alpha(@bg, 0.96);
+  border: 1px solid @color0;
+  box-shadow: 10px 10px 0px @bg;
+  padding: 0 3em;
+}
+
+#clock-label {
+  min-width: 320px;
+  background-color: alpha(@color4, 0.1);
+  color: @color4;
+  font-weight: 500;
+  font-size: 9pt;
+  padding: 10px 30px;
+  margin-bottom: 10px;
+  border-radius: 0 0 10px 10px;
+  border: 1px solid alpha(@color4, 0.5);
+  border-top: 0;
+}
+
+/* hide "Password:" label */
+#input-label {
+  font-size: 0;
+}
+
+#user-name {
+  font-size: 16pt;
+}
+
+#input-field {
+  border-radius: 20px;
+  padding: 10px 15px;
+  border: 1px solid @color0;
+}
+
+#warning-label,
+#error-label,
+#unlock-button {
+  margin-top: 12px;
+  padding: 10px 2rem;
+  margin-bottom: 20px;
+}
+
+#unlock-button {
+  border-radius: 20px;
+  background-color: alpha(@color4, 0.1);
+  color: @color4;
+  border-radius: 25px;
+  border: 1px solid alpha(@color4, 0.5);
+}
