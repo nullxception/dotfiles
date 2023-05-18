@@ -1,0 +1,57 @@
+#!/bin/bash
+#
+# Custom modules for neofetch
+#
+
+get_memory_legacy() {
+    case $os in
+    "Linux")
+        while IFS=":" read -r a b; do
+            case $a in
+            "MemTotal")
+                ((mem_used += ${b/kB/}))
+                mem_total="${b/kB/}"
+                ;;
+            "MemFree" | "Buffers" | "Cached" | "SReclaimable")
+                mem_used="$((mem_used -= ${b/kB/}))"
+                ;;
+            esac
+        done </proc/meminfo
+
+        mem_used="$((mem_used / 1024))"
+        mem_total="$((mem_total / 1024))"
+        ;;
+
+    *)
+        get_memory
+        memory_legacy=$memory
+        return
+        ;;
+
+    esac
+
+    [[ "$memory_percent" == "on" ]] && ((mem_perc = mem_used * 100 / mem_total))
+
+    case $memory_unit in
+    gib)
+        mem_used=$(awk '{printf "%.2f", $1 / $2}' <<<"$mem_used 1024")
+        mem_total=$(awk '{printf "%.2f", $1 / $2}' <<<"$mem_total 1024")
+        mem_label=GiB
+        ;;
+
+    kib)
+        mem_used=$((mem_used * 1024))
+        mem_total=$((mem_total * 1024))
+        mem_label=KiB
+        ;;
+    esac
+
+    memory_legacy="${mem_used}${mem_label:-MiB} / ${mem_total}${mem_label:-MiB} ${mem_perc:+(${mem_perc}%)}"
+
+    # Bars.
+    case $memory_display in
+    "bar") memory_legacy="$(bar "${mem_used}" "${mem_total}")" ;;
+    "infobar") memory_legacy="${memory_legacy} $(bar "${mem_used}" "${mem_total}")" ;;
+    "barinfo") memory_legacy="$(bar "${mem_used}" "${mem_total}")${info_color} ${memory_legacy}" ;;
+    esac
+}
