@@ -1,0 +1,38 @@
+#!/bin/bash
+#
+# Script to watch and notify for volume changes
+#
+
+notify_id=0
+current_vol() {
+    pactl get-sink-volume @DEFAULT_SINK@ | grep -Po '\d+(?=%)' | head -n 1
+}
+
+notify_vol() {
+    if [[ $2 -gt 63 ]]; then
+        level=high
+    elif [[ $2 -le 63 && $2 -gt 33 ]]; then
+        level=medium
+    elif [[ $2 -gt 0 ]]; then
+        level=low
+    else
+        level=muted
+    fi
+
+    notify-send -p -r $1 \
+        -i "audio-volume-$level" \
+        -h "int:value:$2" "Volume"
+}
+
+pactl subscribe | grep --line-buffered -E "chan.*sink " | while read -r buf; do
+    vol=$(current_vol)
+    # skip the first change (session volume restoration)
+    if [[ -z "$last_volume" ]]; then
+        last_volume=$vol
+        continue
+    fi
+    if [[ "$last_volume" != "$vol" ]]; then
+        last_volume=$vol
+        notify_id=$(notify_vol $notify_id $vol)
+    fi
+done
