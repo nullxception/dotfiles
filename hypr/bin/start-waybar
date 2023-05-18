@@ -1,0 +1,8 @@
+#!/bin/bash
+trap "pkill waybar" EXIT
+
+while [[ "$XDG_SESSION_TYPE" == "wayland" ]]; do
+    waybar &
+    inotifywait -e create,modify $XDG_CONFIG_HOME/waybar/config $XDG_CONFIG_HOME/waybar/style.css
+    pkill waybar
+done
