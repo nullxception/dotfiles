@@ -73,6 +73,7 @@ install_mod() {
         exit 1
     fi
 
+    unset dot_preinstall dot_install dot_postinstall module_target
     . $inst
     if fun_exists dot_preinstall; then
         dot_preinstall
