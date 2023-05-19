@@ -27,4 +27,4 @@ fi
 
 #
 # Load WSL2-specific env
-[ -n "$WSL_INTEROP" ] && 
+[ -n "$WSL_INTEROP" ] && source $XDG_CONFIG_HOME/wsl2/env
