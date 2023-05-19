@@ -1,0 +1,25 @@
+#!/bin/bash
+#
+# toggle-gaps
+#
+
+if [[ "$1" -le 0 || "$2" -le 0 ]]; then
+    name="$(basename "$0")"
+    cat <<EOF
+usage:
+    $name <gaps_in> <gaps_out>
+
+example:
+    $name 10 30
+EOF
+    exit 1
+fi
+
+gaps=$(hyprctl getoption general:gaps_in | awk 'NR==2{print $2}')
+if [[ "$gaps" != "$1" ]]; then
+    hyprctl --batch "\
+        keyword general:gaps_in $1;\
+        keyword general:gaps_out $2"
+    exit
+fi
+hyprctl reload
