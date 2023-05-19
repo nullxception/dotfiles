@@ -6,7 +6,6 @@ export XDG_DATA_HOME="$HOME/.local/share"
 # Application Preferences
 export ANDROID_SDK_ROOT="$HOME/.local/lib/android"
 export EDITOR="vim"
-export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/npmrc"
 export USE_CCACHE=1
 export CCACHE_EXEC=$(which ccache)
 export CCACHE_DIR="$HOME/.cache/ccache"
