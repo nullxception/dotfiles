@@ -1,15 +1,15 @@
-@-moz-document url(about:newtab), url(about:home) {
+@-moz-document url(about:newtab),
+url(about:home) {
     :root {
-        --preferred-fg: #111;
-        --preferred-bg: #fff6;
-        --preferred-bg-opaque: #fff;
+        --preferred-fg: #10101f;
+        --preferred-bg: #fefefee0;
+        --preferred-primary: #ff568e;
     }
 
     @media (prefers-color-scheme: dark) {
         :root {
             --preferred-fg: #eee;
-            --preferred-bg: #0006;
-            --preferred-bg-opaque: #000;
+            --preferred-bg: #10101ff0;
         }
     }
 
@@ -20,13 +20,13 @@
     }
 
     .search-wrapper .search-handoff-button {
-        border-radius: 2rem !important;
-        backdrop-filter: blur(2rem);
         background-color: var(--preferred-bg) !important;
+        border-radius: 0 !important;
+        border-left: 3px var(--preferred-primary) solid !important;
     }
 
     .search-wrapper .wordmark {
-        background-color: var(--preferred-bg-opaque) !important;
+        background-color: var(--preferred-bg) !important;
         padding: 10px !important;
         height: 72px !important;
         width: 200px !important;
