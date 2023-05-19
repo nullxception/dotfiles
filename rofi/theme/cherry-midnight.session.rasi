@@ -1,0 +1,91 @@
+configuration {
+    show-icons: false;
+}
+
+* {
+    color0: #33333f;
+    color1: #ff568e;
+    color2: #64de83;
+    color3: #efff73;
+    color4: #73a9ff;
+    color5: #946ff7;
+    color6: #62c6da;
+    color7: #dedeef;
+
+    bg: #101017f0;
+    bg-alt: #1f222e;
+    fg: #bdc3c7;
+
+    color: @fg;
+    background-color: transparent;
+    highlight: underline bold #ff568e;
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+
+window {
+    children: [ mainbox];
+    transparency: "real";
+    location: center;
+    width: 480px;
+    background-color: @bg;
+}
+
+mainbox {
+    children: [ inputbar, listview, message];
+    border: 1px;
+    border-color: @color0;
+    background-color: transparent;
+}
+
+inputbar {
+    children: [ textbox-prompt-colon, prompt];
+    spacing: -1px;
+    padding: 3em;
+    background-image: url("~/.config/rofi/images/header-1.jpg", width);
+}
+
+textbox-prompt-colon {
+    expand: false;
+    str: "";
+    padding: 15px;
+    border-radius: 100% 0 0 100%;
+    background-color: @color5;
+    text-color: @bg;
+}
+
+prompt {
+    padding: 15px 30px 15px 15px;
+    border: 0px;
+    border-radius: 0 100% 100% 0;
+    background-color: @bg;
+}
+
+listview {
+    columns: 6;
+    lines: 1;
+    fixed-columns: false;
+    spacing: -1px;
+    margin: 2em;
+    border-radius: 50%;
+    background-color: @bg-alt;
+    text-color: @fg;
+}
+
+element {
+    padding: 20px;
+    border-radius: 50%;
+}
+
+element-text {
+    font: "sans 18";
+    text-color: inherit;
+    vertical-align: 0.5;
+    horizontal-align: 0.5;
+}
+
+element selected.normal {
+    background-color: @color1;
+    text-color: @bg-alt;
+}
