@@ -79,7 +79,7 @@ fi
 [[ -f $ZDOTDIR/functions ]] && source $ZDOTDIR/functions || true
 
 # Load WSL2-specific scripts
-if [ -n "$WSL_INTEROP" ] && source $XDG_CONFIG_HOME/wsl2/shrc
+[ -n "$WSL_INTEROP" ] && source $XDG_CONFIG_HOME/wsl2/shrc
 
 # configure ccache
 ccache -M ${CCACHE_MAX_SIZE:=50G} -F ccache ${CCACHE_MAX_FILES:=0} >/dev/null 2>&1
