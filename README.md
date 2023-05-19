@@ -12,27 +12,45 @@ Since this dotfiles is grouped by module, you can just run the install script fo
 ./install.sh <module>
 ```
 
-> for example, installing kitty and nvim config
+> for example, installing kitty and gtklock config
 
 ```bash
-./install.sh kitty nvim
+./install.sh kitty gtklock
 ```
+
+# Gallery
+
+| hyprland desktop setup                                  |
+| ------------------------------------------------------- |
+| ![hyprland desktop setup](.github/assets/hyprland.webp) |
+
+| firefox                                 |
+| --------------------------------------- |
+| ![firefox](.github/assets/firefox.webp) |
+
+| rofi session menu                                      |
+| ------------------------------------------------------ |
+| ![rofi session menu](.github/assets/rofi-session.webp) |
+
+| gtklock                                 |
+| --------------------------------------- |
+| ![gtklock](.github/assets/gtklock.webp) |
 
 # Structures
 
 As you can see, the configs is grouped by module.
 
-Each of it has their own `.install` script that will be used by the [`install.sh`](install.sh).
+Each of it has their own `.install` script that will be used by the [install.sh](install.sh).
 
-For complete example, take a look at [`.install.example`](.install.example).
+For complete example, take a look at [.install.example](.install.example).
 
 # Frequently Asked Question
 
 > Can I use this on my machine ?
 
-Yup, especially for some module like [`nvim`](nvim) or [`kitty`](kitty).
+Yup, especially for some module like [kitty](kitty) or [hypr](hypr).
 
-But for things like [`sys/hw`](sys/hw) or [`sys/systemd`](sys/systemd), I suggest you to NOT INSTALL it blatantly since it is a system-wide configuration.
+But for things like [sys/hw](sys/hw) or [sys/systemd](sys/systemd), I suggest you to NOT INSTALL it blatantly since it is a system-wide configuration.
 
 > Why don't use ansible/stow/yadm/etc instead ?
 
