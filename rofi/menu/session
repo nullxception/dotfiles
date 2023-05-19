@@ -1,0 +1,185 @@
+#!/bin/bash
+# SPDX-License-Identifer: MIT
+#
+# rofi-session-modi - a Session menu for Rofi
+#
+# homepage: https://github.com/nullxception/dotfiles
+# based on: https://github.com/jluttine/rofi-power-menu
+#
+
+declare -A label
+label[lockscreen]="Lock screen"
+label[logout]="Logout"
+label[suspend]="Suspend"
+label[hibernate]="Hibernate"
+label[reboot]="Reboot"
+label[shutdown]="Shut down"
+
+declare -A icon
+icon[lockscreen]=""
+icon[logout]="󰿅"
+icon[suspend]="󰒲"
+icon[hibernate]=""
+icon[reboot]="󰜉"
+icon[shutdown]="󰐥"
+icon[back]="󰕍"
+
+declare -A action
+action[lockscreen]="loginctl lock-session ${XDG_SESSION_ID-}"
+action[logout]="loginctl kill-session ${XDG_SESSION_ID-}"
+action[suspend]="systemctl suspend"
+action[hibernate]="systemctl hibernate"
+action[reboot]="systemctl reboot"
+action[shutdown]="systemctl poweroff"
+
+# Supported choices, use --choices instead if you want to filters it
+displayed=(lockscreen logout suspend hibernate reboot shutdown)
+need_prompt=(logout reboot shutdown)
+use_icon=true
+use_label=true
+
+rf_item() {
+    local icon="$1"
+    local text="$2"
+    local item="$text"
+    if [ "$use_icon" = "true" ]; then
+        item="\u200e$icon"
+        if [ "$use_label" = "true" ]; then
+            item+=" \u2068$text\u2069"
+        fi
+    fi
+    printf "$item"
+}
+
+rf_opt() {
+    local prop=''
+    for i in "$@"; do
+        if [ -z "$prop" ]; then
+            prop+="\0$i"
+        else
+            prop+="\x1f$i"
+        fi
+    done
+    printf "$prop\n"
+}
+
+default_choices() {
+    rf_opt prompt "Session Menu"
+    for i in "${displayed[@]}"; do
+        rf_item "${icon[$i]}" "${label[$i]}"
+        rf_opt icon "${icon[$i]}" info "action:$i"
+    done
+    exit 0
+}
+
+prompt_choice() {
+    local choice="$1"
+    for i in "${need_prompt[@]}"; do
+        if [[ "$choice" == "$i" ]]; then
+            rf_opt prompt "Are you sure ?"
+
+            rf_item "${icon[$choice]}" "Yes, ${label[$choice]}"
+            rf_opt icon "${icon[$choice]}" info "prompt:$choice"
+
+            rf_item "${icon[back]}" "Go back"
+            rf_opt icon "${icon[back]}" info "prompt:back"
+
+            exit 0
+        else
+            act="prompt:$choice"
+        fi
+    done
+}
+
+dispatch_action() {
+    local key="${1#*:}"
+    if [[ "$key" == "back" ]]; then
+        default_choices
+    else
+        eval "${action[$key]}" &
+        disown
+        exit 0
+    fi
+}
+
+proceed_choices() {
+    for i in "${displayed[@]}"; do
+        if [[ $act == "action:$i" ]]; then
+            prompt_choice "$i"
+        fi
+
+        if [[ "$act" == "prompt:"* ]]; then
+            dispatch_action "$act"
+        fi
+    done
+}
+
+usage() {
+    local name="$(basename "$0")"
+    cat <<EOF
+$name - a Session menu for Rofi
+
+Usage: $name [options]
+
+Example:
+
+  rofi -show custom -modi "custom:~/.config/rofi/menu/$name --label=false --choices=logout:reboot:shutdown"
+
+Available options:
+
+  --choices CHOICES     Filter choices to display, use ":" as the separator.
+                        Available choices:
+                        lockscreen:logout:suspend:hibernate:reboot:shutdown
+
+                        By default, all available choices will be shown.
+
+  --icon  true|false    Enable or disable unicode symbols for the choices.
+
+  --label true|false    Enable or disable label for the choices.
+
+  -h,--help             Show this help text.
+EOF
+    exit 0
+}
+
+parsed=$(getopt --options=h --longoptions=help,choices:,icon:,label: --name "$0" -- "$@")
+if [ $? -ne 0 ]; then
+    echo 'Invalid argument, exiting.' >&2
+    exit 1
+fi
+
+eval set -- "$parsed"
+unset parsed
+while true; do
+    case "$1" in
+    "-h" | "--help")
+        usage
+        ;;
+    "--choices")
+        IFS=':' read -ra displayed <<<"$2"
+        shift 2
+        ;;
+    "--icon")
+        use_icon="$2"
+        shift 2
+        ;;
+    "--label")
+        use_label="$2"
+        shift 2
+        ;;
+    "--")
+        shift
+        break
+        ;;
+    esac
+done
+
+act="$ROFI_INFO"
+rf_opt no-custom true
+rf_opt markup-rows true
+
+if [ -z "$act" ]; then
+    default_choices
+else
+    proceed_choices
+fi
