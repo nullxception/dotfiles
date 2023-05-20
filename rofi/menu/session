@@ -1,7 +1,7 @@
 #!/bin/bash
 # SPDX-License-Identifer: MIT
 #
-# rofi-session-modi - a Session menu for Rofi
+# rofi-session - a Session menu for Rofi
 #
 # homepage: https://github.com/nullxception/dotfiles
 # based on: https://github.com/jluttine/rofi-power-menu
@@ -16,13 +16,13 @@ label[reboot]="Reboot"
 label[shutdown]="Shut down"
 
 declare -A icon
-icon[lockscreen]=""
-icon[logout]="󰿅"
-icon[suspend]="󰒲"
-icon[hibernate]=""
-icon[reboot]="󰜉"
-icon[shutdown]="󰐥"
-icon[back]="󰕍"
+icon[lockscreen]="system-lock-screen-symbolic, "
+icon[logout]="system-log-out-symbolic, 󰿅"
+icon[suspend]="system-suspend-symbolic, 󰒲"
+icon[hibernate]="system-hibernate-symbolic, "
+icon[reboot]="system-reboot-symbolic, 󰜉"
+icon[shutdown]="system-shutdown-symbolic, 󰐥"
+icon[back]="go-previous-symbolic, 󰕍"
 
 declare -A action
 action[lockscreen]="loginctl lock-session ${XDG_SESSION_ID-}"
@@ -42,10 +42,15 @@ rf_item() {
     local icon="$1"
     local text="$2"
     local item="$text"
-    if [ "$use_icon" = "true" ]; then
+    if [ "$use_icon" = "font" ]; then
         item="\u200e$icon"
         if [ "$use_label" = "true" ]; then
             item+=" \u2068$text\u2069"
+        fi
+    else
+        item="\u200e"
+        if [ "$use_label" = "true" ]; then
+            item+="$text"
         fi
     fi
     printf "$item"
@@ -63,11 +68,25 @@ rf_opt() {
     printf "$prop\n"
 }
 
+get_icon() {
+    case "$use_icon" in
+    "font")
+        printf "${icon[$1]#*,}" | xargs
+        ;;
+    "true")
+        printf "${icon[$1]%,*}" | xargs
+        ;;
+    *)
+        printf ""
+        ;;
+    esac
+}
+
 default_choices() {
     rf_opt prompt "Session Menu"
     for i in "${displayed[@]}"; do
-        rf_item "${icon[$i]}" "${label[$i]}"
-        rf_opt icon "${icon[$i]}" info "action:$i"
+        rf_item "$(get_icon $i)" "${label[$i]}"
+        rf_opt icon "$(get_icon $i)" info "action:$i"
     done
     exit 0
 }
@@ -78,11 +97,11 @@ prompt_choice() {
         if [[ "$choice" == "$i" ]]; then
             rf_opt prompt "Are you sure ?"
 
-            rf_item "${icon[$choice]}" "Yes, ${label[$choice]}"
-            rf_opt icon "${icon[$choice]}" info "prompt:$choice"
+            rf_item "$(get_icon $choice)" "Yes, ${label[$choice]}"
+            rf_opt icon "$(get_icon $choice)" info "prompt:$choice"
 
-            rf_item "${icon[back]}" "Go back"
-            rf_opt icon "${icon[back]}" info "prompt:back"
+            rf_item "$(get_icon back)" "Go back"
+            rf_opt icon "$(get_icon back)" info "prompt:back"
 
             exit 0
         else
@@ -127,17 +146,20 @@ Example:
 
 Available options:
 
-  --choices CHOICES     Filter choices to display, use ":" as the separator.
-                        Available choices:
-                        lockscreen:logout:suspend:hibernate:reboot:shutdown
+  --choices CHOICES             Filter choices to display, use ":" as the separator.
+                                Available choices:
+                                lockscreen:logout:suspend:hibernate:reboot:shutdown
 
-                        By default, all available choices will be shown.
+                                By default, all available choices will be shown.
 
-  --icon  true|false    Enable or disable unicode symbols for the choices.
+  --icon  true|font|false     Enable or disable icon for the choices.
+                                Use --icon=font if you want to use a symbols from
+                                your font instead of desktop icon pack (requires
+                                nerd-patched font).
 
-  --label true|false    Enable or disable label for the choices.
+  --label true|false            Enable or disable label for the choices.
 
-  -h,--help             Show this help text.
+  -h,--help                     Show this help text.
 EOF
     exit 0
 }
