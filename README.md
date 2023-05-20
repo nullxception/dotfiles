@@ -1,6 +1,6 @@
 # nullxception's dotfiles
 
-This repo contains set of some configurations that commonly used by me on my desktop and server.
+This repo contains set of some configurations that commonly used by me for my desktop or server.
 
 It was supposed to helps me config my fresh machine faster, but also act as an archive in case someones want to know my setup. So, don't be shy, give a ⭐️ if some configs can helps you :)
 
@@ -12,25 +12,25 @@ Since this dotfiles is grouped by module, you can just run the install script fo
 ./install.sh <module>
 ```
 
-> for example, installing kitty and gtklock config
+> for example, installing waybar and gtklock config
 
 ```bash
-./install.sh kitty gtklock
+./install.sh waybar gtklock
 ```
 
 # Gallery
 
-| hyprland desktop setup                                  |
-| ------------------------------------------------------- |
-| ![hyprland desktop setup](.github/assets/hyprland.webp) |
+| hyprland setup                                  |
+| ----------------------------------------------- |
+| ![hyprland setup](.github/assets/hyprland.webp) |
 
-| firefox                                 |
+| firefox with custom about:newtab        |
 | --------------------------------------- |
 | ![firefox](.github/assets/firefox.webp) |
 
-| rofi session menu                                      |
-| ------------------------------------------------------ |
-| ![rofi session menu](.github/assets/rofi-session.webp) |
+| rofi session menu                                          |
+| ---------------------------------------------------------- |
+| ![rofi session menu](.github/assets/rofi-session.webp?v=2) |
 
 | gtklock                                 |
 | --------------------------------------- |
@@ -44,18 +44,14 @@ Each of it has their own `.install` script that will be used by the [install.sh]
 
 For complete example, take a look at [.install.example](.install.example).
 
-# Frequently Asked Question
+# FAQ
 
 > Can I use this on my machine ?
 
-Yup, especially for some module like [kitty](kitty) or [hypr](hypr).
+Yes you can, especially for some module like [waybar](waybar) or [hypr](hypr).
 
 But for things like [sys/hw](sys/hw) or [sys/systemd](sys/systemd), I suggest you to NOT INSTALL it blatantly since it is a system-wide configuration.
 
-> Why don't use ansible/stow/yadm/etc instead ?
-
-For simple task such deploying dotfiles, shell script is more than enough for me.
-
 ## License
 
-This work is licensed under [BSD 3-Clause License](LICENSE).
+This dots is licensed under [BSD 3-Clause License](LICENSE).
