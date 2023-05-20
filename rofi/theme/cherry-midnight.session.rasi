@@ -1,5 +1,5 @@
 configuration {
-    show-icons: false;
+    show-icons: true;
 }
 
 * {
@@ -12,7 +12,7 @@ configuration {
     color6: #62c6da;
     color7: #dedeef;
 
-    bg: #101017f0;
+    bg: #101017;
     bg-alt: #1f222e;
     fg: #bdc3c7;
 
@@ -29,7 +29,7 @@ window {
     transparency: "real";
     location: center;
     width: 480px;
-    background-color: @bg;
+    background-color: #101017f0;
 }
 
 mainbox {
@@ -59,33 +59,35 @@ prompt {
     padding: 15px 30px 15px 15px;
     border: 0px;
     border-radius: 0 100% 100% 0;
-    background-color: @bg;
+    background-color: #101017f0;
 }
 
 listview {
     columns: 6;
     lines: 1;
-    fixed-columns: false;
     spacing: -1px;
     margin: 2em;
-    border-radius: 50%;
-    background-color: @bg-alt;
+    border-radius: 50px;
+    border: 1px;
+    border-color: @bg-alt;
     text-color: @fg;
+    background-color: #101017f0;
 }
 
 element {
     padding: 20px;
     border-radius: 50%;
+    orientation: vertical;
+    children: [ element-icon];
 }
 
-element-text {
-    font: "sans 18";
-    text-color: inherit;
-    vertical-align: 0.5;
-    horizontal-align: 0.5;
+element-icon {
+    size: 32px;
 }
 
 element selected.normal {
-    background-color: @color1;
-    text-color: @bg-alt;
+    border-radius: 50%;
+    background-color: #ff568e25;
+    border: 1px;
+    border-color: #ff568e;
 }
