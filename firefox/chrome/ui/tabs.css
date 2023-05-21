@@ -19,6 +19,10 @@
     margin-block: 1px 0 !important;
 }
 
+.tab-background[selected] {
+    outline: none !important;
+}
+
 /* Smaller tab */
 #TabsToolbar,
 #tabbrowser-tabs {
