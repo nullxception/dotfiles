@@ -24,9 +24,9 @@ Since this dotfiles is grouped by module, you can just run the install script fo
 | ----------------------------------------------- |
 | ![hyprland setup](.github/assets/hyprland.webp) |
 
-| firefox with custom about:newtab        |
-| --------------------------------------- |
-| ![firefox](.github/assets/firefox.webp) |
+| firefox w/ custom about:newtab and [Cherry Midnight theme](https://addons.mozilla.org/en-US/firefox/addon/cherry-midnight) |
+| -------------------------------------------------------------------------------------------------------------------------- |
+| ![firefox](.github/assets/firefox.webp)                                                                                    |
 
 | rofi session menu                                          |
 | ---------------------------------------------------------- |
