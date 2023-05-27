@@ -71,6 +71,18 @@ simplify_path() {
     fi
 }
 
+is_file_ignored() {
+    local ignored=false
+    for i in "${ignored_files[@]}"; do
+        if [ "${1##*/}" == "$i" ]; then
+            ignored=true
+            break
+        fi
+    done
+
+    echo $ignored
+}
+
 deploy() {
     local src=$1
     local dest=$2
@@ -81,9 +93,9 @@ deploy() {
     fi
 
     find "$src" -type f | while read f_src; do
-        [ "${f_src#*.install}" != "$f_src" ] && continue
-        [ "${f_src#*.install.ps1}" != "$f_src" ] && continue
-        [ "${f_src#*README.md}" != "$f_src" ] && continue
+        if [ "$(is_file_ignored "$f_src")" = true ]; then
+            continue
+        fi
 
         f_dest="$(printf ${f_src%/*} | sed "s|$src|$dest|")"
         fr_src="$(simplify_path src "$f_src")"
@@ -160,6 +172,7 @@ main() {
 }
 
 dry_run=false
+ignored_files=(.install{,.ps1} README.md)
 parsed=$(getopt --options=h --longoptions=help,dry-run --name "$0" -- "$@")
 if [ $? -ne 0 ]; then
     log 'Invalid argument, exiting.' >&2
