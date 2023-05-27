@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 SDK_VER=31
 SDK_DIR=$HOME/Android/Sdk
 build_out=$ANDROID_BUILD_TOP/out
