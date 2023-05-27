@@ -1,54 +1,5 @@
 module_target="$HOME/.config/fontconfig/conf.d"
 
-set_ini() {
-    if grep -q "$2=" $1; then
-        sed -i "s|$2=.*|$2=$3|" $1
-    else
-        echo "$2=$3" >> $1
-    fi
-}
-
-qset_ini() {
-    if grep -q "$2=" $1; then
-        sed -i "s|$2=.*|$2=\"$3\"|" $1
-    else
-        echo "$2=\"$3\"" >> $1
-    fi
-}
-
 dot_postinstall() {
-    local font="Inter 9"
-    local gtk2=$HOME/.gtkrc-2.0
-    local gtk3=$HOME/.config/gtk-3.0/settings.ini
-    local gtk4=$HOME/.config/gtk-4.0/settings.ini
-
-    log "Setting up fonts for GTK 2/3/4"
-    qset_ini "$gtk2" gtk-font-name "$font"
-    set_ini "$gtk2" gtk-xft-antialias 1
-    set_ini "$gtk2" gtk-xft-hinting 1
-    qset_ini "$gtk2" gtk-xft-hintstyle hintslight
-    qset_ini "$gtk2" gtk-xft-rgba rgb
-
-    mkdir -p $(dirname $gtk3)
-    if ! grep -q "[Settings]" $gtk3; then
-        echo "[Settings]" > $gtk3
-    fi
-
-    set_ini "$gtk3" gtk-font-name "$font"
-    set_ini "$gtk3" gtk-xft-antialias 1
-    set_ini "$gtk3" gtk-xft-hinting 1
-    set_ini "$gtk3" gtk-xft-hintstyle hintslight
-    set_ini "$gtk3" gtk-xft-rgba rgb
-
-    mkdir -p $(dirname $gtk4)
-    if ! grep -q "[Settings]" $gtk4; then
-        echo "[Settings]" > $gtk4
-    fi
-
-    set_ini "$gtk4" gtk-hint-font-metrics true
-
-    gsettings set org.gnome.desktop.interface font-name "$font"
-    gsettings set org.gnome.desktop.interface font-antialiasing rgba
-    gsettings set org.gnome.desktop.interface font-hinting slight
-    gsettings set org.gnome.desktop.interface font-rgba-order rgb
+    "${dotfiles}/bin/set-gtk-fount" "Inter 9"
 }
