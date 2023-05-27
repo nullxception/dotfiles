@@ -48,13 +48,13 @@ For complete example, take a look at [.install.example](.install.example).
 | ----------------------------------------------- |
 | ![hyprland setup](.github/assets/hyprland.webp) |
 
-| firefox w/ ![custom css](firefox/) and [Cherry Midnight](https://addons.mozilla.org/en-US/firefox/addon/cherry-midnight) theme |
-| ------------------------------------------------------------------------------------------------------------------------------ |
-| ![firefox](.github/assets/firefox.webp)                                                                                        |
+| firefox w/ [custom css](firefox/README.md) and [Cherry Midnight](https://addons.mozilla.org/en-US/firefox/addon/cherry-midnight) theme |
+| -------------------------------------------------------------------------------------------------------------------------------------- |
+| ![firefox](.github/assets/firefox.webp)                                                                                                |
 
-| rofi session menu                                          |
-| ---------------------------------------------------------- |
-| ![rofi session menu](.github/assets/rofi-session.webp?v=2) |
+| rofi session menu                                      |
+| ------------------------------------------------------ |
+| ![rofi session menu](.github/assets/rofi-session.webp) |
 
 | gtklock                                 |
 | --------------------------------------- |
