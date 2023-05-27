@@ -7,6 +7,9 @@ export XDG_DATA_HOME="$HOME/.local/share"
 
 # Application Preferences
 export ANDROID_SDK_ROOT="$HOME/Android/Sdk"
+# Fix AVD path for emulator CLI on canary build of studio
+# I assume that they're drunk enough to treat $XDG_CONFIG_HOME as $HOME
+export ANDROID_AVD_HOME="$XDG_CONFIG_HOME/.android/avd"
 export EDITOR="nvim"
 export USE_CCACHE=1
 export CCACHE_EXEC=$(which ccache)
