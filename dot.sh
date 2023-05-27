@@ -8,8 +8,18 @@
 
 dotfiles=$(realpath "$(dirname "$0")")
 
+c0="\033[0;30m"
+c1="\033[0;31m"
+c2="\033[0;32m"
+c3="\033[0;33m"
+c4="\033[0;34m"
+c5="\033[0;35m"
+c6="\033[0;36m"
+c7="\033[0;37m"
+cR="\033[0m"
+
 log() {
-    printf "$(basename "$0"): %s\n" "$1"
+    echo -e "${c5}$(basename "$0")${c0}:${cR} ${1}${cR}"
 }
 
 fun_exists() {
@@ -52,13 +62,21 @@ comm_prefix_gen() {
     fi
 }
 
+simplify_path() {
+    if [[ "$1" == "src" ]]; then
+        realpath --relative-to="$dotfiles" "$2"
+    else
+        sed "s|^$HOME|~|" <<<"$2"
+    fi
+}
+
 deploy() {
     local src=$1
     local dest=$2
     local comm_prefix=$(comm_prefix_gen "$dest")
 
     if [ "$comm_prefix" = "sudo" ]; then
-        log "using sudo to install module..."
+        log "${c3}using sudo to install module..."
     fi
 
     find "$src" -type f | while read f_src; do
@@ -67,7 +85,9 @@ deploy() {
         [ "${f_src#*README.md}" != "$f_src" ] && continue
 
         f_dest="$(printf ${f_src%/*} | sed "s|$src|$dest|")"
-        log "copying $f_src to $f_dest"
+        fr_src="$(simplify_path src "$f_src")"
+        fr_dest="$(simplify_path dst "$f_dest")"
+        log "copying ${c4}$fr_src${cR} to ${c4}$fr_dest"
         if [ $dry_run != true ]; then
             [ -d "$f_dest" ] || $comm_prefix mkdir -p "$f_dest"
             $comm_prefix cp "$f_src" "$f_dest"
@@ -106,12 +126,12 @@ install_mod() {
             exit 1
         fi
 
-        log "installing module $name"
+        log "installing ${c1}$name"
         deploy "$target" "$dest"
     fi
 
     if fun_exists dot_postinstall; then
-        log "running $name::dot_preinstall()"
+        log "running ${c1}$name${cR}::${c2}dot_preinstall()"
         if [ $dry_run != true ]; then
             dot_postinstall
         fi
@@ -125,18 +145,23 @@ main() {
     fi
 
     if [ $dry_run == true ]; then
-        log "dry_run=true"
+        log "${c4}dry-run${cR} mode ${c2}start"
+        echo
     fi
 
     for mod in $@; do
         install_mod "$mod"
     done
+
+    if [ $dry_run == true ]; then
+        log "${c4}dry-run${cR} mode ${c2}finish"
+    fi
 }
 
 dry_run=false
 parsed=$(getopt --options=h --longoptions=help,dry-run --name "$0" -- "$@")
 if [ $? -ne 0 ]; then
-    echo 'Invalid argument, exiting.' >&2
+    log 'Invalid argument, exiting.' >&2
     exit 1
 fi
 
