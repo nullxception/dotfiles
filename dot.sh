@@ -55,6 +55,7 @@ deploy() {
     find "$src" -type f | while read f_src; do
         [ "${f_src#*.install}" != "$f_src" ] && continue
         [ "${f_src#*.install.ps1}" != "$f_src" ] && continue
+        [ "${f_src#*README.md}" != "$f_src" ] && continue
 
         f_dest="$(printf ${f_src%/*} | sed "s|$src|$dest|")"
         log "copying $f_src to $f_dest"

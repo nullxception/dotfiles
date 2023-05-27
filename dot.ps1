@@ -29,7 +29,7 @@ function Install-Mod($ModulePath) {
         if (![System.IO.Directory]::Exists($Installtarget)) {
             New-Item -ItemType Directory -Path $Installtarget
         }
-        Get-ChildItem -Path $ModulePath -Exclude $ModuleData, .install | Copy-Item -Destination $Installtarget -Recurse -Force
+        Get-ChildItem -Path $ModulePath -Exclude $ModuleData,.install,README.md | Copy-Item -Destination $Installtarget -Recurse -Force
     }
     if (Get-Command 'dot_postinstall' -errorAction SilentlyContinue) {
         dot_postinstall
