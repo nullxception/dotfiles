@@ -1,5 +1,5 @@
-module_target="$HOME/.mozilla/firefox/dotfiles"
+module_target="$HOME/.mozilla/firefox/dots"
 
 dot_postinstall() {
-    "${dotfiles}/bin/link-firefox-dotfiles"
+    "${dotfiles}/bin/firefoxutil" --link-dots
 }
