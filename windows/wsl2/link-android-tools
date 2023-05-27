@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Link adb and fastboot
 wslbin=~/.local/bin/wsl
 

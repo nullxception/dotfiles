@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # SPDX-License-Identifer: MIT
 #
 # rofi-session - a Session menu for Rofi

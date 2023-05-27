@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 trap "pkill waybar" EXIT
 
 while [[ "$XDG_SESSION_TYPE" == "wayland" ]]; do

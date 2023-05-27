@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 col() {
     if [[ -z "$1" ]]; then

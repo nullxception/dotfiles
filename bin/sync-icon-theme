@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 icon_paths=("$HOME/.icons" "$HOME/.local/share/icons" "/usr/share/icons")
 
 log() {
