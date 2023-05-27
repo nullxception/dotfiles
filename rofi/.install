@@ -1,9 +1,5 @@
 module_target="$HOME/.config/rofi"
 
 dot_postinstall() {
-    icon="$(grep 'icon-theme' ~/.config/gtk-3.0/settings.ini | cut -d= -f2 | sed -e "s/[\"']//g")"
-    if [ -n "$icon" ]; then
-        echo "Setting up $icon as rofi icon-theme"
-        sed -i -e "s/icon-theme:.*;$/icon-theme: \"$icon\";/g" $module_target/config.rasi
-    fi
+    "${dotfiles}/bin/sync-icon-theme" rofi
 }
