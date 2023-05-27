@@ -1,27 +1,5 @@
 module_target="$HOME/.config/mako"
 
-icon_paths=("$HOME/.icons" "$HOME/.local/share/icons" "/usr/share/icons")
 dot_postinstall() {
-    icon="$(grep 'icon-theme' ~/.config/gtk-3.0/settings.ini | cut -d= -f2 | sed -e "s/[\"']//g")"
-    if [ ! -n "$icon" ]; then
-        return
-    fi
-
-    for p in "${icon_paths[@]}"; do
-        if [ -d "$p/$icon" ]; then
-            iconpath="$p/$icon"
-            break
-        fi
-    done
-
-    if [ ! -d "$iconpath" ]; then
-        return
-    fi
-
-    echo "Setting up $iconpath as mako icon theme"
-    sed -i -e "s|icon-path=.*|icon-path=$iconpath|g" "$module_target/config"
-    if pidof mako &>/dev/null; then
-        echo "mako is running, reloading"
-        makoctl reload
-    fi
+    "${dotfiles}/bin/sync-icon-theme" mako
 }
