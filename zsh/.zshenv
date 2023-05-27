@@ -6,6 +6,7 @@ export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_DATA_HOME="$HOME/.local/share"
 
 # Application Preferences
+export ANDROID_SDK_ROOT="$HOME/Android/Sdk"
 export EDITOR="nvim"
 export USE_CCACHE=1
 export CCACHE_EXEC=$(which ccache)
@@ -26,6 +27,7 @@ append_path() {
 append_path $HOME/.local/bin
 append_path $HOME/.local/lib/node/bin
 append_path $HOME/.local/lib/flutter/bin
+append_path $HOME/.pub-cache/bin
 append_path $ANDROID_SDK_ROOT/emulator
 append_path $ANDROID_SDK_ROOT/platform-tools
 append_path $ANDROID_SDK_ROOT/tools
