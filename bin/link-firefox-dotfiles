@@ -1,0 +1,38 @@
+#!/bin/bash
+
+ff_data="$HOME/.mozilla/firefox"
+ff_dotfiles="$ff_data/dotfiles"
+log() {
+    printf "$(basename "$0"): %s\n" "$1"
+}
+
+linkdots() {
+    local src="$1"
+    local dest="$2"
+
+    for f_src in "$src"/*; do
+        f_dest="$(printf ${f_src%/*} | sed "s|$src|$dest|")"
+        log "linking $f_src to $f_dest"
+        if [[ "$(stat -c %h -- "$f_dest")" -gt 1 ]]; then
+            ln -srf "$f_src" "$f_dest"
+        else
+            ln -sr "$f_src" "$f_dest"
+        fi
+    done
+}
+
+if [[ ! -f "$ff_data/profiles.ini" ]]; then
+    echo "no firefox profile detected, open firefox first before restoring tweaks"
+    exit 1
+fi
+
+if [[ ! -d "$ff_dotfiles" ]]; then
+    echo "no firefox dotfiles detected at $ff_dotfiles"
+    exit 1
+fi
+
+awk '/\[/{prefix=$0; next} $1{print prefix $0}' "$ff_data/profiles.ini" | grep Path | sed -e 's/.*Path=//g' | while read profile; do
+    if [[ -f $ff_data/$profile/prefs.js ]]; then
+        linkdots "$ff_dotfiles" "$ff_data/$profile"
+    fi
+done
