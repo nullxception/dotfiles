@@ -19,19 +19,28 @@ fun_exists() {
 
 usage() {
     cat <<EOF
-Dotfiles install script
+dot.sh - Dotfiles install script
 
 Usage :
-  $(basename "$0") [module-name]
+  $(basename "$0") [OPTION...] module...
+
+Options:
+
+  -h, --help        Show this help text.
+  --dry-run         Perform a trial run with no changes made
 
 EOF
 }
 
 comm_prefix_gen() {
     if [ ! -d "$1" ]; then
-        mkdir -p "$1" >/dev/null 2>&1
+        if [ $dry_run != true ]; then
+            mkdir -p "$1" >/dev/null 2>&1
+        fi
         if [ $? != 0 ]; then
-            sudo mkdir -p "$1" >/dev/null 2>&1
+            if [ $dry_run != true ]; then
+                sudo mkdir -p "$1" >/dev/null 2>&1
+            fi
             printf sudo
         fi
     else
@@ -59,8 +68,10 @@ deploy() {
 
         f_dest="$(printf ${f_src%/*} | sed "s|$src|$dest|")"
         log "copying $f_src to $f_dest"
-        [ -d "$f_dest" ] || $comm_prefix mkdir -p "$f_dest"
-        $comm_prefix cp "$f_src" "$f_dest"
+        if [ $dry_run != true ]; then
+            [ -d "$f_dest" ] || $comm_prefix mkdir -p "$f_dest"
+            $comm_prefix cp "$f_src" "$f_dest"
+        fi
     done
 }
 
@@ -77,12 +88,17 @@ install_mod() {
     unset dot_preinstall dot_install dot_postinstall module_target
     . $inst
     if fun_exists dot_preinstall; then
-        dot_preinstall
+        log "running $name::dot_preinstall()"
+        if [ $dry_run != true ]; then
+            dot_preinstall
+        fi
     fi
 
     if fun_exists dot_install; then
-        log "using custom install method for topic $name"
-        dot_install
+        log "running $name::dot_install()"
+        if [ $dry_run != true ]; then
+            dot_install
+        fi
     else
         local dest=$(realpath -mq "$module_target")
         if [ -z "$dest" ]; then
@@ -90,20 +106,58 @@ install_mod() {
             exit 1
         fi
 
-        log "installing topic $name to $dest"
+        log "installing module $name"
         deploy "$target" "$dest"
     fi
 
     if fun_exists dot_postinstall; then
-        dot_postinstall
+        log "running $name::dot_preinstall()"
+        if [ $dry_run != true ]; then
+            dot_postinstall
+        fi
     fi
 }
 
-if [ -z "$1" ]; then
-    usage
+main() {
+    if [ -z "$1" ]; then
+        usage
+        exit 1
+    fi
+
+    if [ $dry_run == true ]; then
+        log "dry_run=true"
+    fi
+
+    for mod in $@; do
+        install_mod "$mod"
+    done
+}
+
+dry_run=false
+parsed=$(getopt --options=h --longoptions=help,dry-run --name "$0" -- "$@")
+if [ $? -ne 0 ]; then
+    echo 'Invalid argument, exiting.' >&2
     exit 1
 fi
 
-for mod in $@; do
-    install_mod "$mod"
+eval set -- "$parsed"
+unset parsed
+while true; do
+    case "$1" in
+        "-h" | "--help")
+            usage
+            exit
+            ;;
+        "--dry-run")
+            dry_run=true
+            shift 2
+            break
+            ;;
+        "--")
+            shift
+            break
+            ;;
+    esac
 done
+
+main "$@"
