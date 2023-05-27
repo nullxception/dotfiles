@@ -3,7 +3,7 @@
 # simple deploy script for dotfiles
 #
 #  usage :
-#   ./install.sh <module-name>
+#   ./dot.sh <module-name>
 #
 
 dotfiles=$(realpath "$(dirname "$0")")

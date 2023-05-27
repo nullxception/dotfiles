@@ -9,13 +9,13 @@ It was supposed to helps me config my fresh machine faster, but also act as an a
 Since this dotfiles is grouped by module, you can just run the install script followed by the module path.
 
 ```bash
-./install.sh <module>
+./dot.sh <module>
 ```
 
 > for example, installing waybar and gtklock config
 
 ```bash
-./install.sh waybar gtklock
+./dot.sh waybar gtklock
 ```
 
 # Gallery
@@ -40,7 +40,7 @@ Since this dotfiles is grouped by module, you can just run the install script fo
 
 As you can see, the configs is grouped by module.
 
-Each of it has their own `.install` script that will be used by the [install.sh](install.sh).
+Each of it has their own `.install` script that will be used by the [dot.sh](dot.sh).
 
 For complete example, take a look at [.install.example](.install.example).
 
