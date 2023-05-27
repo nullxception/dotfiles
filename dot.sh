@@ -64,9 +64,10 @@ comm_prefix_gen() {
 
 simplify_path() {
     if [[ "$1" == "src" ]]; then
-        realpath --relative-to="$dotfiles" "$2"
+        local rpath="$(realpath "$2")"
+        echo "${rpath#$dotfiles\/}"
     else
-        sed "s|^$HOME|~|" <<<"$2"
+        echo "${2/$HOME/\~}"
     fi
 }
 
