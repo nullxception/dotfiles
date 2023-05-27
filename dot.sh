@@ -35,8 +35,8 @@ comm_prefix_gen() {
             printf sudo
         fi
     else
-        local curr=$(id -gn)
-        local dest=$(stat -c %G "$1")
+        local curr=$(id -g)
+        local dest=$(stat -c %g "$1")
         if [ "$dest" != "$curr" ]; then
             printf sudo
         fi
