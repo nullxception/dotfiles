@@ -16,6 +16,7 @@ cmp.setup({
         { name = 'buffer',  keyword_length = 3 },
         { name = 'luasnip', keyword_length = 2 },
         { name = 'path' },
+        { name = 'nvim_lua' },
     },
     mapping = {
         ['<CR>'] = cmp.mapping.confirm({ select = true }),
