@@ -10,5 +10,9 @@ require('mason').setup({
 })
 
 require("mason-null-ls").setup({
-    ensure_installed = { "prettierd" }
+    ensure_installed = {
+        "prettierd",
+        "stylua",
+        "shfmt"
+    }
 })
