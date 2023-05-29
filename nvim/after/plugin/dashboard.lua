@@ -11,8 +11,7 @@ require("dashboard").setup({
     config = {
         header = utils.build_header({
             data = hesta.normal,
-            padding_top = 1,
-            padding_bottom = 2,
+            padding_bottom = 1,
         }),
         center = {
             {

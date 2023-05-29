@@ -11,7 +11,7 @@ local HEADER_SETTINGS = {
 ---@param tbl HeaderData
 function M.build_header(tbl)
     local result = {}
-    if tbl.padding_top > 1 then
+    if tbl.padding_top and tbl.padding_top >= 1 then
         for _ = 1, tbl.padding_top, 1 do
             table.insert(result, [[]])
         end
@@ -21,7 +21,7 @@ function M.build_header(tbl)
         table.insert(result, v)
     end
 
-    if tbl.padding_bottom > 1 then
+    if tbl.padding_bottom and tbl.padding_bottom >= 1 then
         for _ = 1, tbl.padding_bottom, 1 do
             table.insert(result, [[]])
         end
