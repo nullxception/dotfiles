@@ -24,7 +24,7 @@ cmp.setup({
         { name = 'nvim_lua' },
     },
     mapping = {
-        ['<CR>'] = cmp.mapping.confirm({ select = true }),
+        ['<CR>'] = cmp.mapping.confirm({ select = false }),
         ['<C-Space>'] = cmp.mapping.complete(),
     }
 })
