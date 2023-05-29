@@ -1,3 +1,8 @@
+local success, _ = pcall(require, "dashboard")
+if not success then
+    return
+end
+
 local utils = require("nxc.utils")
 local hesta_img = require("nxc.ascii.hesta")
 
