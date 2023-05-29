@@ -1,3 +1,8 @@
+local success, _ = pcall(require, "lsp-zero")
+if not success then
+    return
+end
+
 local lsp = require("lsp-zero").preset({})
 
 lsp.on_attach(function(client, bufnr)

@@ -1,3 +1,8 @@
+local success, _ = pcall(require, "tokyonight")
+if not success then
+    return
+end
+
 require("tokyonight").setup({
     style = "night",
     styles = {
