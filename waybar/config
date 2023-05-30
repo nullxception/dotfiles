@@ -10,7 +10,7 @@
         "tray",
         "temperature",
         "cpu",
-        "custom/memory",
+        "memory",
         "network",
         "pulseaudio"
     ],
@@ -63,11 +63,8 @@
         "format": "\u2001{usage}%",
         "tooltip": false
     },
-    "custom/memory": {
-        "format": "\u2001{}",
-        "return-type": "json",
-        "interval": 1,
-        "exec": "$HOME/.config/waybar/bin/memory",
+    "memory": {
+        "format": "\u2001{used} GiB",
         "tooltip": false
     }
 }
