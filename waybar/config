@@ -61,10 +61,12 @@
     },
     "cpu": {
         "format": "\u2001{usage}%",
+        "interval": 2,
         "tooltip": false
     },
     "memory": {
         "format": "\u2001{used} GiB",
+        "interval": 2,
         "tooltip": false
     }
 }
