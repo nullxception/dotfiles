@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+#
+# Script to subscribe and notify for volume changes
+#
+
+current_vol() {
+    pactl get-sink-volume ${@:-\@DEFAULT_SINK\@} | grep -Po '\d+(?=%)' | head -n 1
+}
+
+notify_vol() {
+    local nid=$2
+    local value=$2
+    local volume=muted
+
+    if [[ $value -gt 63 ]]; then
+        level=high
+    elif [[ $value -le 63 && $value -gt 33 ]]; then
+        level=medium
+    elif [[ $value -gt 0 ]]; then
+        level=low
+        level=muted
+    fi
+
+    notify-send -p -r $nid -i "audio-volume-$level" -h "int:value:$value" "Volume"
+}
+
+main() {
+    local sink=$1
+    local vol=$(current_vol $sink)
+    local last_volume=$vol
+    local notify_id=0
+
+    pactl subscribe | grep --line-buffered -E "chan.*sink " | while read -r buf; do
+        vol=$(current_vol $sink)
+        if [[ "$last_volume" != "$vol" ]]; then
+            last_volume=$vol
+            notify_id=$(notify_vol $notify_id $vol)
+        fi
+    done
+}
+
+main "$@"
