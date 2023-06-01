@@ -5,9 +5,8 @@ if [ ! -f "$img" ]; then
     exit 1
 fi
 
-cp -vf "$img" "$HOME/.config/face.png"
-chmod -v 644 "$HOME/.config/face.png"
-ln -vsf "$HOME/.config/face.png" "$HOME/.face"
+install -m 644 "$img" "$HOME/.face.icon"
+ln -srf "$HOME/.face.icon" "$HOME/.face"
 dbus-send --system --print-reply \
     --dest=org.freedesktop.Accounts \
     "/org/freedesktop/Accounts/User$(id -u)" \
