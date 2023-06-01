@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-trap "pkill waybar" EXIT
-confdir="${XDG_CONFIG_HOME:-$HOME/.config}/waybar"
-while [[ "$XDG_SESSION_TYPE" == "wayland" ]]; do
-    waybar &
-    inotifywait -e create,modify "$confdir/"{config,style.css}
-    pkill waybar
-done
