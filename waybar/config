@@ -1,5 +1,6 @@
 {
     "modules-left": [
+        "hyprland/submap",
         "wlr/workspaces",
         "hyprland/window"
     ],
@@ -24,6 +25,10 @@
             "3": [],
             "4": []
         }
+    },
+    "hyprland/submap": {
+        "format": "󰌓 \u2001{}",
+        "tooltip": false
     },
     "tray": {
         "icon-size": 16,
