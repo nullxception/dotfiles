@@ -8,20 +8,18 @@ current_vol() {
 }
 
 notify_vol() {
-    local nid=$2
-    local value=$2
     local volume=muted
 
-    if [[ $value -gt 63 ]]; then
+    if [[ $2 -gt 63 ]]; then
         level=high
-    elif [[ $value -le 63 && $value -gt 33 ]]; then
+    elif [[ $2 -le 63 && $2 -gt 33 ]]; then
         level=medium
-    elif [[ $value -gt 0 ]]; then
+    elif [[ $2 -gt 0 ]]; then
         level=low
         level=muted
     fi
 
-    notify-send -p -r $nid -i "audio-volume-$level" -h "int:value:$value" "Volume"
+    notify-send -p -r $1 -i "audio-volume-$level" -h "int:value:$2" "Volume"
 }
 
 main() {
