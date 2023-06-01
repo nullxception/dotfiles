@@ -4,8 +4,8 @@
 <b>~/.nullxception-dotfiles</b>
 <br/><br/>
 <img alt="Stargazers" src="https://img.shields.io/github/stars/nullxception/dotfiles?style=for-the-badge&logo=apachespark&logoColor=ebebf0&color=ff89b5&labelColor=33333f"/>
-<img alt="License" src="https://img.shields.io/github/license/nullxception/dotfiles?style=for-the-badge&logo=gitbook&logoColor=ebebf0&color=95b6ff&labelColor=33333f"/>
-<img src="https://img.shields.io/badge/deez-nuts-b0a8f7?style=for-the-badge&logo=archlinux&logoColor=ebebf0&labelColor=33333f"/>
+<img alt="License" src="https://img.shields.io/github/license/nullxception/dotfiles?style=for-the-badge&logo=gitbook&logoColor=ebebf0&color=b0a8f7&labelColor=33333f"/>
+<img src="https://img.shields.io/badge/-btw-95b6ff?style=for-the-badge&logo=archlinux&logoColor=ebebf0&labelColor=33333f"/>
 <img alt="Repo size" src="https://img.shields.io/github/repo-size/nullxception/dotfiles?style=for-the-badge&logo=hackthebox&logoColor=ebebf0&color=73de8a&labelColor=33333f"/>
 </p>
 
@@ -44,13 +44,13 @@ For complete example, take a look at [.install.example](.install.example).
 
 # Gallery
 
-| hyprland setup                                  |
+| hyprland - [README.md](hypr/README.md)          |
 | ----------------------------------------------- |
 | ![hyprland setup](.github/assets/hyprland.webp) |
 
-| firefox w/ [custom css](firefox/README.md) and [Cherry Midnight](https://addons.mozilla.org/en-US/firefox/addon/cherry-midnight) theme |
-| -------------------------------------------------------------------------------------------------------------------------------------- |
-| ![firefox](.github/assets/firefox.webp)                                                                                                |
+| firefox - [README.md](firefox/README.md) |
+| ---------------------------------------- |
+| ![firefox](.github/assets/firefox.webp)  |
 
 | rofi session menu                                      |
 | ------------------------------------------------------ |

@@ -1,8 +1,8 @@
 ![firefox preview](../.github/assets/firefox.webp)
 
-# Firefox dotfiles
+> Firefox w/ custom css and [Cherry Midnight](https://addons.mozilla.org/en-US/firefox/addon/cherry-midnight) theme
 
-This module contains my dotfiles for firefox.
+# Firefox setup
 
 You can copy the necessary files into your own firefox profile directory. Or use the install script to set it up automatically, like this :
 

@@ -1,10 +1,12 @@
-# Hyprland setup
-
 ![hyprland preview](../.github/assets/hyprland.webp)
 
-| Apps                                                 | Description               | dots                     |
+# Hyprland setup
+
+Here's the list of software and script that used on this setup
+
+| Software/script                                      | Description               | config                   |
 | ---------------------------------------------------- | ------------------------- | ------------------------ |
-| kitty                                                | Default terminal          | --                       |
+| kitty                                                | Default terminal emulator | --                       |
 | wl-clipboard-history                                 | Clipboard history tracker | --                       |
 | swww                                                 | Wallpaper daemon          | --                       |
 | waybar                                               | Panel                     | [../waybar](../waybar)   |
