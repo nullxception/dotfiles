@@ -16,7 +16,6 @@ notify_vol() {
         level=medium
     elif [[ $2 -gt 0 ]]; then
         level=low
-        level=muted
     fi
 
     notify-send -p -r $1 -i "audio-volume-$level" -h "int:value:$2" "Volume"
