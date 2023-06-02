@@ -7,37 +7,6 @@
 # based on: https://github.com/jluttine/rofi-power-menu
 #
 
-declare -A label
-label[lockscreen]="Lock screen"
-label[logout]="Logout"
-label[suspend]="Suspend"
-label[hibernate]="Hibernate"
-label[reboot]="Reboot"
-label[shutdown]="Shut down"
-
-declare -A icon
-icon[lockscreen]="system-lock-screen-symbolic, "
-icon[logout]="system-log-out-symbolic, 󰿅"
-icon[suspend]="system-suspend-symbolic, 󰒲"
-icon[hibernate]="system-hibernate-symbolic, "
-icon[reboot]="system-reboot-symbolic, 󰜉"
-icon[shutdown]="system-shutdown-symbolic, 󰐥"
-icon[back]="go-previous-symbolic, 󰕍"
-
-declare -A action
-action[lockscreen]="loginctl lock-session ${XDG_SESSION_ID-}"
-action[logout]="loginctl kill-session ${XDG_SESSION_ID-}"
-action[suspend]="systemctl suspend"
-action[hibernate]="systemctl hibernate"
-action[reboot]="systemctl reboot"
-action[shutdown]="systemctl poweroff"
-
-# Supported choices, use --choices instead if you want to filters it
-displayed_choices=(lockscreen logout suspend hibernate reboot shutdown)
-need_prompt=(logout reboot shutdown)
-icon=true
-label=true
-
 rf_item() {
     local text="$2"
     local item="$text"
@@ -156,7 +125,7 @@ $name - a Session menu for Rofi
 
 Usage:
   $name [options] -- [rofi args]
-  rofi -show foo -modi "foo:$name -m [options]"
+  rofi -show foo -modi "foo:$name [options]"
 
 Example:
 
@@ -164,7 +133,7 @@ Example:
 
 or use as rofi modi:
 
-  rofi -show foo -modi "foo:$name -m -l false -c logout:shutdown" -theme ~/.config/rofi/theme/cherry.rasi
+  rofi -show foo -modi "foo:$name -l false -c logout:shutdown" -theme ~/.config/rofi/theme/cherry.rasi
 
 Available options:
 
@@ -180,8 +149,6 @@ Available options:
                                 nerd-patched font).
 
   -l, --label true|false        Enable or disable label for the choices.
-
-  -m, --as-modi                 Use rofi-session as rofi modi
 
   -h,--help                     Show this help text.
 
@@ -201,7 +168,38 @@ EOF
     exit 0
 }
 
-parsed=$(getopt --options=hsc:i:l:m --longoptions=help,show,choices:,icon:,label:,as-modi --name "$0" -- "$@")
+declare -A label
+label[lockscreen]="Lock screen"
+label[logout]="Logout"
+label[suspend]="Suspend"
+label[hibernate]="Hibernate"
+label[reboot]="Reboot"
+label[shutdown]="Shut down"
+
+declare -A icon
+icon[lockscreen]="system-lock-screen-symbolic, "
+icon[logout]="system-log-out-symbolic, 󰿅"
+icon[suspend]="system-suspend-symbolic, 󰒲"
+icon[hibernate]="system-hibernate-symbolic, "
+icon[reboot]="system-reboot-symbolic, 󰜉"
+icon[shutdown]="system-shutdown-symbolic, 󰐥"
+icon[back]="go-previous-symbolic, 󰕍"
+
+declare -A action
+action[lockscreen]="loginctl lock-session ${XDG_SESSION_ID-}"
+action[logout]="loginctl kill-session ${XDG_SESSION_ID-}"
+action[suspend]="systemctl suspend"
+action[hibernate]="systemctl hibernate"
+action[reboot]="systemctl reboot"
+action[shutdown]="systemctl poweroff"
+
+# Supported choices, use --choices instead if you want to filters it
+displayed_choices=(lockscreen logout suspend hibernate reboot shutdown)
+need_prompt=(logout reboot shutdown)
+icon=true
+label=true
+
+parsed=$(getopt --options=hsc:i:l: --longoptions=help,show,choices:,icon:,label: --name "$0" -- "$@")
 if [ $? -ne 0 ]; then
     echo 'Invalid argument, exiting.' >&2
     exit 1
@@ -219,7 +217,6 @@ fi
 
 source $sessionconf
 
-as_modi=false
 while true; do
     case "$1" in
     -h | --help)
@@ -236,10 +233,6 @@ while true; do
     -l | --label)
         label="$2"
         shift 2
-        ;;
-    -m | --as-modi)
-        as_modi=true
-        shift
         ;;
     --)
         shift
@@ -288,7 +281,7 @@ build_rofi_args() {
     echo $args
 }
 
-if [ "$as_modi" = false ]; then
+if [ -z "$ROFI_OUTSIDE" ]; then
     rofi -show session -modi "session:$0 $(build_session_args)" $(build_rofi_args $@)
     exit
 fi
