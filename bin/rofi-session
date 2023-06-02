@@ -33,23 +33,22 @@ action[reboot]="systemctl reboot"
 action[shutdown]="systemctl poweroff"
 
 # Supported choices, use --choices instead if you want to filters it
-displayed=(lockscreen logout suspend hibernate reboot shutdown)
+displayed_choices=(lockscreen logout suspend hibernate reboot shutdown)
 need_prompt=(logout reboot shutdown)
-use_icon=true
-use_label=true
+icon=true
+label=true
 
 rf_item() {
-    local icon="$1"
     local text="$2"
     local item="$text"
-    if [ "$use_icon" = "font" ]; then
-        item="\u200e$icon"
-        if [ "$use_label" = "true" ]; then
+    if [ "$icon" = "font" ]; then
+        item="\u200e$1"
+        if [ "$label" = "true" ]; then
             item+=" \u2068$text\u2069"
         fi
     else
         item="\u200e"
-        if [ "$use_label" = "true" ]; then
+        if [ "$label" = "true" ]; then
             item+="$text"
         fi
     fi
@@ -69,7 +68,7 @@ rf_opt() {
 }
 
 get_icon() {
-    case "$use_icon" in
+    case "$icon" in
     "font")
         printf "${icon[$1]#*,}" | xargs
         ;;
@@ -84,7 +83,7 @@ get_icon() {
 
 default_choices() {
     rf_opt prompt "Session Menu"
-    for i in "${displayed[@]}"; do
+    for i in "${displayed_choices[@]}"; do
         rf_item "$(get_icon $i)" "${label[$i]}"
         rf_opt icon "$(get_icon $i)" info "action:$i"
     done
@@ -122,7 +121,7 @@ dispatch_action() {
 }
 
 proceed_choices() {
-    for i in "${displayed[@]}"; do
+    for i in "${displayed_choices[@]}"; do
         if [[ $act == "action:$i" ]]; then
             prompt_choice "$i"
         fi
@@ -133,38 +132,76 @@ proceed_choices() {
     done
 }
 
+gen_config() {
+    mkdir -p $confdir
+    printf -v list_choices '%s:' "${displayed_choices[@]}"
+
+    cat <<EOF >$sessionconf
+#
+# rofi-session configuration
+#
+
+# icon=$icon
+# choices=${list_choices%:}
+# label=$label
+# theme=/path/to/theme.rasi
+
+EOF
+}
+
 usage() {
     local name="$(basename "$0")"
     cat <<EOF
 $name - a Session menu for Rofi
 
-Usage: $name [options]
+Usage:
+  $name [options] -- [rofi args]
+  rofi -show foo -modi "foo:$name -m [options]"
 
 Example:
 
-  rofi -show custom -modi "custom:~/.config/rofi/menu/$name --label=false --choices=logout:reboot:shutdown"
+  $name -l false -c logout:shutdown -- -theme ~/.config/rofi/theme/cherry.rasi
+
+or use as rofi modi:
+
+  rofi -show foo -modi "foo:$name -m -l false -c logout:shutdown" -theme ~/.config/rofi/theme/cherry.rasi
 
 Available options:
 
-  --choices CHOICES             Filter choices to display, use ":" as the separator.
+  -c, --choices CHOICES         Filter choices to display, use ":" as the separator.
                                 Available choices:
                                 lockscreen:logout:suspend:hibernate:reboot:shutdown
 
                                 By default, all available choices will be shown.
 
-  --icon  true|font|false     Enable or disable icon for the choices.
+  -i, --icon  true|font|false   Enable or disable icon for the choices.
                                 Use --icon=font if you want to use a symbols from
                                 your font instead of desktop icon pack (requires
                                 nerd-patched font).
 
-  --label true|false            Enable or disable label for the choices.
+  -l, --label true|false        Enable or disable label for the choices.
+
+  -m, --as-modi                 Use rofi-session as rofi modi
 
   -h,--help                     Show this help text.
+
+Configuration
+
+    $name will source variables from $sessionconf if exists.
+    Valid variables are :
+
+    icon=true|font|false
+    choices=CHOICES
+    label=true|false
+    theme=/path/to/theme.rasi
+
+    For "theme" variable, it'll only be used when -m or --as-modi is not used.
+
 EOF
     exit 0
 }
 
-parsed=$(getopt --options=h --longoptions=help,choices:,icon:,label: --name "$0" -- "$@")
+parsed=$(getopt --options=hsc:i:l:m --longoptions=help,show,choices:,icon:,label:,as-modi --name "$0" -- "$@")
 if [ $? -ne 0 ]; then
     echo 'Invalid argument, exiting.' >&2
     exit 1
@@ -172,33 +209,97 @@ fi
 
 eval set -- "$parsed"
 unset parsed
+
+confdir="${XDG_CONFIG_HOME:-$HOME/.config}/rofi"
+sessionconf="${confdir}/rofi-session.conf"
+
+if [ ! -f "${sessionconf}" ]; then
+    gen_config
+fi
+
+source $sessionconf
+
+as_modi=false
 while true; do
     case "$1" in
-    "-h" | "--help")
+    -h | --help)
         usage
         ;;
-    "--choices")
-        IFS=':' read -ra displayed <<<"$2"
+    -c | --choices)
+        choices="$2"
         shift 2
         ;;
-    "--icon")
-        use_icon="$2"
+    -i | --icon)
+        icon="$2"
         shift 2
         ;;
-    "--label")
-        use_label="$2"
+    -l | --label)
+        label="$2"
         shift 2
         ;;
-    "--")
+    -m | --as-modi)
+        as_modi=true
+        shift
+        ;;
+    --)
         shift
         break
         ;;
     esac
 done
 
+build_session_args() {
+    local args=""
+    if [ -n "$choices" ]; then
+        args+=" --choices=$choices"
+    fi
+    if [ -n "$icon" ]; then
+        args+=" --icon=$icon"
+    fi
+    if [ -n "$label" ]; then
+        args+=" --label=$label"
+    fi
+    echo "$args"
+}
+
+build_rofi_args() {
+    local args=""
+    local skip=0
+    for arg in $@; do
+        if [ $skip -gt 0 ]; then
+            skip=$((skip - 1))
+            continue
+        fi
+
+        case $arg in
+        -show | -modi)
+            skip=1
+            ;;
+        *)
+            args+=" $arg"
+            ;;
+        esac
+    done
+
+    if [ -f "$theme" ]; then
+        args+=" -theme $theme"
+    fi
+
+    echo $args
+}
+
+if [ "$as_modi" = false ]; then
+    rofi -show session -modi "session:$0 $(build_session_args)" $(build_rofi_args $@)
+    exit
+fi
+
 act="$ROFI_INFO"
 rf_opt no-custom true
 rf_opt markup-rows true
+
+if [ -n "$choices" ]; then
+    IFS=':' read -ra displayed_choices <<<"$choices"
+fi
 
 if [ -z "$act" ]; then
     default_choices
