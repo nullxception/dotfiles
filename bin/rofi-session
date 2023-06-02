@@ -102,10 +102,11 @@ proceed_choices() {
 }
 
 gen_config() {
-    mkdir -p $confdir
+    local conf="$1"
+    mkdir -p "$(dirname "$(realpath "$conf")")"
     printf -v list_choices '%s:' "${displayed_choices[@]}"
 
-    cat <<EOF >$sessionconf
+    cat <<EOF >"$conf"
 #
 # rofi-session configuration
 #
@@ -165,81 +166,7 @@ Configuration
     For "theme" variable, it'll only be used when -m or --as-modi is not used.
 
 EOF
-    exit 0
 }
-
-declare -A label
-label[lockscreen]="Lock screen"
-label[logout]="Logout"
-label[suspend]="Suspend"
-label[hibernate]="Hibernate"
-label[reboot]="Reboot"
-label[shutdown]="Shut down"
-
-declare -A icon
-icon[lockscreen]="system-lock-screen-symbolic, "
-icon[logout]="system-log-out-symbolic, 󰿅"
-icon[suspend]="system-suspend-symbolic, 󰒲"
-icon[hibernate]="system-hibernate-symbolic, "
-icon[reboot]="system-reboot-symbolic, 󰜉"
-icon[shutdown]="system-shutdown-symbolic, 󰐥"
-icon[back]="go-previous-symbolic, 󰕍"
-
-declare -A action
-action[lockscreen]="loginctl lock-session ${XDG_SESSION_ID-}"
-action[logout]="loginctl kill-session ${XDG_SESSION_ID-}"
-action[suspend]="systemctl suspend"
-action[hibernate]="systemctl hibernate"
-action[reboot]="systemctl reboot"
-action[shutdown]="systemctl poweroff"
-
-# Supported choices, use --choices instead if you want to filters it
-displayed_choices=(lockscreen logout suspend hibernate reboot shutdown)
-need_prompt=(logout reboot shutdown)
-icon=true
-label=true
-
-parsed=$(getopt --options=hsc:i:l: --longoptions=help,show,choices:,icon:,label: --name "$0" -- "$@")
-if [ $? -ne 0 ]; then
-    echo 'Invalid argument, exiting.' >&2
-    exit 1
-fi
-
-eval set -- "$parsed"
-unset parsed
-
-confdir="${XDG_CONFIG_HOME:-$HOME/.config}/rofi"
-sessionconf="${confdir}/rofi-session.conf"
-
-if [ ! -f "${sessionconf}" ]; then
-    gen_config
-fi
-
-source $sessionconf
-
-while true; do
-    case "$1" in
-    -h | --help)
-        usage
-        ;;
-    -c | --choices)
-        choices="$2"
-        shift 2
-        ;;
-    -i | --icon)
-        icon="$2"
-        shift 2
-        ;;
-    -l | --label)
-        label="$2"
-        shift 2
-        ;;
-    --)
-        shift
-        break
-        ;;
-    esac
-done
 
 build_session_args() {
     local args=""
@@ -280,6 +207,88 @@ build_rofi_args() {
 
     echo $args
 }
+
+declare -A label
+label[lockscreen]="Lock screen"
+label[logout]="Logout"
+label[suspend]="Suspend"
+label[hibernate]="Hibernate"
+label[reboot]="Reboot"
+label[shutdown]="Shut down"
+
+declare -A icon
+icon[lockscreen]="system-lock-screen-symbolic, "
+icon[logout]="system-log-out-symbolic, 󰿅"
+icon[suspend]="system-suspend-symbolic, 󰒲"
+icon[hibernate]="system-hibernate-symbolic, "
+icon[reboot]="system-reboot-symbolic, 󰜉"
+icon[shutdown]="system-shutdown-symbolic, 󰐥"
+icon[back]="go-previous-symbolic, 󰕍"
+
+declare -A action
+action[lockscreen]="loginctl lock-session ${XDG_SESSION_ID-}"
+action[logout]="loginctl kill-session ${XDG_SESSION_ID-}"
+action[suspend]="systemctl suspend"
+action[hibernate]="systemctl hibernate"
+action[reboot]="systemctl reboot"
+action[shutdown]="systemctl poweroff"
+
+# Supported choices, use --choices instead if you want to filters it
+displayed_choices=(lockscreen logout suspend hibernate reboot shutdown)
+need_prompt=(logout reboot shutdown)
+icon=true
+label=true
+
+parsed=$(getopt --options=hsc:i:l: --longoptions=help,show,choices:,icon:,label:,config: --name "$0" -- "$@")
+if [ $? -ne 0 ]; then
+    echo 'Invalid argument, exiting.' >&2
+    exit 1
+fi
+
+eval set -- "$parsed"
+unset parsed
+
+while true; do
+    case "$1" in
+    -h | --help)
+        usage
+        exit
+        ;;
+    -c | --choices)
+        arg_choices="$2"
+        shift 2
+        ;;
+    -i | --icon)
+        arg_icon="$2"
+        shift 2
+        ;;
+    -l | --label)
+        arg_label="$2"
+        shift 2
+        ;;
+    --config)
+        arg_conf="$2"
+        shift 2
+        ;;
+    --)
+        shift
+        break
+        ;;
+    esac
+done
+
+confdir="${XDG_CONFIG_HOME:-$HOME/.config}/rofi"
+sessionconf="${arg_conf:-${confdir}/rofi-session.conf}"
+
+if [ ! -f "${sessionconf}" ]; then
+    gen_config "$sessionconf"
+fi
+
+. $sessionconf
+
+choices="${arg_choices:-$choices}"
+label="${arg_label:-$label}"
+icon="${arg_icon:-$icon}"
 
 if [ -z "$ROFI_OUTSIDE" ]; then
     rofi -show session -modi "session:$0 $(build_session_args)" $(build_rofi_args $@)
