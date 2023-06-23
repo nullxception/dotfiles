@@ -1,11 +1,11 @@
 <p align="center">
-<img alt="Stargazers" src="https://images.weserv.nl/?url=avatars.githubusercontent.com/u/58150791?v=4&h=72&w=72&fit=cover&mask=circle&maxage=7d"/>
+<img alt="nullxception" src="https://images.weserv.nl/?url=avatars.githubusercontent.com/u/58150791?v=5&h=128&w=128&fit=cover&mask=circle&maxage=7d"/>
 <br/><br/>
 <b>~/.nullxception-dotfiles</b>
 <br/><br/>
 <img alt="Stargazers" src="https://img.shields.io/github/stars/nullxception/dotfiles?style=for-the-badge&logo=apachespark&logoColor=ebebf0&color=ff89b5&labelColor=33333f"/>
 <img alt="License" src="https://img.shields.io/github/license/nullxception/dotfiles?style=for-the-badge&logo=gitbook&logoColor=ebebf0&color=b0a8f7&labelColor=33333f"/>
-<img src="https://img.shields.io/badge/-btw-95b6ff?style=for-the-badge&logo=archlinux&logoColor=ebebf0&labelColor=33333f"/>
+<img alt="archlinux" src="https://img.shields.io/badge/-btw-95b6ff?style=for-the-badge&logo=archlinux&logoColor=ebebf0&labelColor=33333f"/>
 <img alt="Repo size" src="https://img.shields.io/github/repo-size/nullxception/dotfiles?style=for-the-badge&logo=hackthebox&logoColor=ebebf0&color=73de8a&labelColor=33333f"/>
 </p>
 
