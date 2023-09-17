@@ -1,7 +1,7 @@
 {
     "modules-left": [
         "hyprland/submap",
-        "wlr/workspaces",
+        "hyprland/workspaces",
         "hyprland/window"
     ],
     "modules-center": [
@@ -15,7 +15,7 @@
         "network",
         "pulseaudio"
     ],
-    "wlr/workspaces": {
+    "hyprland/workspaces": {
         "on-click": "activate",
         "on-scroll-up": "hyprctl dispatch workspace r+1",
         "on-scroll-down": "hyprctl dispatch workspace r-1",
