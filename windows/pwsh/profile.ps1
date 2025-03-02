@@ -11,6 +11,8 @@ $CustomPath = @(
     "$env:LOCALAPPDATA\Android\Sdk\platform-tools"
 )
 
+fnm env --use-on-cd --shell powershell | Out-String | Invoke-Expression
+
 $CustomPath | Where-Object { Register-Path -At $_ -Scope User }
 
 # Setup aliases
