@@ -1,10 +1,13 @@
-
 # WSL2 workaround for default dir
-grep -qE '/mnt/c/Users/([a-zA-Z\ ]+)$' <<<$PWD \
-    && grep -qE '/mnt/c/Users/([a-zA-Z\ ]+)$' <<<$OLDPWD \
-    && cd ~
+grep -qE '/mnt/c/Users/([a-zA-Z\ ]+)$' <<<$PWD &&
+    grep -qE '/mnt/c/Users/([a-zA-Z\ ]+)$' <<<$OLDPWD &&
+    cd ~
 
 # Loading SSH key
-keychain -q --nogui ~/.ssh/id_rsa
-source ~/.keychain/$(hostname)-sh
+if command -v wsl2-ssh-agent >/dev/null; then
+    eval $(wsl2-ssh-agent)
+elif command -v keychain >/dev/null; then
+    keychain -q --nogui ~/.ssh/id_rsa
+    source ~/.keychain/$(hostname)-sh
+fi
 sh $XDG_CONFIG_HOME/wsl2/link-android-tools

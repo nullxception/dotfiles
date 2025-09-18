@@ -1,2 +1,4 @@
 # configure ccache
-ccache -M ${CCACHE_MAX_SIZE:=50G} -F ccache ${CCACHE_MAX_FILES:=0} >/dev/null 2>&1
+if command -v ccache >/dev/null; then
+    ccache -M ${CCACHE_MAX_SIZE:=50G} -F ccache ${CCACHE_MAX_FILES:=0} >/dev/null 2>&1
+fi

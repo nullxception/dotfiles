@@ -1,10 +1,12 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
-ZSCRIPT_HOME="$HOME/.zsh"
+setopt extended_glob
 typeset -Ag ZI
+ZSCRIPT_HOME="$HOME/.zsh"
 ZI[HOME_DIR]="${ZSCRIPT_HOME}/zi"
 ZI[BIN_DIR]="${ZI[HOME_DIR]}/bin"
+ZI[COMPINIT_OPTS]=-C
 
 if [ ! -f "${ZI[BIN_DIR]}/zi.zsh" ]; then
     command mkdir -p "${ZI[BIN_DIR]}"
@@ -15,12 +17,12 @@ fi
 source "${ZI[BIN_DIR]}/zi.zsh"
 autoload -Uz _zi
 (( ${+_comps} )) && _comps[zi]=_zi
-zicompinit
+zicompinit_fast
 
 # Plugins
 zi wait depth=1 lucid light-mode for \
     hlissner/zsh-autopair \
-    atinit"zicompinit; zicdreplay" \
+    atinit"zicompinit_fast; zicdreplay" \
     z-shell/F-Sy-H \
     atload"_zsh_autosuggest_start" \
     zsh-users/zsh-autosuggestions \
@@ -37,29 +39,34 @@ zi lucid light-mode for \
     OMZL::termsupport.zsh
 
 # Programs
-if [[ "$(uname -m)" == "x86_64" ]];then
+ARCH=$(uname -m)
+if [[ "$ARCH" == "x86_64" || "$ARCH" == "aarch64" ]];then    
     # ripgrep
     zi ice as"program" from"gh-r" mv"ripgrep* -> rg" pick"rg/rg"
     zi light BurntSushi/ripgrep
-
-    # exa
-    zi ice as"command" from"gh-r" bpick"exa-linux-x86_64-musl-*" pick"bin/exa"
-    zi light ogham/exa
 
     # bat
     zi ice as"program" from"gh-r" mv"bat* -> bat" pick"bat/bat"
     zi light sharkdp/bat
 
-    # sharkdp/fd
-    zi ice as"command" from"gh-r" mv"fd* -> fd" bpick"*x86_64-unknown-linux-gnu*" pick"fd/fd"
-    zi light sharkdp/fd
-
     # fzf
-    zi ice from"gh-r" as"program"
+    zi ice as"program" from"gh-r"
     zi light junegunn/fzf
+
+	# eza
+	zi ice as"program" from"gh-r" pick"eza"
+	zi light eza-community/eza
+
+	# sharkdp/fd
+	zi ice as"program" from"gh-r" mv"fd* -> fd" pick"fd/fd"
+	zi light sharkdp/fd
 fi
 
 # Theme
+if [ -n "$SSH_TTY" ]; then
+	ROUNDY_USER_CONTENT_NORMAL=" %n@${HOSTNAME:-$HOST} "
+	ROUNDY_USER_CONTENT_ROOT=" %n@${HOSTNAME:-$HOST} "
+fi
 zi ice pick="lib/async.zsh" src="roundy.zsh" compile"{lib/async,roundy}.zsh"
 zi light nullxception/roundy
 
