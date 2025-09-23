@@ -32,9 +32,6 @@ vim.g.mapleader = ' '
 vim.wo.fillchars = 'eob: '
 vim.opt.updatetime = 50
 vim.opt.scrolloff = 8
-if vim.fn.has('gui_running') ~= 1 then
-    vim.o.t_Co = 256
-end
 
 vim.cmd [[
     filetype plugin indent on
