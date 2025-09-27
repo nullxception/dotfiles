@@ -1,31 +1,12 @@
 #!/usr/bin/env bash
 #
-# simple deploy script for dotfiles
+# akane's smol script for deploying dotfiles
 #
 #  usage :
-#   ./dot.sh <module-name>
+#   ./dot.sh <module-a> <module-b> ...
 #
 
-dotfiles=$(realpath "$(dirname "$0")")
-
-c0="\033[0;30m"
-c1="\033[0;31m"
-c2="\033[0;32m"
-c3="\033[0;33m"
-c4="\033[0;34m"
-c5="\033[0;35m"
-c6="\033[0;36m"
-c7="\033[0;37m"
-cR="\033[0m"
-
-log() {
-    echo -e "${c5}$(basename "$0")${c0}:${cR} ${1}${cR}"
-}
-
-fun_exists() {
-    declare -f -F $1 >/dev/null
-    return $?
-}
+dotfiles="$(realpath "$(dirname "$0")")"
 
 usage() {
     cat <<EOF
@@ -42,129 +23,64 @@ Options:
 EOF
 }
 
-comm_prefix_gen() {
-    if [ ! -d "$1" ]; then
-        if [ $dry_run != true ]; then
-            mkdir -p "$1" >/dev/null 2>&1
-        fi
-        if [ $? != 0 ]; then
-            if [ $dry_run != true ]; then
-                sudo mkdir -p "$1" >/dev/null 2>&1
-            fi
-            printf sudo
-        fi
-    else
-        local curr=$(id -g)
-        local dest=$(stat -c %g "$1")
-        if [ "$dest" != "$curr" ]; then
-            printf sudo
-        fi
-    fi
-}
-
-simplify_path() {
-    if [[ "$1" == "src" ]]; then
-        local rpath="$(realpath "$2")"
-        echo "${rpath#$dotfiles\/}"
-    else
-        echo "${2/$HOME/\~}"
-    fi
-}
-
 is_file_ignored() {
-    local ignored=false
-    for i in "${ignored_files[@]}"; do
-        if [ "${1##*/}" == "$i" ]; then
-            ignored=true
-            break
-        fi
-    done
+    case "${1##*/}" in
+        "${ignored_files[@]}") return 0 ;;
+    esac
+    return 1
+}
 
-    echo $ignored
+for i in {0..7}; do
+    eval $(printf "c${i}=\"\033[0;3${i}m\"")
+done
+
+cR="\033[0m"
+
+log() {
+    local msg="$(sed "s|$dotfiles/||g; s|$HOME|\~|g" <<<"$1")"
+    [ $dry_run -eq 1 ] && echo -ne "${c3}[dryrun] ${cR}"
+    echo -e "${c5}${cR}${msg}${cR}"
 }
 
 deploy() {
     local src=$1
     local dest=$2
-    local comm_prefix=$(comm_prefix_gen "$dest")
 
-    if [ "$comm_prefix" = "sudo" ]; then
-        log "${c3}using sudo to install module..."
-    fi
-
-    find "$src" -type f | while read f_src; do
-        if [ "$(is_file_ignored "$f_src")" = true ]; then
-            continue
-        fi
-
-        f_dest="$(printf ${f_src%/*} | sed "s|$src|$dest|")"
-        fr_src="$(simplify_path src "$f_src")"
-        fr_dest="$(simplify_path dst "$f_dest")"
-        log "copying ${c4}$fr_src${cR} to ${c4}$fr_dest"
-        if [ $dry_run != true ]; then
-            [ -d "$f_dest" ] || $comm_prefix mkdir -p "$f_dest"
-            $comm_prefix cp "$f_src" "$f_dest"
+    find "$src" -type f | while read srcfile; do
+        is_file_ignored "$srcfile" && continue
+        local destfile="$(printf ${srcfile%/*} | sed "s|$src|$dest|")"
+        log "  ${c1}$srcfile${cR} -> ${c4}$destfile"
+        if [ $dry_run -ne 1 ]; then
+            [ -d "$destfile" ] || mkdir -p "$destfile"
+            cp "$srcfile" "$destfile"
         fi
     done
 }
 
 install_mod() {
-    local target="$(realpath $1)"
-    local name=$(basename $(realpath $target))
-    local inst="$target/.install"
+    local module="$(realpath $1)"
+    local modname="$(realpath -- "$module")"
+    modname="${modname##*/}"
+    local moddefs="$module/.install"
 
-    if [ ! -f "$inst" ]; then
-        log ".install for $name doesn't exists. aborting"
+    if [ ! -f "$moddefs" ]; then
+        log "${c1}$modname${cR}/${c2}.install${cR} doesn't exists. aborting"
         exit 1
     fi
 
-    unset dot_preinstall dot_postinstall module_target
-    . $inst
-    if fun_exists dot_preinstall; then
-        log "running $name::dot_preinstall()"
-        if [ $dry_run != true ]; then
-            dot_preinstall
-        fi
-    fi
-
-    local dest=$(realpath -mq "$module_target")
-    if [ -z "$dest" ]; then
-        log "Invalid module_target entry. aborting"
+    unset module_target
+    . $moddefs
+    local _dest=$(realpath -mq "$module_target")
+    if [ -z "$_dest" ]; then
+        log "Invalid \$dest. aborting"
         exit 1
     fi
 
-    log "installing ${c1}$name"
-    deploy "$target" "$dest"
-
-    if fun_exists dot_postinstall; then
-        log "running ${c1}$name${cR}::${c2}dot_preinstall()"
-        if [ $dry_run != true ]; then
-            dot_postinstall
-        fi
-    fi
+    log "installing ${c1}$modname${cR} to ${c4}$module_target"
+    deploy "$module" "$module_target"
 }
 
-main() {
-    if [ -z "$1" ]; then
-        usage
-        exit 1
-    fi
-
-    if [ $dry_run == true ]; then
-        log "${c4}dry-run${cR} mode ${c2}start"
-        echo
-    fi
-
-    for mod in $@; do
-        install_mod "$mod"
-    done
-
-    if [ $dry_run == true ]; then
-        log "${c4}dry-run${cR} mode ${c2}finish"
-    fi
-}
-
-dry_run=false
+dry_run=0
 ignored_files=(.install{,.ps1} README.md)
 parsed=$(getopt --options=h --longoptions=help,dry-run --name "$0" -- "$@")
 if [ $? -ne 0 ]; then
@@ -181,7 +97,7 @@ while true; do
             exit
             ;;
         "--dry-run")
-            dry_run=true
+            dry_run=1
             shift 2
             break
             ;;
@@ -192,4 +108,14 @@ while true; do
     esac
 done
 
-main "$@"
+if [ -z "$1" ]; then
+    usage
+    exit 1
+fi
+
+modcount=0
+for mod in "$@"; do
+    [ $modcount -gt 0 ] && printf '\n'
+    install_mod "$mod"
+    modcount=$((modcount + 1))
+done

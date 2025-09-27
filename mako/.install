@@ -1,5 +1,1 @@
 module_target="$HOME/.config/mako"
-
-dot_postinstall() {
-    "${dotfiles}/bin/sync-icon-theme" mako
-}
