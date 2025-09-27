@@ -1,0 +1,6 @@
+# Loading SSH key
+if [ -n "$WSL_INTEROP" ] && command -v wsl2-ssh-agent >/dev/null; then
+    eval $(wsl2-ssh-agent)
+elif command -v keychain >/dev/null; then
+    eval $(keychain --eval --quiet id_ed25519)
+fi
