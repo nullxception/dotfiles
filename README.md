@@ -48,10 +48,6 @@ For complete example, take a look at [.install.example](.install.example).
 | ----------------------------------------------- |
 | ![hyprland setup](.github/assets/hyprland.webp) |
 
-| firefox - [README.md](firefox/README.md) |
-| ---------------------------------------- |
-| ![firefox](.github/assets/firefox.webp)  |
-
 | rofi session menu                                      |
 | ------------------------------------------------------ |
 | ![rofi session menu](.github/assets/rofi-session.webp) |
