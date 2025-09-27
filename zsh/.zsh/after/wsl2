@@ -1,2 +1,0 @@
-# Load WSL2-specific scripts
-[ -n "$WSL_INTEROP" ] && source $XDG_CONFIG_HOME/wsl2/shrc
