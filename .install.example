@@ -1,14 +1,9 @@
 module_target="/path/to/target"
 
 dot_preinstall() {
-    # custom action before install process (default/custom method)
-}
-
-dot_install() {
-    # custom install method that will replace the default method
-    # Note: remove it if you want to use the default method
+    # custom action before install process
 }
 
 dot_postinstall() {
-    # custom action after install process (default/custom method)
+    # custom action after install process
 }

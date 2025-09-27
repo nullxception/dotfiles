@@ -1,12 +1,7 @@
-$InstallTarget = "Z:\path\to\files"
+$module_target = "Z:\path\to\files"
 
 function dot_preinstall {
     # custom action before install process (default/custom method)
-}
-
-function dot_install {
-    # custom install method that will replace the default method
-    # Note: remove it if you want to use the default method
 }
 
 function dot_postinstall {

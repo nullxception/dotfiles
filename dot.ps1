@@ -21,16 +21,11 @@ function Install-Mod($ModulePath) {
     if (Get-Command 'dot_preinstall' -errorAction SilentlyContinue) {
         dot_preinstall
     }
-    if (Get-Command 'dot_install' -errorAction SilentlyContinue) {
-        dot_install
+    Write-Output "installing module $ModuleName to $module_target"
+    if (![System.IO.Directory]::Exists($module_target)) {
+        New-Item -ItemType Directory -Path $module_target
     }
-    else {
-        Write-Output "installing module $ModuleName to $Installtarget"
-        if (![System.IO.Directory]::Exists($Installtarget)) {
-            New-Item -ItemType Directory -Path $Installtarget
-        }
-        Get-ChildItem -Path $ModulePath -Exclude $ModuleData,.install,README.md | Copy-Item -Destination $Installtarget -Recurse -Force
-    }
+    Get-ChildItem -Path $ModulePath -Exclude $ModuleData,.install,README.md | Copy-Item -Destination $module_target -Recurse -Force
     if (Get-Command 'dot_postinstall' -errorAction SilentlyContinue) {
         dot_postinstall
     }
@@ -38,9 +33,6 @@ function Install-Mod($ModulePath) {
     # Unregister modules functions
     if (Get-Command 'dot_preinstall' -errorAction SilentlyContinue) {
         Remove-Item -Path Function:\dot_preinstall
-    }
-    if (Get-Command 'dot_install' -errorAction SilentlyContinue) {
-        Remove-Item -Path Function:\dot_install
     }
     if (Get-Command 'dot_postinstall' -errorAction SilentlyContinue) {
         Remove-Item -Path Function:\dot_postinstall
