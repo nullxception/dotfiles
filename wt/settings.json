@@ -1,0 +1,101 @@
+{
+  "$help": "https://aka.ms/terminal-documentation",
+  "$schema": "https://aka.ms/terminal-profiles-schema",
+  "copyOnSelect": true,
+  "defaultProfile": "{bbdc567f-7730-44a3-92b9-1bad5977c7e3}",
+  "disableAnimations": true,
+  "initialCols": 90,
+  "initialRows": 23,
+  "keybindings": [
+    {
+      "id": "Terminal.CtrlSpaceWorkaround",
+      "keys": "ctrl+space"
+    }
+  ],
+  "actions": [
+    {
+      "command": {
+        "action": "sendInput",
+        "input": "\u001b[32;5u"
+      },
+      "id": "Terminal.CtrlSpaceWorkaround"
+    }
+  ],
+  "newTabMenu": [
+    {
+      "type": "remainingProfiles"
+    }
+  ],
+  "profiles": {
+    "defaults": {
+      "colorScheme": "Cherry",
+      "cursorShape": "bar",
+      "experimental.retroTerminalEffect": false,
+      "font": {
+        "face": "JetBrainsMono NF",
+        "size": 9,
+        "weight": "medium"
+      },
+      "opacity": 90,
+      "padding": "25",
+      "useAcrylic": true
+    },
+    "list": [
+      {
+        "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
+        "hidden": false,
+        "name": "cmd"
+      },
+      {
+        "commandline": "powershell.exe -NoLogo",
+        "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+        "hidden": false,
+        "name": "posh"
+      },
+      {
+        "commandline": "pwsh.exe -NoLogo",
+        "guid": "{bbdc567f-7730-44a3-92b9-1bad5977c7e3}",
+        "hidden": false,
+        "icon": "ms-appx:///ProfileIcons/pwsh.png",
+        "name": "pwsh",
+        "startingDirectory": "%USERPROFILE%"
+      },
+      {
+        "commandline": "wsl",
+        "guid": "{a2e98c98-ccd4-4e5a-b551-6bc28713ec8f}",
+        "hidden": false,
+        "icon": "C:\\Program Files\\WSL\\wsl.exe",
+        "name": "wsl",
+        "pathTranslationStyle": "wsl"
+      }
+    ]
+  },
+  "schemes": [
+    {
+      "background": "#1F1F2A",
+      "black": "#33333F",
+      "blue": "#73A9FF",
+      "brightBlack": "#43435A",
+      "brightBlue": "#94B9FF",
+      "brightCyan": "#7CD7D5",
+      "brightGreen": "#8BE39E",
+      "brightPurple": "#AA91F8",
+      "brightRed": "#FF84A6",
+      "brightWhite": "#EBEBFF",
+      "brightYellow": "#F1FF94",
+      "cursorColor": "#EBEBFF",
+      "cyan": "#46CFCC",
+      "foreground": "#BDC3DF",
+      "green": "#64DE83",
+      "name": "Cherry",
+      "purple": "#946FF7",
+      "red": "#FF568E",
+      "selectionBackground": "#A9A9E3",
+      "white": "#DEDEFF",
+      "yellow": "#EFFF73"
+    }
+  ],
+  "tabWidthMode": "equal",
+  "themes": [],
+  "useAcrylicInTabRow": true
+}
