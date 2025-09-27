@@ -118,7 +118,7 @@ install_mod() {
         exit 1
     fi
 
-    unset dot_preinstall dot_install dot_postinstall module_target
+    unset dot_preinstall dot_postinstall module_target
     . $inst
     if fun_exists dot_preinstall; then
         log "running $name::dot_preinstall()"
@@ -127,21 +127,14 @@ install_mod() {
         fi
     fi
 
-    if fun_exists dot_install; then
-        log "running $name::dot_install()"
-        if [ $dry_run != true ]; then
-            dot_install
-        fi
-    else
-        local dest=$(realpath -mq "$module_target")
-        if [ -z "$dest" ]; then
-            log "Invalid module_target entry. aborting"
-            exit 1
-        fi
-
-        log "installing ${c1}$name"
-        deploy "$target" "$dest"
+    local dest=$(realpath -mq "$module_target")
+    if [ -z "$dest" ]; then
+        log "Invalid module_target entry. aborting"
+        exit 1
     fi
+
+    log "installing ${c1}$name"
+    deploy "$target" "$dest"
 
     if fun_exists dot_postinstall; then
         log "running ${c1}$name${cR}::${c2}dot_preinstall()"
