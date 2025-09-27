@@ -1,5 +1,0 @@
-def_key "right"
-  seek_forward
-
-def_key "left"
-  seek_backward

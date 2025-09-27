@@ -1,5 +1,1 @@
 module_target="$HOME/.config/rofi"
-
-dot_postinstall() {
-    "${dotfiles}/bin/sync-icon-theme" rofi
-}

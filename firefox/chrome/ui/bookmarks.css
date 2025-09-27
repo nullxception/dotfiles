@@ -1,4 +1,0 @@
-/* Allow longer bookmark item */
-toolbarbutton.bookmark-item:not(.subviewbutton) {
-    max-width: 18em !important;
-}

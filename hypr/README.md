@@ -6,7 +6,7 @@ Here's the list of software and script that used on this setup
 
 | Software/script                                      | Description               | config                                                 |
 | ---------------------------------------------------- | ------------------------- | ------------------------------------------------------ |
-| kitty                                                | Default terminal emulator | [../kitty](../kitty)                                   |
+| wezterm                                              | Default terminal emulator | [../wezterm](../wezterm)                               |
 | wl-clipboard-history                                 | Clipboard history tracker | --                                                     |
 | swww                                                 | Wallpaper daemon          | --                                                     |
 | waybar                                               | Panel                     | [../waybar](../waybar)                                 |

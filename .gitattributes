@@ -1,4 +1,3 @@
-.install.ps1 linguist-vendored
-.install linguist-vendored
-dot.sh linguist-vendored
-dot.ps1 linguist-vendored
+.install.* linguist-vendored
+/dot.* linguist-vendored
+/zsh/.zsh/**/* linguist-language=Shell

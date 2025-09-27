@@ -1,9 +1,2 @@
 module_target="/path/to/target"
 
-dot_preinstall() {
-    # custom action before install process
-}
-
-dot_postinstall() {
-    # custom action after install process
-}
