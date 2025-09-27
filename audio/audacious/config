@@ -1,5 +1,0 @@
-[audacious]
-enable_clipping_prevention=FALSE
-enable_replay_gain=FALSE
-output_bit_depth=0
-output_buffer_size=300

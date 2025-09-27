@@ -1,4 +1,4 @@
-$InstallTarget = Split-Path $profile
+$module_target = Split-Path $profile
 
 function dot_postinstall {
     if (!(Get-InstalledModule posh-git -ErrorAction SilentlyContinue)) {
