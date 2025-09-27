@@ -1,50 +1,70 @@
 #
 # nullxception's Dotfiles install script
-# usage:
-# ./dot.ps1 <module-name>
 #
-param(
-    [Parameter(Mandatory = $True)]
-    [String] $Module
-)
+# only support reading from .install file :
+#
+# module_target_win32=path/to/target
+# module_target=path/to/target
+#
+# for convenience, module_target_win32 can be set to "inherit"
+# to use module_target instead. This is useful when the target path
+# is same on both win32 and linux.
+#
+# usage:
+# ./dot.ps1 <module>
+#
 
-$ModuleData = ".install.ps1"
+$ModuleData = ".install"
+
+function Resolve-ModuleTarget {
+    $arg = $args[0]
+    try {
+        $str = Invoke-Expression -Command "`"$arg`""
+        return $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($str)
+    } catch {
+        return Invoke-Expression -Command "$arg"
+    }
+}
 
 function Install-Mod($ModulePath) {
     $ModuleName = Split-Path $ModulePath -Leaf
     $ModuleRPath = Resolve-Path $ModulePath\$ModuleData -ErrorAction SilentlyContinue
-    if (![System.IO.File]::Exists($ModuleRPath)) {
+    if (!(Test-Path -Path $ModuleRPath -PathType Leaf)) {
         Return "Module $ModuleName does not exists or has no $ModuleData"
     }
+    $InstallContent = Get-Content $ModuleRPath
 
-    . $ModuleRPath
-    if (Get-Command 'dot_preinstall' -errorAction SilentlyContinue) {
-        dot_preinstall
-    }
-    if (Get-Command 'dot_install' -errorAction SilentlyContinue) {
-        dot_install
-    }
-    else {
-        Write-Output "installing module $ModuleName to $Installtarget"
-        if (![System.IO.Directory]::Exists($Installtarget)) {
-            New-Item -ItemType Directory -Path $Installtarget
+    # $ModuleRPath file contains bash variable `module_target_win32` that act as target path
+    # e.g. module_target_win32="$env:LOCALAPPDATA\nvim"
+    # so we need to evaluate it in PowerShell somehow
+    $target_win32 = $InstallContent | ForEach-Object {
+        if ($_ -match '^\s*module_target_win32\s*=\s*"(.*)"\s*$') {
+            if ($Matches[1] -eq "inherit") {
+                return "inherit"
+            }
+            return Resolve-ModuleTarget $Matches[1]
         }
-        Get-ChildItem -Path $ModulePath -Exclude $ModuleData,.install,README.md | Copy-Item -Destination $Installtarget -Recurse -Force
     }
-    if (Get-Command 'dot_postinstall' -errorAction SilentlyContinue) {
-        dot_postinstall
+    $target_def = $InstallContent | ForEach-Object {
+        if ($_ -match '^\s*module_target\s*=\s*"(.*)"\s*$') {
+            return Resolve-ModuleTarget $Matches[1]
+        }
     }
 
-    # Unregister modules functions
-    if (Get-Command 'dot_preinstall' -errorAction SilentlyContinue) {
-        Remove-Item -Path Function:\dot_preinstall
+    if ($target_win32 -and $target_win32 -ne "inherit") {
+        $module_target = $target_win32
+    } elseif ($target_win32 -eq "inherit" -and $target_def) {
+        $module_target = $target_def
+    } else {
+        Return "Module $ModuleName has no valid module_target_win32"
     }
-    if (Get-Command 'dot_install' -errorAction SilentlyContinue) {
-        Remove-Item -Path Function:\dot_install
+
+    Write-Output "installing module $ModuleName to $module_target"
+    if (!(Test-Path -Path $module_target -PathType Container)) {
+        New-Item -ItemType Directory -Path $module_target
     }
-    if (Get-Command 'dot_postinstall' -errorAction SilentlyContinue) {
-        Remove-Item -Path Function:\dot_postinstall
-    }
+    Get-ChildItem -Path $ModulePath -Exclude $ModuleData,.install,README.md |
+        Copy-Item -Destination $module_target -Recurse -Force
 }
 
-Install-Mod $Module
+$args | ForEach-Object { Install-Mod $_ }

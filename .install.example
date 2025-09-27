@@ -1,14 +1,17 @@
-module_target="/path/to/target"
+#
+# install module to /home/<user>/.config/foo
+#
+module_target="$HOME/.config/foo"
 
-dot_preinstall() {
-    # custom action before install process (default/custom method)
-}
+#
+# install module to C:/Users/<user>/AppData/Local/foo on
+# windows via dot.ps1
+#
+module_target_win32="$env:APPDATA/foo"
 
-dot_install() {
-    # custom install method that will replace the default method
-    # Note: remove it if you want to use the default method
-}
-
-dot_postinstall() {
-    # custom action after install process (default/custom method)
-}
+#
+# install module to /home/<user>/.config/foo and C:/Users/<user>/.config/foo
+# on both linux (dot.sh) and windows (dot.ps1)
+#
+module_target="$HOME/.config/foo"
+module_target_win32=inherit
