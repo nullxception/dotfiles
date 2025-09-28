@@ -1,4 +1,3 @@
--- header builder for the dashboard
 local M = {}
 
 ---@class HeaderData
@@ -27,6 +26,16 @@ function M.build_header(tbl)
         end
     end
     return result
+end
+
+function M.libfzf_buildcmd()
+    if vim.fn.executable("cmake") == 1 then
+        return "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release"
+    elseif vim.fn.executable("make") == 1 then
+        return "make"
+    else
+        return nil
+    end
 end
 
 return M
