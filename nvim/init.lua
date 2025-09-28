@@ -1,1 +1,1 @@
-require('nxc')
+require("nxc")

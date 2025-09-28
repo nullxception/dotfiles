@@ -16,5 +16,5 @@ space_redirects    = false  # like -sr
 keep_padding       = true  # like -kp
 function_next_line = false  # like -fn
 
-[*.{json,yaml,yml}]
+[*.{json,yaml,yml,jsonc}]
 indent_size = 2

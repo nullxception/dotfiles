@@ -1,4 +1,3 @@
--- header builder for the dashboard
 local M = {}
 
 ---@class HeaderData
