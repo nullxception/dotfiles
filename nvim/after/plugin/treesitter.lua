@@ -3,13 +3,17 @@ if not success then
     return
 end
 
-require('nvim-treesitter.configs').setup({
+require("nvim-treesitter.configs").setup({
     ensure_installed = {
         "bash",
         "c",
         "cpp",
         "css",
         "dart",
+        "diff",
+        "git_rebase",
+        "gitcommit",
+        "gitignore",
         "go",
         "html",
         "java",
