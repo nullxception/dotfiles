@@ -13,7 +13,7 @@ $ModuleData = ".install.ps1"
 function Install-Mod($ModulePath) {
     $ModuleName = Split-Path $ModulePath -Leaf
     $ModuleRPath = Resolve-Path $ModulePath\$ModuleData -ErrorAction SilentlyContinue
-    if (![System.IO.File]::Exists($ModuleRPath)) {
+    if (!(Test-Path -Path $ModuleRPath -PathType Leaf)) {
         Return "Module $ModuleName does not exists or has no $ModuleData"
     }
 
@@ -22,7 +22,7 @@ function Install-Mod($ModulePath) {
         dot_preinstall
     }
     Write-Output "installing module $ModuleName to $module_target"
-    if (![System.IO.Directory]::Exists($module_target)) {
+    if (!(Test-Path -Path $module_target -PathType Container)) {
         New-Item -ItemType Directory -Path $module_target
     }
     Get-ChildItem -Path $ModulePath -Exclude $ModuleData,.install,README.md | Copy-Item -Destination $module_target -Recurse -Force
