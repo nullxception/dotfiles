@@ -27,6 +27,13 @@ window#waybar.hidden {
     opacity: 0.2;
 }
 
+tooltip {
+    background-color: alpha(@colorBackground, 0.95);
+    padding: 0.5rem 1.25rem;
+    border: 1px solid @color0;
+    font-size: 12px;
+}
+
 .modules-left,
 .modules-right,
 .modules-center {
@@ -88,6 +95,19 @@ window#waybar.hidden {
 
 #tray > .needs-attention {
     -gtk-icon-effect: highlight;
+}
+
+#tray menu {
+    background-color: alpha(@colorBackground, 0.95);
+    border: 1px solid @color0;
+}
+
+#tray menuitem {
+    padding: 0.5rem 1.25rem;
+}
+
+#tray menuitem:hover {
+    background-color: @colorSecondaryBackground;
 }
 
 #submap {
