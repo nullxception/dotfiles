@@ -186,6 +186,26 @@ return { ---@type LazySpec
         opts = {},
     },
     "tpope/vim-fugitive",
+    "sindrets/diffview.nvim",
+    {
+        "NeogitOrg/neogit",
+        opts = {
+            telescope_sorter = function()
+                return require("telescope").extensions.fzf.native_fzf_sorter()
+            end,
+            kind = "floating",
+            commit_editor = { kind = "floating" },
+        },
+        keys = {
+            {
+                "<leader>ng",
+                function()
+                    require("neogit").open()
+                end,
+                desc = "Neogit",
+            },
+        },
+    },
     "lambdalisue/suda.vim",
     {
         "nvim-telescope/telescope-fzf-native.nvim",
