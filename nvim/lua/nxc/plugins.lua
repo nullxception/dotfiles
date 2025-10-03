@@ -131,43 +131,21 @@ return { ---@type LazySpec
         opts = {},
     },
     {
-        "L3MON4D3/LuaSnip",
-        init = function()
-            require("luasnip.loaders.from_vscode").lazy_load()
-        end,
-    },
-    "hrsh7th/cmp-buffer",
-    "hrsh7th/cmp-path",
-    "hrsh7th/cmp-nvim-lsp",
-    "hrsh7th/cmp-nvim-lua",
-    {
-        "hrsh7th/nvim-cmp",
-        opts = function(_, o)
-            local cmp = require("cmp")
-            o.snippet = {
-                expand = function(args)
-                    vim.snippet.expand(args.body)
-                end,
-            }
-            o.window = {
-                completion = cmp.config.window.bordered(),
-                documentation = cmp.config.window.bordered(),
-            }
-            o.sources = cmp.config.sources({
-                { name = "nvim_lsp" },
-                { name = "buffer", keyword_length = 3 },
-                { name = "luasnip", keyword_length = 2 },
-                { name = "path" },
-                { name = "nvim_lua" },
-            })
-            o.mapping = cmp.mapping.preset.insert({
-                ["<C-b>"] = cmp.mapping.scroll_docs(-4),
-                ["<C-f>"] = cmp.mapping.scroll_docs(4),
-                ["<C-Space>"] = cmp.mapping.complete(),
-                ["<C-e>"] = cmp.mapping.abort(),
-                ["<CR>"] = cmp.mapping.confirm({ select = false }),
-            })
-        end,
+        "saghen/blink.cmp",
+        version = "1.*",
+        opts = {
+            keymap = {
+                preset = "super-tab",
+                ["<C-u>"] = { "scroll_signature_up", "fallback" },
+                ["<C-d>"] = { "scroll_signature_down", "fallback" },
+            },
+            completion = { documentation = { auto_show = true } },
+            signature = { enabled = true },
+            cmdline = {
+                keymap = { preset = "inherit" },
+                completion = { menu = { auto_show = true } },
+            },
+        },
     },
     {
         "akinsho/flutter-tools.nvim",
