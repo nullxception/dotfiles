@@ -1,1 +1,1 @@
-module_target="$HOME/.config/nvim"
+dest="$HOME/.config/nvim"

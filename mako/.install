@@ -1,5 +1,5 @@
-module_target="$HOME/.config/mako"
+dest="$HOME/.config/mako"
 
-dot_postinstall() {
+postinstall() {
     "${dotfiles}/bin/sync-icon-theme" mako
 }

@@ -1,5 +1,5 @@
-module_target="$HOME/.config/fontconfig/conf.d"
+dest="$HOME/.config/fontconfig/conf.d"
 
-dot_postinstall() {
+postinstall() {
     "${dotfiles}/bin/set-gtk-font" "Inter 9"
 }

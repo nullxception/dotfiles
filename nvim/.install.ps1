@@ -1,1 +1,1 @@
-$module_target = "$env:LOCALAPPDATA\nvim"
+$dest = "$env:LOCALAPPDATA\nvim"

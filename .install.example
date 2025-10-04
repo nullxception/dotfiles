@@ -1,9 +1,9 @@
-module_target="/path/to/target"
+dest="/path/to/target"
 
-dot_preinstall() {
+preinstall() {
     # custom action before install process
 }
 
-dot_postinstall() {
+postinstall() {
     # custom action after install process
 }

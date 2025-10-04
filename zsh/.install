@@ -1,1 +1,2 @@
-module_target="$HOME"
+dest="$HOME"
+

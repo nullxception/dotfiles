@@ -1,1 +1,1 @@
-module_target="$HOME/.local/bin"
+dest="$HOME/.local/bin"

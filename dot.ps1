@@ -18,24 +18,24 @@ function Install-Mod($ModulePath) {
     }
 
     . $ModuleRPath
-    if (Get-Command 'dot_preinstall' -errorAction SilentlyContinue) {
-        dot_preinstall
+    if (Get-Command 'preinstall' -errorAction SilentlyContinue) {
+        preinstall
     }
-    Write-Output "installing module $ModuleName to $module_target"
-    if (!(Test-Path -Path $module_target -PathType Container)) {
-        New-Item -ItemType Directory -Path $module_target
+    Write-Output "installing module $ModuleName to $dest"
+    if (!(Test-Path -Path $dest -PathType Container)) {
+        New-Item -ItemType Directory -Path $dest
     }
-    Get-ChildItem -Path $ModulePath -Exclude $ModuleData,.install,README.md | Copy-Item -Destination $module_target -Recurse -Force
-    if (Get-Command 'dot_postinstall' -errorAction SilentlyContinue) {
-        dot_postinstall
+    Get-ChildItem -Path $ModulePath -Exclude $ModuleData,.install,README.md | Copy-Item -Destination $dest -Recurse -Force
+    if (Get-Command 'postinstall' -errorAction SilentlyContinue) {
+        postinstall
     }
 
     # Unregister modules functions
-    if (Get-Command 'dot_preinstall' -errorAction SilentlyContinue) {
-        Remove-Item -Path Function:\dot_preinstall
+    if (Get-Command 'preinstall' -errorAction SilentlyContinue) {
+        Remove-Item -Path Function:\preinstall
     }
-    if (Get-Command 'dot_postinstall' -errorAction SilentlyContinue) {
-        Remove-Item -Path Function:\dot_postinstall
+    if (Get-Command 'postinstall' -errorAction SilentlyContinue) {
+        Remove-Item -Path Function:\postinstall
     }
 }
 

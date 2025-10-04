@@ -1,1 +1,1 @@
-$module_target = Split-Path $profile
+$dest = Split-Path $profile
