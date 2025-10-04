@@ -1,3 +1,5 @@
+[ -z "$__ENV_SOURCED" ] && source "$HOME/.zshenv"
+
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
