@@ -196,6 +196,9 @@ return { ---@type LazySpec
     {
         "wakatime/vim-wakatime",
         lazy = false,
-        opts = {},
+        opts = {
+            plugin_name = "neovim-wakatime", -- fix editor = 'unknown' issues on wakapi
+            heartbeat_frequency = 1,
+        },
     },
 }
