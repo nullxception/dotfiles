@@ -171,8 +171,6 @@ return { ---@type LazySpec
             telescope_sorter = function()
                 return require("telescope").extensions.fzf.native_fzf_sorter()
             end,
-            kind = "floating",
-            commit_editor = { kind = "floating" },
         },
         keys = {
             {
