@@ -75,8 +75,8 @@ return { ---@type LazySpec
     },
     {
         "mason-org/mason-lspconfig.nvim",
-        opts = function(_, o)
-            local servers = {
+        opts = {
+            ensure_installed = {
                 "bashls",
                 "cssls",
                 "docker_compose_language_service",
@@ -88,15 +88,8 @@ return { ---@type LazySpec
                 "ts_ls",
                 "vimls",
                 "yamlls",
-            }
-
-            if vim.fn.has("win32") ~= 1 then
-                -- kotlin_lsp is not supported on windows yet
-                table.insert(servers, "kotlin_lsp")
-            end
-
-            o.ensure_installed = servers
-        end,
+            },
+        },
     },
     {
         "stevearc/conform.nvim",

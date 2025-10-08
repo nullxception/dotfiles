@@ -16,3 +16,7 @@ vim.lsp.config.lua_ls = {
         },
     },
 }
+
+if vim.fn.executable("kotlin-lsp") ~= nil then
+    vim.lsp.enable("kotlin_lsp")
+end
