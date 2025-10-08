@@ -1,3 +1,9 @@
+# fix armbian bug where $PATH on .zshenv is getting overwritten
+# by armbian's /etc/profile
+if [ "${#PATH}" -lt "${#_zenvpath}" ]; then
+    export PATH="$_zenvpath:$PATH"
+fi
+
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 

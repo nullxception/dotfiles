@@ -67,4 +67,4 @@ if [ ! -e "$SSH_AUTH_SOCK" ]; then
     fi
 fi
 
-
+export _zenvpath="$PATH"
