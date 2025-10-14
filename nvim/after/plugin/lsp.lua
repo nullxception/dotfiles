@@ -20,3 +20,13 @@ vim.lsp.config.lua_ls = {
 if vim.fn.executable("kotlin-lsp") ~= nil then
     vim.lsp.enable("kotlin_lsp")
 end
+
+vim.lsp.config.jsonls = {
+    settings = {
+        json = {
+            format = { enable = true },
+            validate = { enable = true },
+            schemas = require("schemastore").json.schemas(),
+        },
+    },
+}

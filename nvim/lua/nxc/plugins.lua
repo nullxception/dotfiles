@@ -70,9 +70,8 @@ return { ---@type LazySpec
         build = ":TSUpdate",
         branch = "master",
     },
-    {
-        "neovim/nvim-lspconfig",
-    },
+    "b0o/schemastore.nvim",
+    "neovim/nvim-lspconfig",
     {
         "mason-org/mason.nvim",
         opts = {
@@ -100,6 +99,9 @@ return { ---@type LazySpec
     {
         "stevearc/conform.nvim",
         opts = function(_, o)
+            o.default_format_opts = {
+                lsp_format = "fallback"
+            }
             o.formatters_by_ft = {
                 sh = { "shfmt" },
                 lua = { "stylua" },
