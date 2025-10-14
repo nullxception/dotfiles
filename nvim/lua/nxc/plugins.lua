@@ -126,13 +126,25 @@ return { ---@type LazySpec
     {
         "saghen/blink.cmp",
         version = "1.*",
+        event = { "InsertEnter", "CmdlineEnter" },
         opts = {
             keymap = {
                 preset = "super-tab",
                 ["<C-u>"] = { "scroll_signature_up", "fallback" },
                 ["<C-d>"] = { "scroll_signature_down", "fallback" },
             },
-            completion = { documentation = { auto_show = true } },
+            completion = {
+                documentation = {
+                    auto_show = true,
+                    auto_show_delay_ms = 150,
+                },
+                ghost_text = { enabled = true },
+                menu = {
+                    draw = {
+                        treesitter = { "lsp" },
+                    },
+                },
+            },
             signature = { enabled = true },
             cmdline = {
                 keymap = { preset = "inherit" },
