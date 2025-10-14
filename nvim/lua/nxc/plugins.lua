@@ -58,7 +58,13 @@ return { ---@type LazySpec
         opts = require("nxc.dashboard"),
     },
     { "nvim-lua/plenary.nvim", lazy = true },
-    { "nvim-tree/nvim-web-devicons", lazy = true },
+    {
+        "nvim-mini/mini.icons",
+        version = false,
+        init = function()
+            require("mini.icons").mock_nvim_web_devicons()
+        end,
+    },
     {
         "nvim-treesitter/nvim-treesitter",
         build = ":TSUpdate",
@@ -142,6 +148,24 @@ return { ---@type LazySpec
                 menu = {
                     draw = {
                         treesitter = { "lsp" },
+                        components = {
+                            kind_icon = {
+                                text = function(ctx)
+                                    local kind_icon, _, _ = require("mini.icons").get("lsp", ctx.kind)
+                                    return kind_icon
+                                end,
+                                highlight = function(ctx)
+                                    local _, hl, _ = require("mini.icons").get("lsp", ctx.kind)
+                                    return hl
+                                end,
+                            },
+                            kind = {
+                                highlight = function(ctx)
+                                    local _, hl, _ = require("mini.icons").get("lsp", ctx.kind)
+                                    return hl
+                                end,
+                            },
+                        },
                     },
                 },
             },
