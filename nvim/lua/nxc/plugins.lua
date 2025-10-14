@@ -192,4 +192,26 @@ return { ---@type LazySpec
             heartbeat_frequency = 1,
         },
     },
+    {
+        "nvim-mini/mini.indentscope",
+        version = false,
+        opts = {
+            symbol = "│",
+            options = { try_as_border = true },
+        },
+        init = function()
+            vim.api.nvim_create_autocmd("FileType", {
+                pattern = {
+                    "dashboard",
+                    "fzf",
+                    "help",
+                    "lazy",
+                    "mason",
+                },
+                callback = function()
+                    vim.b.miniindentscope_disable = true
+                end,
+            })
+        end,
+    },
 }
