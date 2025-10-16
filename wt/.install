@@ -1,0 +1,1 @@
+module_target_win32="$env:LOCALAPPDATA/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState"

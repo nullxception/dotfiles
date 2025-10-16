@@ -1,1 +1,2 @@
 module_target="$HOME/.config/wezterm"
+module_target_win32="inherit"
