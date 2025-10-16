@@ -1,2 +1,12 @@
-module_target="/path/to/target"
+module_target="/path/to/dir"
 
+# Use `module_target_win32="path/to/dir"` to deploy it using dot.ps1 on
+# windows via powershell, example:
+#
+# module_target_win32="$env:APPDATA/nvim"
+
+# Use `module_target_win32=inherit` if module_target can
+# be used on win32 as well, example:
+#
+# module_target="$HOME/.config/wezterm"
+# module_target_win32=inherit # automatically expanded into C:/Users/foo/.config/wezterm

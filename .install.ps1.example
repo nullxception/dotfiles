@@ -1,9 +1,0 @@
-$module_target = "Z:\path\to\files"
-
-function dot_preinstall {
-    # custom action before install process (default/custom method)
-}
-
-function dot_postinstall {
-    # custom action after install process (default/custom method)
-}
