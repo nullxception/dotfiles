@@ -1,1 +1,2 @@
 module_target="$HOME/.config/fastfetch"
+module_target_win32="inherit"
