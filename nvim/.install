@@ -1,1 +1,2 @@
 module_target="$HOME/.config/nvim"
+module_target_win32="$env:LOCALAPPDATA/nvim"
