@@ -10,6 +10,29 @@ Set-PSReadLineOption -Colors @{
     "Operator"  = [ConsoleColor]::DarkYellow
     "Command"   = [ConsoleColor]::DarkBlue
 }
+Set-PSReadLineKeyHandler -Key "Ctrl+l" -ScriptBlock {
+    $hasGit = Get-Command git -ErrorAction SilentlyContinue
+    $hasFzf = Get-Command fzf -ErrorAction SilentlyContinue
+    if (-not ($hasGit -and $hasFzf)) {
+        return
+    }
+    $isGitTree =  git rev-parse --is-inside-work-tree 2>$null
+    if (-not $isGitTree) {
+        return
+    }
+    $item = (
+        git for-each-ref --format="%(refname:short)|BRANCH" refs/heads |
+            git for-each-ref --format="%(refname:short)|TAG" refs/tags |
+            git log --oneline --decorate=short --color=always |
+            fzf --ansi --prompt="Git > " --preview "git show --color=always {1}"
+    )
+
+    if ($item) {
+        $ref = ($item -split '\|')[0]
+        [Microsoft.PowerShell.PSConsoleReadLine]::Insert(($ref -split ' ')[0])
+    }
+}
+
 
 #
 # Autocomplete
