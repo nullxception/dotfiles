@@ -1,4 +1,6 @@
+---@type Wezterm
 local wezterm = require("wezterm")
+---@type Config
 local config = wezterm.config_builder()
 local cherry = require("cherry")
 

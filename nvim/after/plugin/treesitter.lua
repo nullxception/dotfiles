@@ -30,6 +30,9 @@ require("nvim-treesitter.configs").setup({
         "typescript",
         "yaml",
     },
+    modules = {},
+    sync_install = false,
+    ignore_install = {},
     auto_install = true,
     highlight = {
         enable = true,

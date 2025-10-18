@@ -1,9 +1,13 @@
 local utils = require("nxc.utils")
 
-return { ---@type LazySpec
+---@module "lazy"
+---@type LazySpec
+return {
     {
         "folke/tokyonight.nvim",
         priority = 1000,
+        ---@module "tokyonight"
+        ---@type tokyonight.Config
         opts = {
             style = "night",
             styles = {
@@ -29,7 +33,10 @@ return { ---@type LazySpec
     {
         "rcarriga/nvim-notify",
         priority = 999,
+        ---@module "notify"
+        ---@type notify.Config
         opts = {
+            merge_duplicates = true,
             render = "wrapped-compact",
             stages = "static",
             timeout = 2500,
@@ -74,12 +81,16 @@ return { ---@type LazySpec
     "neovim/nvim-lspconfig",
     {
         "mason-org/mason.nvim",
+        ---@module "mason"
+        ---@type MasonSettings
         opts = {
             ui = { border = "single" },
         },
     },
     {
         "mason-org/mason-lspconfig.nvim",
+        ---@module "mason-lspconfig"
+        ---@type MasonLspconfigSettings
         opts = {
             ensure_installed = {
                 "bashls",
@@ -98,9 +109,11 @@ return { ---@type LazySpec
     },
     {
         "stevearc/conform.nvim",
+        ---@module "conform"
+        ---@param o conform.setupOpts
         opts = function(_, o)
             o.default_format_opts = {
-                lsp_format = "fallback"
+                lsp_format = "fallback",
             }
             o.formatters_by_ft = {
                 sh = { "shfmt" },
@@ -132,10 +145,39 @@ return { ---@type LazySpec
         opts = {},
     },
     {
+        "DrKJeff16/wezterm-types",
+        lazy = true,
+        version = false,
+    },
+    {
+        "folke/lazydev.nvim",
+        ft = "lua",
+        ---@module "lazydev"
+        ---@type lazydev.Config
+        opts = {
+            library = {
+                { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+                { path = "wezterm-types", mods = { "wezterm" } },
+            },
+        },
+    },
+    {
         "saghen/blink.cmp",
         version = "1.*",
         event = { "InsertEnter", "CmdlineEnter" },
+        ---@module "blink-cmp"
+        ---@type blink.cmp.Config
         opts = {
+            sources = {
+                default = { "lazydev", "lsp", "path", "snippets", "buffer" },
+                providers = {
+                    lazydev = {
+                        name = "LazyDev",
+                        module = "lazydev.integrations.blink",
+                        score_offset = 100,
+                    },
+                },
+            },
             keymap = {
                 preset = "super-tab",
                 ["<C-u>"] = { "scroll_signature_up", "fallback" },
@@ -171,7 +213,12 @@ return { ---@type LazySpec
                     },
                 },
             },
-            signature = { enabled = true },
+            signature = {
+                enabled = true,
+                window = {
+                    show_documentation = false,
+                },
+            },
             cmdline = {
                 keymap = { preset = "inherit" },
                 completion = { menu = { auto_show = true } },
@@ -198,6 +245,8 @@ return { ---@type LazySpec
     "sindrets/diffview.nvim",
     {
         "NeogitOrg/neogit",
+        ---@module "neogit"
+        ---@type NeogitConfig
         opts = {
             telescope_sorter = function()
                 return require("telescope").extensions.fzf.native_fzf_sorter()
