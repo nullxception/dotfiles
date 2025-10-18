@@ -1,13 +1,26 @@
 {
   "$help": "https://aka.ms/terminal-documentation",
   "$schema": "https://aka.ms/terminal-profiles-schema",
-  "actions": [],
   "copyOnSelect": true,
   "defaultProfile": "{bbdc567f-7730-44a3-92b9-1bad5977c7e3}",
   "disableAnimations": true,
   "initialCols": 90,
   "initialRows": 23,
-  "keybindings": [],
+  "keybindings": [
+    {
+      "id": "Terminal.CtrlSpaceWorkaround",
+      "keys": "ctrl+space"
+    }
+  ],
+  "actions": [
+    {
+      "command": {
+        "action": "sendInput",
+        "input": "\u001b[32;5u"
+      },
+      "id": "Terminal.CtrlSpaceWorkaround"
+    }
+  ],
   "newTabMenu": [
     {
       "type": "remainingProfiles"

@@ -22,6 +22,14 @@ if wezterm.target_triple == "x86_64-pc-windows-msvc" then
     config.win32_system_backdrop = "Acrylic"
     config.window_background_opacity = 0.8
     config.default_prog = { "pwsh.exe", "-NoLogo" }
+    config.keys = {
+        -- workaround for <C-space> not working on nvim
+        {
+            key = " ",
+            mods = "CTRL",
+            action = wezterm.action.SendKey({ key = " ", mods = "CTRL" }),
+        },
+    }
 else
     config.window_background_opacity = 0.95
 end
