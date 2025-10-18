@@ -12,7 +12,7 @@ return {
             {
                 icon = "󰮗 ",
                 icon_hl = "Title",
-                desc = "findfiles",
+                desc = "find files",
                 key = "f",
                 keymap = "<leader>ff",
                 action = "Telescope find_files",
@@ -20,15 +20,15 @@ return {
             {
                 icon = "󱎸 ",
                 icon_hl = "Title",
-                desc = "livegrep",
-                key = "g",
-                keymap = "<leader>lg",
+                desc = "find string",
+                key = "s",
+                keymap = "<leader>fg",
                 action = "Telescope live_grep",
             },
             {
                 icon = "󱀼 ",
                 icon_hl = "Title",
-                desc = "oldfiles",
+                desc = "old files",
                 key = "o",
                 keymap = "<leader>fo",
                 action = "Telescope oldfiles",
@@ -36,10 +36,20 @@ return {
             {
                 icon = "󱏒 ",
                 icon_hl = "Title",
-                desc = "filebrowser",
+                desc = "browse file",
                 key = "b",
                 keymap = "<leader>fb",
                 action = "Telescope file_browser",
+            },
+            {
+                icon = " ",
+                icon_hl = "Title",
+                desc = "neogit",
+                key = "g",
+                keymap = "<leader>gg",
+                action = function()
+                    require("neogit").open()
+                end,
             },
         },
         footer = {},

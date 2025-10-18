@@ -1,22 +1,34 @@
-vim.keymap.set("n", "<Esc><Esc>", "<Esc>:nohlsearch<CR>", { silent = true })
-
 vim.api.nvim_create_autocmd("LspAttach", {
     desc = "LSP actions",
-    callback = function(event)
-        local opts = { buffer = event.buf }
+    callback = function(ev)
+        local vk = vim.keymap
+        local b = vim.lsp.buf
 
-        vim.keymap.set("n", "K", "<cmd>lua vim.lsp.buf.hover()<cr>", opts)
-        vim.keymap.set("n", "gd", "<cmd>lua vim.lsp.buf.definition()<cr>", opts)
-        vim.keymap.set("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<cr>", opts)
-        vim.keymap.set("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<cr>", opts)
-        vim.keymap.set("n", "go", "<cmd>lua vim.lsp.buf.type_definition()<cr>", opts)
-        vim.keymap.set("n", "gr", "<cmd>lua vim.lsp.buf.references()<cr>", opts)
-        vim.keymap.set("n", "gs", "<cmd>lua vim.lsp.buf.signature_help()<cr>", opts)
-        vim.keymap.set({ "n", "i" }, "<F2>", "<cmd>lua vim.lsp.buf.rename()<cr>", opts)
-        vim.keymap.set({ "n", "i" }, "<F4>", "<cmd>lua vim.lsp.buf.code_action()<cr>", opts)
+        vk.set("n", "K", b.hover, { buffer = ev.buf, desc = "Hover" })
+        vk.set("n", "gd", b.definition, { buffer = ev.buf, desc = "Go to definition" })
+        vk.set("n", "gD", b.declaration, { buffer = ev.buf, desc = "Go to declaration" })
+        vk.set("n", "gi", b.implementation, { buffer = ev.buf, desc = "Go to implementation" })
+        vk.set("n", "go", b.type_definition, { buffer = ev.buf, desc = "Go to type definition" })
+        vk.set("n", "gr", b.references, { buffer = ev.buf, desc = "References", nowait = true })
+        vk.set("n", "gs", b.signature_help, { buffer = ev.buf, desc = "Signatures" })
+        vk.set({ "n", "i" }, "<F2>", b.rename, { buffer = ev.buf, desc = "Rename" })
+        vk.set({ "n", "i" }, "<F4>", b.code_action, { buffer = ev.buf, desc = "Code action" })
     end,
 })
 
-vim.keymap.set({ "n", "t", "i" }, "<A-`>", function()
-    require("nxc.term").toggle()
-end, { silent = true })
+local telescope = require("telescope")
+local builtin = require("telescope.builtin")
+local term = require("nxc.term")
+local wk = require("which-key")
+wk.add({
+    { "<Esc><Esc>", "<Esc>:nohlsearch<CR>", mode = "n", silent = true, hidden = true },
+    { "<A-`>", term.toggle, mode = { "n", "t", "i" }, silent = true, desc = "Open terminal" },
+    { "<leader>f", group = "Files", mode = "n" },
+    { "<leader>ff", builtin.find_files, mode = "n", desc = "Find by name" },
+    { "<leader>fg", builtin.live_grep, mode = "n", desc = "Grep string" },
+    { "<leader>fG", builtin.git_files, mode = "n", desc = "Git files" },
+    { "<leader>fb", telescope.extensions.file_browser.file_browser, mode = "n", desc = "Browse file" },
+    { "<leader>fo", builtin.oldfiles, mode = "n", desc = "Old files" },
+    { "<leader>h", builtin.help_tags, mode = "n", desc = "Help" },
+    { "<leader>b", builtin.buffers, mode = "n", desc = "Buffers" },
+})

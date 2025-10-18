@@ -249,17 +249,11 @@ return {
         ---@type NeogitConfig
         opts = {
             telescope_sorter = function()
-                return require("telescope").extensions.fzf.native_fzf_sorter()
+                require("telescope").extensions.fzf.native_fzf_sorter()
             end,
         },
         keys = {
-            {
-                "<leader>ng",
-                function()
-                    require("neogit").open()
-                end,
-                desc = "Neogit",
-            },
+            { "<leader>gg", function() require("neogit").open() end, desc = "NeoGit" },
         },
     },
     "lambdalisue/suda.vim",
@@ -300,5 +294,25 @@ return {
                 end,
             })
         end,
+    },
+    {
+        "folke/which-key.nvim",
+        event = "VeryLazy",
+        ---@module "which-key"
+        ---@type wk.Opts
+        opts = {
+            win = {
+                border = "rounded",
+            },
+        },
+        keys = {
+            {
+                "<leader>?",
+                function()
+                    require("which-key").show({ global = false })
+                end,
+                desc = "Buffer Local Keymaps",
+            },
+        },
     },
 }
