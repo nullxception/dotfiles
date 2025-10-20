@@ -41,10 +41,16 @@ winget install jftuga.less
 winget install junegunn.fzf
 winget install sharkdp.bat
 winget install jstarks.npiperelay
+winget install GnuWin32.gzip
+winget install GnuWin32.unzip
 
 if ($env:PATH -notlike "*7-Zip*") {
     Register-Path -At "C:\Program Files\7-Zip" -Scope User
 }
+if ($env:PATH -notlike "*GnuWin32*") {
+    Register-Path -At "C:\Program Files (x86)\GnuWin32\bin\" -Scope User
+}
+
 Update-CurrentEnv
 gsudo config CacheMode Auto
 Set-GitDefaults
