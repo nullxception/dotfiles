@@ -1,10 +1,12 @@
 ---@module "lazy"
 ---@type LazySpec
 return {
-    "lambdalisue/suda.vim",
+    {
+        "lambdalisue/suda.vim",
+        cmd = { "SudaRead", "SudaWrite" },
+    },
     {
         "wakatime/vim-wakatime",
-        lazy = true,
         event = { "BufReadPost", "BufWritePost" },
         opts = {
             plugin_name = "neovim-wakatime", -- fix editor = 'unknown' issues on wakapi
@@ -13,7 +15,6 @@ return {
     },
     {
         "vyfor/cord.nvim",
-        lazy = true,
         event = { "BufReadPost", "BufWritePost" },
         build = ":Cord update",
         ---@module "cord"
