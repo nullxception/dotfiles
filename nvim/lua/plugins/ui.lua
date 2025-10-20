@@ -9,6 +9,10 @@ return {
         ---@type snacks.Config
         opts = {
             picker = {},
+            notifier = {
+                top_down = false,
+                margin = { bottom = 2 },
+            },
         },
     },
     {
@@ -16,22 +20,6 @@ return {
         version = false,
         init = function()
             require("mini.icons").mock_nvim_web_devicons()
-        end,
-    },
-    {
-        "rcarriga/nvim-notify",
-        priority = 999,
-        ---@module "notify"
-        ---@type notify.Config
-        opts = {
-            merge_duplicates = true,
-            render = "wrapped-compact",
-            stages = "static",
-            timeout = 2500,
-            top_down = false,
-        },
-        init = function()
-            vim.notify = require("notify")
         end,
     },
     {
