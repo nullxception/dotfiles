@@ -1,48 +1,95 @@
+function ensure_tscli(cb)
+    if vim.fn.executable("tree-sitter") == 1 then
+        cb()
+    end
+
+    local reg = require("mason-registry")
+    reg.refresh()
+    if not reg.has_package("tree-sitter-cli") then
+        return
+    end
+
+    local tscli = reg.get_package("tree-sitter-cli")
+    tscli:install(nil, function(success, _)
+        if not success then
+            return
+        end
+        vim.schedule(cb)
+    end)
+end
+
+function install_missing(ensure_installed)
+    if vim.fn.executable("tree-sitter") ~= 1 then
+        vim.notify("tree-sitter-cli is not installed, cannot install tree-sitter parsers", vim.log.levels.WARN)
+        return
+    end
+    if vim.fn.has("win32") == 1 and vim.fn.executable("gcc") == 1 then
+        vim.env.CC = "gcc"
+    end
+
+    local config = require("nvim-treesitter.config")
+    local installed = config.get_installed("parsers")
+    local missing = vim.tbl_filter(function(parser)
+        return not vim.tbl_contains(installed, parser)
+    end, ensure_installed)
+
+    if #missing > 0 then
+        require("nvim-treesitter").install(missing):await(vim.schedule(function()
+            vim.notify(#missing .. " parser(s) has been installed", vim.log.levels.INFO)
+        end))
+    end
+end
+
 ---@module "lazy"
 ---@type LazySpec
 return {
     {
         "nvim-treesitter/nvim-treesitter",
-        build = ":TSUpdate",
-        branch = "master",
-        config = function()
-            require("nvim-treesitter.configs").setup({
-                ensure_installed = {
-                    "bash",
-                    "c",
-                    "cpp",
-                    "css",
-                    "dart",
-                    "diff",
-                    "git_rebase",
-                    "gitcommit",
-                    "gitignore",
-                    "go",
-                    "html",
-                    "java",
-                    "javascript",
-                    "json",
-                    "kotlin",
-                    "lua",
-                    "markdown",
-                    "python",
-                    "rasi",
-                    "scss",
-                    "toml",
-                    "tsx",
-                    "typescript",
-                    "yaml",
-                },
-                modules = {},
-                sync_install = false,
-                ignore_install = {},
-                auto_install = true,
-                highlight = {
-                    enable = true,
-                },
-                indent = {
-                    enable = true,
-                },
+        build = {
+            require("mason").setup({}),
+            ":TSUpdate",
+        },
+        branch = "main",
+        opts = {
+            ensure_installed = {
+                "bash",
+                "c",
+                "cpp",
+                "css",
+                "dart",
+                "diff",
+                "git_rebase",
+                "gitcommit",
+                "gitignore",
+                "go",
+                "html",
+                "java",
+                "javascript",
+                "json",
+                "kotlin",
+                "lua",
+                "markdown",
+                "python",
+                "rasi",
+                "scss",
+                "toml",
+                "tsx",
+                "typescript",
+                "yaml",
+            },
+        },
+        config = function(_, opts)
+            ensure_tscli(function()
+                install_missing(opts.ensure_installed)
+            end)
+
+            vim.api.nvim_create_autocmd("FileType", {
+                callback = function(cb)
+                    -- highlight
+                    pcall(vim.treesitter.start, cb.buf)
+                    -- indentation
+                    vim.bo[cb.buf].indentexpr = "v:lua.require('nvim-treesitter').indentexpr()"
+                end,
             })
         end,
     },
