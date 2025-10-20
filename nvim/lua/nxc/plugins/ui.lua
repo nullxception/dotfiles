@@ -2,7 +2,15 @@
 ---@type LazySpec
 return {
     "nvim-lua/popup.nvim",
-    { "stevearc/dressing.nvim", lazy = true },
+    {
+        "folke/snacks.nvim",
+        priority = 1000,
+        ---@module "snacks"
+        ---@type snacks.Config
+        opts = {
+            picker = {},
+        },
+    },
     {
         "nvim-mini/mini.icons",
         version = false,
