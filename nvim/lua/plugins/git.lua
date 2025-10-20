@@ -1,7 +1,11 @@
 ---@module "lazy"
 ---@type LazySpec
 return {
-    "tpope/vim-fugitive",
+    {
+        "tpope/vim-fugitive",
+        event = { "CmdlineEnter" },
+    },
+
     "sindrets/diffview.nvim",
     {
         "NeogitOrg/neogit",
