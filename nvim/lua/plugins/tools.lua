@@ -15,7 +15,7 @@ return {
     },
     {
         "vyfor/cord.nvim",
-        event = { "BufReadPost", "BufWritePost" },
+        event = "VeryLazy",
         build = ":Cord update",
         ---@module "cord"
         ---@type CordConfig
