@@ -23,8 +23,20 @@ function install_missing(ensure_installed)
         vim.notify("tree-sitter-cli is not installed, cannot install tree-sitter parsers", vim.log.levels.WARN)
         return
     end
-    if vim.fn.has("win32") == 1 and vim.fn.executable("gcc") == 1 then
-        vim.env.CC = "gcc"
+
+    if vim.fn.has("win32") == 1 then
+        local has_cc = 0
+        if vim.fn.executable("gcc") == 1 then
+            has_cc = 1
+            vim.env.CC = "gcc"
+        elseif vim.fn.executable("cl.exe") == 1 then
+            has_cc = 1
+        end
+
+        if has_cc == 0 then
+            vim.notify("no compatible CC installed for tree-sitter", vim.log.levels.ERROR)
+            return
+        end
     end
 
     local config = require("nvim-treesitter.config")
@@ -34,9 +46,9 @@ function install_missing(ensure_installed)
     end, ensure_installed)
 
     if #missing > 0 then
-        require("nvim-treesitter").install(missing):await(vim.schedule(function()
+        require("nvim-treesitter").install(missing):await(function()
             vim.notify(#missing .. " parser(s) has been installed", vim.log.levels.INFO)
-        end))
+        end)
     end
 end
 
@@ -45,10 +57,10 @@ end
 return {
     {
         "nvim-treesitter/nvim-treesitter",
-        build = {
-            require("mason").setup({}),
-            ":TSUpdate",
+        dependencies = {
+            { "mason-org/mason.nvim", opts = {} },
         },
+        build = ":TSUpdate",
         branch = "main",
         opts = {
             ensure_installed = {
