@@ -13,6 +13,19 @@ return {
                 top_down = false,
                 margin = { bottom = 2 },
             },
+            terminal = {
+                win = { height = 0.25 },
+            },
+        },
+        keys = {
+            {
+                "<A-`>",
+                function()
+                    Snacks.terminal()
+                end,
+                desc = "Toggle Terminal",
+                mode = { "n", "t", "i" },
+            },
         },
     },
     {
