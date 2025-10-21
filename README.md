@@ -21,10 +21,10 @@ This dotfiles is grouped by module or package, you can just run [./dot.sh](dot.s
 ./dot.sh <package>
 ```
 
-for example, installing waybar and gtklock config
+for example, installing waybar and rofi config
 
 ```bash
-./dot.sh waybar gtklock
+./dot.sh waybar rofi
 ```
 
 ## About [./dot.sh](dot.sh)
@@ -42,13 +42,13 @@ For complete example, take a look at [.install.example](.install.example).
 | ----------------------------------------------- |
 | ![hyprland setup](.github/assets/hyprland.webp) |
 
+| hyprlock                                        |
+| ----------------------------------------------- |
+| ![hyprlock setup](.github/assets/hyprlock.webp) |
+
 | rofi session menu                                      |
 | ------------------------------------------------------ |
 | ![rofi session menu](.github/assets/rofi-session.webp) |
-
-| gtklock                                 |
-| --------------------------------------- |
-| ![gtklock](.github/assets/gtklock.webp) |
 
 # license
 

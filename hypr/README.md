@@ -1,4 +1,5 @@
 ![hyprland preview](../.github/assets/hyprland.webp)
+![hyprlock preview](../.github/assets/hyprlock.webp)
 
 # Hyprland setup
 
@@ -17,7 +18,7 @@ Here's the list of software and script that used on this setup
 | [../bin/subs-volume](../bin/subs-volume)             | Volume notifier           | --                                                     |
 | [../bin/watch-waybar-conf](../bin/watch-waybar-conf) | waybar auto reloader      | --                                                     |
 | swayidle                                             | Idle daemon               | --                                                     |
-| gtklock                                              | Lock Screen               | [../gtklock](../gtklock)                               |
+| hyprlock                                             | Lock Screen               | [hyprlock.conf](hyprlock.conf)                         |
 | grimblast                                            | Screenshot script         | --                                                     |
 
 # Installation
@@ -30,7 +31,7 @@ You can copy the necessary files into your own config dirs, or deploy the config
 #
 
 # Deploy hyprland and other configs
-./dot.sh hypr waybar mako rofi gtklock
+./dot.sh hypr waybar mako rofi
 
 # Install needed scripts to your bin
 install -m 755 bin/rofi-session ~/.local/bin
