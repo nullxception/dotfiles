@@ -26,13 +26,6 @@ return {
             local wk = require("which-key")
             wk.add({
                 { "<Esc><Esc>", "<Esc>:nohlsearch<CR>", mode = "n", silent = true, hidden = true },
-                {
-                    "<A-`>",
-                    require("nxc.term").toggle,
-                    mode = { "n", "t", "i" },
-                    silent = true,
-                    desc = "Open terminal",
-                },
                 { "<leader>ff", builtin.find_files, mode = "n", desc = "Find files" },
                 { "<leader>fg", builtin.live_grep, mode = "n", desc = "Live grep" },
                 { "<leader>fG", builtin.git_files, mode = "n", desc = "Git files" },

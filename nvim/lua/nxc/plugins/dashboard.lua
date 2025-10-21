@@ -55,6 +55,16 @@ return {
                         keymap = "<leader>ng",
                         action = "Neogit",
                     },
+                    {
+                        icon = " ",
+                        icon_hl = "Title",
+                        desc = "terminal",
+                        key = "`",
+                        keymap = "<A-`>",
+                        action = function()
+                            require("snacks").terminal()
+                        end,
+                    },
                 },
                 footer = {},
             },
