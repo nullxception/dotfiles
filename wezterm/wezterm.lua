@@ -23,7 +23,11 @@ config.window_padding = {
 if wezterm.target_triple == "x86_64-pc-windows-msvc" then
     config.win32_system_backdrop = "Acrylic"
     config.window_background_opacity = 0.8
-    config.default_prog = { "pwsh.exe", "-NoLogo" }
+    if #wezterm.glob("C:/Prog*/PowerSh*/*/pwsh.exe") > 0 then
+        config.default_prog = { "pwsh.exe", "-NoLogo" }
+    else
+        config.default_prog = { "powershell.exe", "-NoLogo" }
+    end
     config.keys = {
         -- workaround for <C-space> not working on nvim
         {
