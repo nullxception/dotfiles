@@ -7,6 +7,7 @@ return {
     },
     {
         "wakatime/vim-wakatime",
+        dependencies = { "folke/snacks.nvim" },
         event = { "BufReadPost", "BufWritePost" },
         opts = {
             plugin_name = "neovim-wakatime", -- fix editor = 'unknown' issues on wakapi
