@@ -18,7 +18,9 @@ function ensure_tscli(cb)
     end)
 end
 
-function install_missing(ensure_installed)
+---@param languages string[]
+---@param opts InstallOptions
+function install_missing(languages, opts)
     if vim.fn.executable("tree-sitter") ~= 1 then
         vim.notify("tree-sitter-cli is not installed, cannot install tree-sitter parsers", vim.log.levels.WARN)
         return
@@ -43,12 +45,10 @@ function install_missing(ensure_installed)
     local installed = config.get_installed("parsers")
     local missing = vim.tbl_filter(function(parser)
         return not vim.tbl_contains(installed, parser)
-    end, ensure_installed)
+    end, languages)
 
     if #missing > 0 then
-        require("nvim-treesitter").install(missing):await(function()
-            vim.notify(#missing .. " parser(s) has been installed", vim.log.levels.INFO)
-        end)
+        require("nvim-treesitter").install(missing, opts)
     end
 end
 
@@ -91,8 +91,9 @@ return {
             },
         },
         config = function(_, opts)
+            opts = opts or {}
             ensure_tscli(function()
-                install_missing(opts.ensure_installed)
+                install_missing(opts.ensure_installed, { summary = true })
             end)
 
             vim.api.nvim_create_autocmd("FileType", {
