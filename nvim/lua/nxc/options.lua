@@ -38,3 +38,11 @@ vim.cmd([[
     filetype plugin indent on
     syntax on
 ]])
+
+if vim.fn.has("win32") == 1 then
+    if vim.fn.executable("pwsh") == 1 then
+        vim.o.shell = "pwsh -NoLogo"
+    elseif vim.fn.executable("powershell") == 1 then
+        vim.o.shell = "powershell -NoLogo"
+    end
+end
