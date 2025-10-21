@@ -6,7 +6,7 @@
     CompanyName       = 'Chaldeaprjkt'
     Description       = 'Set of utilities for modifying environment variables'
     Copyright         = '(c) Chaldeaprjkt. All rights reserved.'
-    FunctionsToExport = @("Register-Path", "Register-Env", "Update-CurrentEnv")
+    FunctionsToExport = @('Register-Path', 'Register-Env', 'Update-CurrentEnv', 'Optimize-UserPath')
     CmdletsToExport   = @()
     VariablesToExport = '*'
     AliasesToExport   = @()
