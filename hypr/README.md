@@ -17,7 +17,7 @@ Here's the list of software and script that used on this setup
 | rofi-polkit-agent                                    | Polkit agent              | --                                                     |
 | [../bin/subs-volume](../bin/subs-volume)             | Volume notifier           | --                                                     |
 | [../bin/watch-waybar-conf](../bin/watch-waybar-conf) | waybar auto reloader      | --                                                     |
-| swayidle                                             | Idle daemon               | --                                                     |
+| hyridle                                              | Idle daemon               | [hypridle.conf](hypridle.conf)                         |
 | hyprlock                                             | Lock Screen               | [hyprlock.conf](hyprlock.conf)                         |
 | grimblast                                            | Screenshot script         | --                                                     |
 
