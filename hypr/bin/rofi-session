@@ -10,16 +10,9 @@
 rf_item() {
     local text="$2"
     local item="$text"
-    if [ "$icon" = "font" ]; then
-        item="\u200e$1"
-        if [ "$label" = "true" ]; then
-            item+=" \u2068$text\u2069"
-        fi
-    else
-        item="\u200e"
-        if [ "$label" = "true" ]; then
-            item+="$text"
-        fi
+    item="\u200e"
+    if [ "$label" = "true" ]; then
+        item+="$text"
     fi
     printf "$item"
 }
@@ -39,10 +32,11 @@ rf_opt() {
 get_icon() {
     case "$icon" in
     "font")
-        printf "${icon[$1]#*,}" | xargs
+        color="${icon_color:-white}"
+        printf "<span color=\"$color\">${icon[$1]#*, }</span>"
         ;;
     "true")
-        printf "${icon[$1]%,*}" | xargs
+        printf "${icon[$1]%,*}"
         ;;
     *)
         printf ""
@@ -112,6 +106,7 @@ gen_config() {
 #
 
 # icon=$icon
+# icon_color="${icon_color:-#ffffff}" # will only be used if icon=font
 # choices=${list_choices%:}
 # label=$label
 # theme=/path/to/theme.rasi
@@ -149,6 +144,9 @@ Available options:
                                 your font instead of desktop icon pack (requires
                                 nerd-patched font).
 
+      --icon-color "<color>"    Tint icon symbol with pango-compatible color format.
+                                note that this option only support tinting icon=font
+
   -l, --label true|false        Enable or disable label for the choices.
 
   -h,--help                     Show this help text.
@@ -159,6 +157,7 @@ Configuration
     Valid variables are :
 
     icon=true|font|false
+    icon_color="#ffffff" # will only be used when icon=font
     choices=CHOICES
     label=true|false
     theme=/path/to/theme.rasi
@@ -239,7 +238,7 @@ need_prompt=(logout reboot shutdown)
 icon=true
 label=true
 
-parsed=$(getopt --options=hsc:i:l: --longoptions=help,show,choices:,icon:,label:,config: --name "$0" -- "$@")
+parsed=$(getopt --options=hsc:i:l: --longoptions=help,show,choices:,icon:,label:,config:,icon-color: --name "$0" -- "$@")
 if [ $? -ne 0 ]; then
     echo 'Invalid argument, exiting.' >&2
     exit 1
@@ -260,6 +259,10 @@ while true; do
         ;;
     -i | --icon)
         arg_icon="$2"
+        shift 2
+        ;;
+    --icon-color)
+        arg_icon_color="$2"
         shift 2
         ;;
     -l | --label)
@@ -289,6 +292,7 @@ fi
 choices="${arg_choices:-$choices}"
 label="${arg_label:-$label}"
 icon="${arg_icon:-$icon}"
+icon_color="${arg_icon_color:-$icon_color}"
 
 if [ -z "$ROFI_OUTSIDE" ]; then
     rofi -show session -modi "session:$0 $(build_session_args)" $(build_rofi_args $@)
