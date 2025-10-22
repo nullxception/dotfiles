@@ -11,6 +11,10 @@
     }
   },
   "logo": {
+    "type": "iterm",
+    "source": "~/.config/fastfetch/logo.png",
+    "width": 30,
+    "preserveAspectRatio": true,
     "padding": {
       "top": 1
     }
