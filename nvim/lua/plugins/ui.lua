@@ -17,6 +17,11 @@ return {
             terminal = {
                 win = { height = 0.25 },
             },
+            styles = {
+                notifier = {
+                    backdrop = false,
+                },
+            },
         },
         init = function()
             vim.api.nvim_create_autocmd("LspProgress", {
