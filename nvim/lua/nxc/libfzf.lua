@@ -17,7 +17,7 @@ end
 function M.build()
     if vim.fn.executable("zig") == 1 then
         local ext = ".so"
-        if vim.fn.has("win32") then
+        if vim.fn.has("win32") == 1 then
             ext = ".dll -target x86_64-windows-gnu"
         end
         return {
@@ -40,7 +40,7 @@ end
 ---@param plugin LazyPlugin
 function M.load(plugin)
     local libname = "libfzf.so"
-    if vim.fn.has("win32") then
+    if vim.fn.has("win32") == 1 then
         libname = "libfzf.dll"
     end
     local libpath = vim.fs.joinpath(plugin.dir, "build", libname)
