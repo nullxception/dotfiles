@@ -50,6 +50,8 @@ setopt autolist
 setopt completeinword
 setopt alwaystoend
 
+setopt autocd
+
 eval "$(dircolors -b)"
 # fix visibility issues when navigating NTFS on wsl2
 export LS_COLORS="ow=0;34:tw=0;36:$LS_COLORS"
@@ -96,10 +98,6 @@ if [[ "$ARCH" != "x86_64" || "$ARCH" != "aarch64" ]]; then
     zi ice as"program" from"gh-r" mv"bat* -> bat" pick"bat/bat" atload"alias cat=bat"
     zi light sharkdp/bat
 
-    # fzf
-    zi ice as"program" from"gh-r"
-    zi light junegunn/fzf
-
     # eza
     zi ice as"program" from"gh-r" pick"eza" atload"alias ls=eza"
     zi light eza-community/eza
@@ -107,6 +105,10 @@ if [[ "$ARCH" != "x86_64" || "$ARCH" != "aarch64" ]]; then
     # fd
     zi ice as"program" from"gh-r" mv"fd* -> fd" pick"fd/fd"
     zi light sharkdp/fd
+
+    # fzf
+    zi ice as"program" from"gh-r" atload"source <(fzf --zsh)"
+    zi light junegunn/fzf
 fi
 
 # Theme
