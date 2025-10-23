@@ -37,20 +37,22 @@ return {
                 },
             }
 
-            vim.lsp.config.powershell_es = {
-                filetypes = { "ps1", "psm1", "psd1" },
-                bundle_path = vim.fn.expand("$MASON/packages/powershell-editor-services"),
-                settings = {
-                    powershell = {
-                        codeFormatting = {
-                            Preset = "OTBS",
+            if vim.fn.executable("pwsh") == 1 then
+                vim.lsp.config.powershell_es = {
+                    filetypes = { "ps1", "psm1", "psd1" },
+                    bundle_path = vim.fn.expand("$MASON/packages/powershell-editor-services"),
+                    settings = {
+                        powershell = {
+                            codeFormatting = {
+                                Preset = "OTBS",
+                            },
                         },
                     },
-                },
-                init_options = {
-                    enableProfileLoading = false,
-                },
-            }
+                    init_options = {
+                        enableProfileLoading = false,
+                    },
+                }
+            end
         end,
     },
     {
@@ -64,9 +66,10 @@ return {
     {
         "mason-org/mason-lspconfig.nvim",
         ---@module "mason-lspconfig"
-        ---@type MasonLspconfigSettings
-        opts = {
-            ensure_installed = {
+        ---@param o MasonLspconfigSettings
+        opts = function(_, o)
+            o = o or {}
+            o.ensure_installed = {
                 "bashls",
                 "cssls",
                 "docker_compose_language_service",
@@ -74,12 +77,15 @@ return {
                 "jsonls",
                 "lua_ls",
                 "postgres_lsp",
-                "powershell_es",
                 "ts_ls",
                 "vimls",
                 "yamlls",
-            },
-        },
+            }
+
+            if vim.fn.executable("pwsh") == 1 then
+                table.insert(o.ensure_installed, "powershell_es")
+            end
+        end,
     },
     "mfussenegger/nvim-dap",
     "rcarriga/nvim-dap-ui",
