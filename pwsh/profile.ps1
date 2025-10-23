@@ -91,7 +91,14 @@ function prompt {
     if (![string]::IsNullOrWhiteSpace($Local:gitBranch)) {
         $Local:git = " $ESC[32m($Local:gitBranch)$ESC[0m"
     }
-    "$ESC[31m$Local:user$ESC[34m at $ESC[0m$Local:dirInfo$Local:git > "
+    $p = $executionContext.SessionState.Path.CurrentLocation
+    $osc7 = ""
+    if ($p.Provider.Name -eq "FileSystem") {
+        $ansi_escape = [char]27
+        $provider_path = $p.ProviderPath -Replace "\\", "/"
+        $osc7 = "$ansi_escape]7;file://${env:COMPUTERNAME}/${provider_path}${ansi_escape}\"
+    }
+    "${osc7}$ESC[31m$Local:user$ESC[34m at $ESC[0m$Local:dirInfo$Local:git > "
 }
 
 #
