@@ -18,11 +18,12 @@ config.window_padding = {
     top = "20px",
     bottom = "20px",
 }
+config.window_background_opacity = 0.95
 
 -- windows specific settings
 if wezterm.target_triple == "x86_64-pc-windows-msvc" then
-    config.win32_system_backdrop = "Acrylic"
-    config.window_background_opacity = 0.8
+    -- config.win32_system_backdrop = "Acrylic"
+    -- config.window_background_opacity = 0.8
     if #wezterm.glob("C:/Prog*/PowerSh*/*/pwsh.exe") > 0 then
         config.default_prog = { "pwsh.exe", "-NoLogo" }
     else
@@ -36,8 +37,6 @@ if wezterm.target_triple == "x86_64-pc-windows-msvc" then
             action = wezterm.action.SendKey({ key = " ", mods = "CTRL" }),
         },
     }
-else
-    config.window_background_opacity = 0.95
 end
 
 return config
