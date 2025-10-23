@@ -9,6 +9,11 @@ return {
         "wakatime/vim-wakatime",
         dependencies = { "folke/snacks.nvim" },
         event = { "BufReadPost", "BufWritePost" },
+        cond = function()
+            local home = vim.env.HOME or os.getenv("HOME")
+            local cfg = vim.fs.joinpath(home, ".wakatime.cfg")
+            return vim.uv.fs_stat(cfg) ~= nil
+        end,
         opts = {
             plugin_name = "neovim-wakatime", -- fix editor = 'unknown' issues on wakapi
             heartbeat_frequency = 1,
