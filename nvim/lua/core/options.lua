@@ -2,7 +2,6 @@ vim.o.cursorline = true
 vim.o.emoji = true
 vim.o.compatible = false
 vim.o.backspace = "indent,eol,start"
-vim.o.clipboard = "unnamedplus"
 vim.o.encoding = "utf8"
 vim.o.expandtab = true
 vim.o.smarttab = true
