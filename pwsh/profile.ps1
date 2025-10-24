@@ -119,3 +119,13 @@ if (Get-Command bat -ErrorAction SilentlyContinue) {
 if (Get-Command fnm -ErrorAction SilentlyContinue) {
     fnm env --use-on-cd | Out-String | Invoke-Expression
 }
+
+#
+# fzf setup
+#
+if (Get-Command fzf -ErrorAction SilentlyContinue) {
+    if (!(Test-Path "$PSProfileDir\Modules\PSFzf" -ErrorAction SilentlyContinue)) {
+        Install-Module PSFzf -Scope CurrentUser -Force
+    }
+    Import-Module PSFzf
+}
