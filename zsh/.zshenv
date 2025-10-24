@@ -57,6 +57,9 @@ if [ ! -e "$SSH_AUTH_SOCK" ]; then
     # use wsl2-ssh-agent if we're on wsl2
     if [ -n "$WSL_INTEROP" ] && command -v wsl2-ssh-agent >/dev/null; then
         eval $(wsl2-ssh-agent)
+    elif [ -e "$XDG_RUNTIME_DIR/gcr/ssh" ]; then
+        # use provided socket from gnome-keyring's ssh agent component
+        export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/gcr/ssh"
     elif [ -e "$XDG_RUNTIME_DIR/ssh-agent.socket" ]; then
         # use provided socket (forwarding or systemd ssh-agent)
         # combine with `AddKeysToAgent yes` on ~/.ssh/config
