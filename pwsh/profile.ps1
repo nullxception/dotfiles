@@ -51,13 +51,21 @@ Register-ArgumentCompleter -Native -CommandName winget -ScriptBlock {
 # prompt
 #
 
-# Get-InstalledModule is too slow, let's just check the dir instead
-$PSProfileDir = Split-Path $PROFILE
-if (!(Test-Path "$PSProfileDir\Modules\posh-git" -ErrorAction SilentlyContinue)) {
+# Get-InstalledModule is too slow, let's spin our own way
+function Test-HasPsModule {
+    param(
+        [string]$DirName
+    )
+    $env:PSModulePath -split ":" | ForEach-Object { Join-Path "$_" "$DirName" } |
+        Where-Object { Test-Path "$_" } | Select-Object -First 1
+}
+
+if (!(Test-HasPsModule posh-git)) {
     Install-Module posh-git -Scope CurrentUser -Force
 }
+
 # posh-git will be loaded by lazy-posh-git later
-if (!(Test-Path "$PSProfileDir\Modules\lazy-posh-git" -ErrorAction SilentlyContinue)) {
+if (!(Test-HasPsModule lazy-posh-git)) {
     Install-Module lazy-posh-git -Scope CurrentUser -Force -AllowClobber
 }
 
@@ -124,7 +132,7 @@ if (Get-Command fnm -ErrorAction SilentlyContinue) {
 # fzf setup
 #
 if (Get-Command fzf -ErrorAction SilentlyContinue) {
-    if (!(Test-Path "$PSProfileDir\Modules\PSFzf" -ErrorAction SilentlyContinue)) {
+    if (!(Test-HasPsModule PSFzf)) {
         Install-Module PSFzf -Scope CurrentUser -Force
     }
     Import-Module PSFzf
