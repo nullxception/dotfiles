@@ -62,10 +62,13 @@ module_target="$HOME/.config/nvim"              # this will read by dot.sh
 module_target_win32="$env:LOCALAPPDATA/nvim"    # and this is for dot.ps1
 ```
 
-To use it, you can just do pretty much similar way:
+To use it, you can just do pretty much similar way, only the difference is when installing multiple modules:
 
 ```powershell
 ./dot.ps1 nvim
+
+# use comma-separated args to install multiple modules
+./dot.ps1 wt,nvim,wezterm
 ```
 
 This lets me sync cross-platform configs (like Neovim or WezTerm) seamlessly between Linux and Windows. ✨

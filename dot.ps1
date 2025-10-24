@@ -15,7 +15,7 @@
 #
 param(
     [Parameter(Mandatory = $True)]
-    [String] $Module
+    [String[]] $Module
 )
 
 $ModuleData = ".install"
@@ -60,14 +60,17 @@ function Install-Mod($ModulePath) {
     } elseif ($target_win32 -eq "inherit" -and $target_def) {
         $module_target = $target_def
     } else {
-        Return "Module $ModuleName has no valid module_target"
+        Return "Module $ModuleName has no valid module_target_win32"
     }
 
     Write-Output "installing module $ModuleName to $module_target"
     if (!(Test-Path -Path $module_target -PathType Container)) {
         New-Item -ItemType Directory -Path $module_target
     }
-    Get-ChildItem -Path $ModulePath -Exclude $ModuleData,.install,README.md | Copy-Item -Destination $module_target -Recurse -Force
+    Get-ChildItem -Path $ModulePath -Exclude $ModuleData,.install,README.md |
+        Copy-Item -Destination $module_target -Recurse -Force
 }
 
-Install-Mod $Module
+foreach ($m in $Module) {
+    Install-Mod $m
+}
