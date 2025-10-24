@@ -13,10 +13,6 @@
 # usage:
 # ./dot.ps1 <module>
 #
-param(
-    [Parameter(Mandatory = $True)]
-    [String[]] $Module
-)
 
 $ModuleData = ".install"
 
@@ -71,6 +67,4 @@ function Install-Mod($ModulePath) {
         Copy-Item -Destination $module_target -Recurse -Force
 }
 
-foreach ($m in $Module) {
-    Install-Mod $m
-}
+$args | ForEach-Object { Install-Mod $_ }
