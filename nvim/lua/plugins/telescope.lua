@@ -40,12 +40,30 @@ return {
                 },
             }
         end,
+        keys = {
+            { "<leader>ff", ":Telescope find_files<cr>", mode = "n", silent = true, desc = "Find files" },
+            { "<leader>fg", ":Telescope live_grep<cr>", mode = "n", silent = true, desc = "Live grep" },
+            { "<leader>fG", ":Telescope git_files<cr>", mode = "n", silent = true, desc = "Git files" },
+            { "<leader>fb", ":Telescope buffers<cr>", mode = "n", silent = true, desc = "Buffers" },
+            { "<leader>fr", ":Telescope oldfiles<cr>", mode = "n", silent = true, desc = "Recent Files" },
+            { "<leader>fh", ":Telescope help_tags<cr>", mode = "n", silent = true, desc = "Find Help" },
+        },
     },
     {
         "nvim-telescope/telescope-file-browser.nvim",
         init = function()
             require("telescope").load_extension("file_browser")
         end,
+        keys = {
+            {
+                "<leader>fB",
+                function()
+                    require("telescope").extensions.file_browser.file_browser()
+                end,
+                mode = "n",
+                desc = "File browser",
+            },
+        },
     },
     {
         "nvim-telescope/telescope-fzf-native.nvim",

@@ -17,6 +17,85 @@ return {
             terminal = {
                 win = { height = 0.25 },
             },
+            dashboard = {
+                enabled = true,
+                preset = {
+                    pick = "telescope.nvim",
+                    header = require("core.herta").normal,
+                    keys = {
+                        {
+                            icon = " ",
+                            key = "f",
+                            desc = "Find File",
+                            action = ":Telescope find_files",
+                        },
+                        {
+                            icon = " ",
+                            key = "g",
+                            desc = "Find Text",
+                            action = ":Telescope live_grep",
+                        },
+                        {
+                            icon = " ",
+                            key = "r",
+                            desc = "Recent Files",
+                            action = ":Telescope oldfiles",
+                        },
+                        {
+                            icon = " ",
+                            mode = "n",
+                            key = "B",
+                            desc = "File Browser",
+                            action = function()
+                                require("telescope").extensions.file_browser.file_browser()
+                            end,
+                        },
+                        {
+                            icon = " ",
+                            key = "c",
+                            desc = "Config",
+                            action = function()
+                                require("telescope.builtin").find_files({ cwd = vim.fn.stdpath("config") })
+                            end,
+                        },
+                        { icon = " ", key = "s", desc = "Restore Session", section = "session" },
+                        {
+                            icon = "󰒲 ",
+                            key = "L",
+                            desc = "Lazy",
+                            action = ":Lazy",
+                            enabled = package.loaded.lazy ~= nil,
+                        },
+                        {
+                            icon = " ",
+                            icon_hl = "Title",
+                            desc = "NeoGit",
+                            key = "n",
+                            keymap = "<leader>ng",
+                            action = ":Neogit",
+                        },
+                        {
+                            icon = " ",
+                            icon_hl = "Title",
+                            desc = "Terminal",
+                            key = "`",
+                            keymap = "<A-`>",
+                            action = ":lua Snacks.terminal()",
+                        },
+                        { icon = " ", key = "q", desc = "Quit", action = ":qa" },
+                    },
+                },
+                sections = {
+                    {
+                        section = "header",
+                    },
+                    {
+                        pane = 2,
+                        { section = "keys", gap = 1, padding = 1 },
+                        { section = "startup" },
+                    },
+                },
+            },
             styles = {
                 notifier = {
                     backdrop = false,
@@ -59,12 +138,16 @@ return {
     },
     {
         "nvim-lualine/lualine.nvim",
+        event = "VeryLazy",
         opts = {
             options = {
                 theme = "tokyonight",
                 globalstatus = true,
             },
         },
+        init = function()
+            vim.g.lualine_laststatus = vim.o.laststatus
+        end,
     },
     {
         "nvim-mini/mini.indentscope",
@@ -76,7 +159,7 @@ return {
         init = function()
             vim.api.nvim_create_autocmd("FileType", {
                 pattern = {
-                    "dashboard",
+                    "snacks_dashboard",
                     "fzf",
                     "help",
                     "lazy",
@@ -84,6 +167,12 @@ return {
                 },
                 callback = function()
                     vim.b.miniindentscope_disable = true
+                end,
+            })
+            vim.api.nvim_create_autocmd("User", {
+                pattern = "SnacksDashboardOpened",
+                callback = function(data)
+                    vim.b[data.buf].miniindentscope_disable = true
                 end,
             })
         end,
