@@ -23,24 +23,9 @@ return {
                     pick = "telescope.nvim",
                     header = require("core.herta").normal,
                     keys = {
-                        {
-                            icon = " ",
-                            key = "f",
-                            desc = "Find File",
-                            action = ":Telescope find_files",
-                        },
-                        {
-                            icon = " ",
-                            key = "g",
-                            desc = "Find Text",
-                            action = ":Telescope live_grep",
-                        },
-                        {
-                            icon = " ",
-                            key = "r",
-                            desc = "Recent Files",
-                            action = ":Telescope oldfiles",
-                        },
+                        { icon = " ", key = "f", desc = "Find File", action = ":Telescope find_files" },
+                        { icon = " ", key = "g", desc = "Find Text", action = ":Telescope live_grep" },
+                        { icon = " ", key = "r", desc = "Recent Files", action = ":Telescope oldfiles" },
                         {
                             icon = " ",
                             mode = "n",
@@ -50,22 +35,7 @@ return {
                                 require("telescope").extensions.file_browser.file_browser()
                             end,
                         },
-                        {
-                            icon = " ",
-                            key = "c",
-                            desc = "Config",
-                            action = function()
-                                require("telescope.builtin").find_files({ cwd = vim.fn.stdpath("config") })
-                            end,
-                        },
                         { icon = " ", key = "s", desc = "Restore Session", section = "session" },
-                        {
-                            icon = "󰒲 ",
-                            key = "L",
-                            desc = "Lazy",
-                            action = ":Lazy",
-                            enabled = package.loaded.lazy ~= nil,
-                        },
                         {
                             icon = " ",
                             icon_hl = "Title",
@@ -82,13 +52,25 @@ return {
                             keymap = "<A-`>",
                             action = ":lua Snacks.terminal()",
                         },
-                        { icon = " ", key = "q", desc = "Quit", action = ":qa" },
+                        {
+                            icon = " ",
+                            key = "c",
+                            desc = "Config",
+                            action = function()
+                                require("telescope.builtin").find_files({ cwd = vim.fn.stdpath("config") })
+                            end,
+                        },
+                        {
+                            icon = "󰒲 ",
+                            key = "L",
+                            desc = "Lazy",
+                            action = ":Lazy",
+                            enabled = package.loaded.lazy ~= nil,
+                        },
                     },
                 },
                 sections = {
-                    {
-                        section = "header",
-                    },
+                    { section = "header" },
                     {
                         pane = 2,
                         { section = "keys", gap = 1, padding = 1 },
