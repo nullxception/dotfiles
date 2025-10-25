@@ -133,6 +133,7 @@ return {
     },
     {
         "nvim-mini/mini.indentscope",
+        event = { "BufReadPost", "BufNewFile", "BufWritePre" },
         version = false,
         opts = {
             symbol = "│",
