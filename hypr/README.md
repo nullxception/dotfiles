@@ -1,5 +1,5 @@
-![hyprland preview](../.github/assets/hyprland.webp)
-![hyprlock preview](../.github/assets/hyprlock.webp)
+![hyprland](https://github.com/user-attachments/assets/3dc01457-e9dd-438e-8347-7f20f4919857)
+![hyprlock](https://github.com/user-attachments/assets/ea2c1020-66fa-4f6d-bc5f-2b5c02000870)
 
 # Hyprland setup
 

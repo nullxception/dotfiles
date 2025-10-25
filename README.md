@@ -13,6 +13,14 @@
 > This is the place where I keep the dotfiles that I use daily.<br/>
 > So yeah, it will definitely change from time to time :D
 
+| hyprland - [README.md](hypr/README.md)                                                       | neovim - [README.md](nvim/README.md)                                                     |
+| -------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| ![hyprland](https://github.com/user-attachments/assets/3dc01457-e9dd-438e-8347-7f20f4919857) | ![nvim](https://github.com/user-attachments/assets/8bd5d275-e65a-4d93-aa05-7c612f019994) |
+
+| hyprlock                                                                                     | rofi session menu                                                                                |
+| -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| ![hyprlock](https://github.com/user-attachments/assets/ea2c1020-66fa-4f6d-bc5f-2b5c02000870) | ![rofi-session](https://github.com/user-attachments/assets/95587895-7dbd-4913-9b78-06563b1bdeb3) |
+
 ## 🧩 Installation
 
 Each module in this repo is self-contained.<br/>
@@ -72,20 +80,6 @@ To use it, you can just do pretty much similar way:
 ```
 
 This lets me sync cross-platform configs (like Neovim or WezTerm) seamlessly between Linux and Windows. ✨
-
-## 🖼️ Showcase
-
-| hyprland - [README.md](hypr/README.md)                                                       |
-| -------------------------------------------------------------------------------------------- |
-| ![hyprland](https://github.com/user-attachments/assets/3dc01457-e9dd-438e-8347-7f20f4919857) |
-
-| hyprlock                                                                                     |
-| -------------------------------------------------------------------------------------------- |
-| ![hyprlock](https://github.com/user-attachments/assets/ea2c1020-66fa-4f6d-bc5f-2b5c02000870) |
-
-| rofi session menu                                                                                |
-| ------------------------------------------------------------------------------------------------ |
-| ![rofi-session](https://github.com/user-attachments/assets/95587895-7dbd-4913-9b78-06563b1bdeb3) |
 
 ## 📜 License
 

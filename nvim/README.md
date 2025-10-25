@@ -1,6 +1,8 @@
+![nvim](https://github.com/user-attachments/assets/8bd5d275-e65a-4d93-aa05-7c612f019994)
+
 This is my **Neovim configuration** tailored for me and my machines (native win32, arch, and debian server).
 
-It uses **Lua** for configuration, leveraging **lazy.nvim**, **mason.nvim**, and a curated set of plugins for a cohesive development experience, or just configuring stuff on the server :D
+Leveraging **lazy.nvim**, **mason.nvim**, and a curated set of plugins for a cohesive development experience, or just configuring things to justify my boredom :D
 
 ## ⚙️ Requirements
 
