@@ -7,3 +7,10 @@ vim.diagnostic.config({
     virtual_lines = false,
     virtual_text = { severity = severity },
 })
+
+-- highlight when yanking
+vim.api.nvim_create_autocmd("TextYankPost", {
+    callback = function()
+        vim.highlight.on_yank({ higroup = "IncSearch", timeout = 150 })
+    end,
+})
