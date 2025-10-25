@@ -52,6 +52,8 @@ return {
     },
     {
         "zapling/mason-conform.nvim",
+        dependencies = { "stevearc/conform.nvim" },
+        event = { "BufReadPost", "BufNewFile", "BufWritePre" },
         opts = {},
     },
 }
