@@ -121,6 +121,8 @@ if command -v pacman >/dev/null; then
         local pactime="$(date -r /var/cache/zsh/pacman +%s%N)"
         if ((zshcache_time < pactime)); then
             rehash && _zpactime="$pactime"
+            autoload -Uz compinit
+            compinit && zi cdreplay -q
         fi
     }
     autoload -Uz add-zsh-hook
