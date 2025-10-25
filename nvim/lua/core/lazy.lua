@@ -20,4 +20,7 @@ require("lazy").setup({
         { "nvim-lua/plenary.nvim", lazy = true },
         { import = "plugins" },
     },
+    defaults = {
+        lazy = true,
+    },
 })
