@@ -1,10 +1,18 @@
 ---@module "lazy"
 ---@type LazySpec
 return {
-    "b0o/schemastore.nvim",
+    {
+        "mason-org/mason.nvim",
+        ---@module "mason"
+        ---@type MasonSettings
+        opts = {
+            ui = { border = "single" },
+        },
+    },
     {
         "neovim/nvim-lspconfig",
-        init = function()
+        dependencies = { "b0o/schemastore.nvim" },
+        config = function()
             vim.api.nvim_create_autocmd("LspAttach", {
                 desc = "LSP actions",
                 callback = function(ev)
@@ -56,15 +64,12 @@ return {
         end,
     },
     {
-        "mason-org/mason.nvim",
-        ---@module "mason"
-        ---@type MasonSettings
-        opts = {
-            ui = { border = "single" },
-        },
-    },
-    {
         "mason-org/mason-lspconfig.nvim",
+        event = { "BufReadPost", "BufNewFile", "BufWritePre" },
+        dependencies = {
+            "neovim/nvim-lspconfig",
+            "mason-org/mason.nvim",
+        },
         ---@module "mason-lspconfig"
         ---@param o MasonLspconfigSettings
         opts = function(_, o)
@@ -91,6 +96,7 @@ return {
     "rcarriga/nvim-dap-ui",
     {
         "akinsho/flutter-tools.nvim",
+        event = { "BufReadPost", "BufNewFile", "BufWritePre" },
         opts = {
             widget_guides = {
                 enabled = true,
