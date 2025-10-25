@@ -57,9 +57,8 @@ end
 return {
     {
         "nvim-treesitter/nvim-treesitter",
-        dependencies = {
-            { "mason-org/mason.nvim", opts = {} },
-        },
+        event = { "BufReadPost", "BufNewFile", "BufWritePre", "CmdlineEnter" },
+        dependencies = { "mason-org/mason.nvim" },
         build = ":TSUpdate",
         branch = "main",
         opts = {
