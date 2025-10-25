@@ -90,7 +90,7 @@ function Get-GitBranch {
 
 function prompt {
     $ESC = [char]27
-    $Local:user = $env:USERNAME.ToLower()
+    $Local:user = $env:USERNAME ?? $env:USER ?? "me"
     $Local:dirInfo = $PWD.Path.Replace($env:USERPROFILE, "~")
     if ($Local:dirInfo -ne "~") {
         $Local:dirInfo = Split-Path $Local:dirInfo -Leaf
