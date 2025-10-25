@@ -5,7 +5,17 @@ local libfzf = require("core.libfzf")
 return {
     "nvim-telescope/telescope-symbols.nvim",
     {
+        "nvim-telescope/telescope-fzf-native.nvim",
+        cond = libfzf.is_buildable(),
+        build = libfzf.build(),
+        config = function(plug, _)
+            libfzf.load(plug)
+        end,
+    },
+    {
         "nvim-telescope/telescope.nvim",
+        dependencies = { "nvim-telescope/telescope-fzf-native.nvim" },
+        cmd = "Telescope",
         ---@param o table
         opts = function(_, o)
             local actions = require("telescope.actions")
@@ -51,7 +61,7 @@ return {
     },
     {
         "nvim-telescope/telescope-file-browser.nvim",
-        init = function()
+        config = function()
             require("telescope").load_extension("file_browser")
         end,
         keys = {
@@ -64,11 +74,5 @@ return {
                 desc = "File browser",
             },
         },
-    },
-    {
-        "nvim-telescope/telescope-fzf-native.nvim",
-        cond = libfzf.is_buildable(),
-        build = libfzf.build(),
-        init = libfzf.load,
     },
 }
