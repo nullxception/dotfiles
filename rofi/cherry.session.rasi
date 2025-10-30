@@ -1,65 +1,31 @@
-configuration {
-    show-icons: true;
-}
-
-* {
-    color0: #33333f;
-    color1: #ff568e;
-    color2: #64de83;
-    color3: #efff73;
-    color4: #73a9ff;
-    color5: #946ff7;
-    color6: #62c6da;
-    color7: #dedeef;
-
-    bg: #101017;
-    bg-alt: #1f222e;
-    fg: #bdc3c7;
-
-    color: @fg;
-    background-color: transparent;
-    highlight: underline bold #ff568e;
-    padding: 0;
-    margin: 0;
-    border: 0;
-}
+@import "cherry.rasi"
 
 window {
     children: [ mainbox];
-    transparency: "real";
-    location: center;
-    width: 480px;
-    background-color: #101017f0;
 }
 
 mainbox {
     children: [ inputbar, listview, message];
-    border: 1px;
-    border-color: @color0;
-    background-color: transparent;
 }
 
 inputbar {
     children: [ textbox-prompt-colon, prompt];
-    spacing: -1px;
-    padding: 3em;
-    background-image: url("~/.config/rofi/images/header-1.jpg", width);
 }
 
 textbox-prompt-colon {
     expand: false;
     str: "";
-    padding: 15px;
+    padding: 8px 15px;
     border-radius: 100% 0 0 100%;
     background-color: @color5;
     text-color: @bg;
 }
 
 prompt {
-    padding: 15px 30px 15px 15px;
-    border: 0px;
+    padding: 8px 30px 8px 15px;
     border-radius: 0 100% 100% 0;
     background-color: #101017f0;
+    text-color: @fg;
 }
 
 listview {
@@ -71,7 +37,6 @@ listview {
     border: 1px;
     border-color: @bg-alt;
     text-color: @fg;
-    background-color: #101017f0;
 }
 
 element {
@@ -82,6 +47,7 @@ element {
 }
 
 element-icon {
+    padding: 0;
     size: 32px;
 }
 

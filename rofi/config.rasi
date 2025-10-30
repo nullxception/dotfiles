@@ -3,4 +3,4 @@ configuration {
   icon-theme: "Papirus-Dark";
 }
 
-@theme "~/.config/rofi/theme/cherry-midnight.rasi"
+@theme "cherry.rasi"

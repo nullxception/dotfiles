@@ -41,21 +41,21 @@ mainbox {
 }
 
 inputbar {
-    padding: 3em;
-    background-image: url("~/.config/rofi/images/header-1.jpg", width);
+    padding: 5em 3em;
+    background-image: url("~/.config/rofi/header.jpg", width);
     children: [prompt,entry];
     spacing: -1px;
 }
 
 prompt {
     background-color: @color1;
-    padding: 15px;
+    padding: 8px 15px;
     text-color: @bg;
     border-radius: 50% 0 0 50%;
 }
 
 entry {
-    padding: 15px 30px 15px 15px;
+    padding: 8px 30px 8px 15px;
     border: 0px;
     border-radius: 0 100% 100% 0;
     background-color: @bg;
@@ -63,12 +63,12 @@ entry {
 }
 
 message {
-    padding: 0 0 1em 0;
+    padding: 0;
 }
 
 textbox {
-    background-color: @color1;
-    padding: 0 1.5em;
+    background-color: transparent;
+    padding: 1.5em;
 }
 
 listview {
