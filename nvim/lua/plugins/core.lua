@@ -1,5 +1,6 @@
 vim.pack.add({
     gh("mason-org/mason.nvim"),
+    gh("nvim-lua/plenary.nvim"),
     gh("nvim-mini/mini.icons"),
 }, { confirm = false })
 
