@@ -4,6 +4,7 @@ vim.pack.add({
     gh("nvim-mini/mini.indentscope"),
     gh("sphamba/smear-cursor.nvim"),
     gh("folke/snacks.nvim"),
+    gh("folke/which-key.nvim"),
 }, { confirm = false })
 
 require("tokyonight").setup({
@@ -155,4 +156,15 @@ vim.api.nvim_create_autocmd("User", {
 
 require("smear_cursor").setup({
     legacy_computing_symbols_support = true,
+})
+
+local wk = require("which-key")
+wk.setup({ win = { border = "rounded" } })
+
+wk.add({
+    "<leader>?",
+    function()
+        require("which-key").show({ global = false })
+    end,
+    desc = "Buffer Local Keymaps",
 })
