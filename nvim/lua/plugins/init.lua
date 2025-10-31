@@ -7,4 +7,5 @@ end
 require("plugins.core")
 require("plugins.ui")
 require("plugins.lsp")
+require("plugins.formatters")
 require("plugins.telescope")
