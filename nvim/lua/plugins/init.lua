@@ -6,3 +6,4 @@ end
 
 require("plugins.core")
 require("plugins.ui")
+require("plugins.lsp")
