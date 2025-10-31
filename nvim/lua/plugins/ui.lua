@@ -106,9 +106,9 @@ snacks.setup({
     },
 })
 
-local snacksau = vim.api.nvim_create_augroup("UserSnacksAuto", { clear = true })
+local augroup = vim.api.nvim_create_augroup("UserUIAuto", { clear = true })
 vim.api.nvim_create_autocmd("LspProgress", {
-    group = snacksau,
+    group = augroup,
     ---@param ev {data: {client_id: integer, params: lsp.ProgressParams}}
     callback = function(ev)
         local spinner = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
@@ -128,9 +128,8 @@ vim.keymap.set({ "n", "t", "i" }, "<A-`>", function()
 end, { desc = "Toggle Terminal" })
 
 local lualine = require("lualine")
-local lualineau = vim.api.nvim_create_augroup("UserLualine", { clear = true })
 vim.api.nvim_create_autocmd("User", {
-    group = lualineau,
+    group = augroup,
     pattern = "SnacksDashboardOpened",
     callback = function()
         lualine.setup({
@@ -152,9 +151,8 @@ indentscope.setup({
     symbol = "│",
     options = { try_as_border = true },
 })
-local miniindentau = vim.api.nvim_create_augroup("UserMiniIndentAuto", { clear = true })
 vim.api.nvim_create_autocmd("FileType", {
-    group = miniindentau,
+    group = augroup,
     pattern = {
         "snacks_dashboard",
         "fzf",
@@ -167,7 +165,7 @@ vim.api.nvim_create_autocmd("FileType", {
     end,
 })
 vim.api.nvim_create_autocmd("User", {
-    group = miniindentau,
+    group = augroup,
     pattern = "SnacksDashboardOpened",
     callback = function(data)
         vim.b[data.buf].miniindentscope_disable = true
