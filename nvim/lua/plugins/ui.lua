@@ -128,17 +128,24 @@ vim.keymap.set({ "n", "t", "i" }, "<A-`>", function()
 end, { desc = "Toggle Terminal" })
 
 local lualine = require("lualine")
-lualine.setup({
-    options = {
-        theme = "tokyonight",
-        globalstatus = true,
-        disabled_filetypes = {
-            statusline = {},
-            winbar = {},
-        },
-    },
+local lualineau = vim.api.nvim_create_augroup("UserLualine", { clear = true })
+vim.api.nvim_create_autocmd("User", {
+    group = lualineau,
+    pattern = "SnacksDashboardOpened",
+    callback = function()
+        lualine.setup({
+            options = {
+                theme = "tokyonight",
+                globalstatus = true,
+                disabled_filetypes = {
+                    statusline = {},
+                    winbar = {},
+                },
+            },
+        })
+        vim.o.laststatus = vim.g.lualine_laststatus
+    end,
 })
-vim.o.laststatus = vim.g.lualine_laststatus
 
 local indentscope = require("mini.indentscope")
 indentscope.setup({
