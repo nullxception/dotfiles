@@ -10,3 +10,4 @@ require("mason").setup({})
 
 require("plugins.ui")
 require("plugins.lsp")
+require("plugins.telescope")
