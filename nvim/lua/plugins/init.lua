@@ -9,3 +9,4 @@ vim.pack.add({ gh("mason-org/mason.nvim") }, { confirm = false })
 require("mason").setup({})
 
 require("plugins.ui")
+require("plugins.lsp")
