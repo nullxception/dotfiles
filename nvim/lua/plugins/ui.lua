@@ -4,7 +4,12 @@ vim.pack.add({
     gh("nvim-mini/mini.icons"),
     gh("nvim-mini/mini.indentscope"),
     gh("sphamba/smear-cursor.nvim"),
+    gh("folke/snacks.nvim"),
 }, { confirm = false })
+
+local icons = require("mini.icons")
+icons.setup({})
+icons.mock_nvim_web_devicons()
 
 require("tokyonight").setup({
     style = "night",
@@ -30,23 +35,119 @@ require("tokyonight").setup({
 })
 vim.cmd.colorscheme("tokyonight")
 
+local snacks = require("snacks")
+snacks.setup({
+    picker = {},
+    notifier = {
+        top_down = false,
+        margin = { bottom = 2 },
+    },
+    terminal = {
+        win = { height = 0.25 },
+    },
+    dashboard = {
+        enabled = true,
+        preset = {
+            pick = "telescope.nvim",
+            header = require("herta").normal,
+            keys = {
+                { icon = " ", key = "f", desc = "Find File", action = ":Telescope find_files" },
+                { icon = " ", key = "g", desc = "Find Text", action = ":Telescope live_grep" },
+                { icon = " ", key = "r", desc = "Recent Files", action = ":Telescope oldfiles" },
+                {
+                    icon = " ",
+                    mode = "n",
+                    key = "B",
+                    desc = "File Browser",
+                    action = function()
+                        require("telescope").extensions.file_browser.file_browser()
+                    end,
+                },
+                { icon = " ", key = "s", desc = "Restore Session", section = "session" },
+                {
+                    icon = " ",
+                    icon_hl = "Title",
+                    desc = "NeoGit",
+                    key = "n",
+                    keymap = "<leader>ng",
+                    action = ":Neogit",
+                },
+                {
+                    icon = " ",
+                    icon_hl = "Title",
+                    desc = "Terminal",
+                    key = "`",
+                    keymap = "<A-`>",
+                    action = ":lua Snacks.terminal()",
+                },
+                {
+                    icon = " ",
+                    key = "c",
+                    desc = "Config",
+                    action = function()
+                        require("telescope.builtin").find_files({ cwd = vim.fn.stdpath("config") })
+                    end,
+                },
+                { icon = " ", key = "q", desc = "Quit", action = ":qa" },
+            },
+        },
+        sections = {
+            { section = "header" },
+            {
+                pane = 2,
+                { section = "keys", gap = 1, padding = 1 },
+            },
+        },
+    },
+    styles = {
+        notifier = {
+            backdrop = false,
+        },
+    },
+})
+
+local snacksau = vim.api.nvim_create_augroup("UserSnacksAuto", { clear = true })
+vim.api.nvim_create_autocmd("LspProgress", {
+    group = snacksau,
+    ---@param ev {data: {client_id: integer, params: lsp.ProgressParams}}
+    callback = function(ev)
+        local spinner = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
+        vim.notify(vim.lsp.status(), "info", {
+            id = "lsp_progress",
+            title = "LSP Progress",
+            opts = function(notif)
+                notif.icon = ev.data.params.value.kind == "end" and " "
+                    or spinner[math.floor(vim.uv.hrtime() / (1e6 * 80)) % #spinner + 1]
+            end,
+        })
+    end,
+})
+
+vim.keymap.set({ "n", "t", "i" }, "<A-`>", function()
+    Snacks.terminal()
+end, { desc = "Toggle Terminal" })
+
 local lualine = require("lualine")
 lualine.setup({
     options = {
         theme = "tokyonight",
         globalstatus = true,
+        disabled_filetypes = {
+            statusline = {},
+            winbar = {},
+        },
     },
 })
-vim.g.lualine_laststatus = vim.o.laststatus
+vim.o.laststatus = vim.g.lualine_laststatus
 
 local indentscope = require("mini.indentscope")
 indentscope.setup({
     symbol = "│",
     options = { try_as_border = true },
 })
-local augroup = vim.api.nvim_create_augroup("UserMiniIndentAuto", { clear = true })
+local miniindentau = vim.api.nvim_create_augroup("UserMiniIndentAuto", { clear = true })
 vim.api.nvim_create_autocmd("FileType", {
-    group = augroup,
+    group = miniindentau,
     pattern = {
         "snacks_dashboard",
         "fzf",
@@ -59,16 +160,12 @@ vim.api.nvim_create_autocmd("FileType", {
     end,
 })
 vim.api.nvim_create_autocmd("User", {
-    group = augroup,
+    group = miniindentau,
     pattern = "SnacksDashboardOpened",
     callback = function(data)
         vim.b[data.buf].miniindentscope_disable = true
     end,
 })
-
-local icons = require("mini.icons")
-icons.setup({})
-icons.mock_nvim_web_devicons()
 
 require("smear_cursor").setup({
     legacy_computing_symbols_support = true,
