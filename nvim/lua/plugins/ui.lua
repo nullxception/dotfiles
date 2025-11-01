@@ -6,6 +6,7 @@ vim.pack.add({
     gh("folke/snacks.nvim"),
     gh("sschleemilch/slimline.nvim"),
     gh("declancm/cinnamon.nvim"),
+    gh("j-hui/fidget.nvim"),
 }, { confirm = false })
 
 local icons = require("mini.icons")
@@ -58,10 +59,6 @@ require("cinnamon").setup({
 local snacks = require("snacks")
 snacks.setup({
     picker = {},
-    notifier = {
-        top_down = false,
-        margin = { bottom = 2 },
-    },
     terminal = {
         win = { height = 0.25 },
     },
@@ -119,28 +116,6 @@ snacks.setup({
             },
         },
     },
-    styles = {
-        notifier = {
-            backdrop = false,
-        },
-    },
-})
-
-local augroup = vim.api.nvim_create_augroup("UserUIAuto", { clear = true })
-vim.api.nvim_create_autocmd("LspProgress", {
-    group = augroup,
-    ---@param ev {data: {client_id: integer, params: lsp.ProgressParams}}
-    callback = function(ev)
-        local spinner = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
-        vim.notify(vim.lsp.status(), "info", {
-            id = "lsp_progress",
-            title = "LSP Progress",
-            opts = function(notif)
-                notif.icon = ev.data.params.value.kind == "end" and " "
-                    or spinner[math.floor(vim.uv.hrtime() / (1e6 * 80)) % #spinner + 1]
-            end,
-        })
-    end,
 })
 
 vim.keymap.set({ "n", "t", "i" }, "<A-`>", function()
@@ -152,6 +127,7 @@ indentscope.setup({
     symbol = "│",
     options = { try_as_border = true },
 })
+local augroup = vim.api.nvim_create_augroup("UserUIAuto", { clear = true })
 vim.api.nvim_create_autocmd("FileType", {
     group = augroup,
     pattern = {
@@ -176,4 +152,8 @@ vim.api.nvim_create_autocmd("User", {
 
 require("smear_cursor").setup({
     legacy_computing_symbols_support = true,
+})
+
+require("fidget").setup({
+    notification = { override_vim_notify = true },
 })
