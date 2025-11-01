@@ -6,46 +6,51 @@ vim.pack.add({
     gh("nvim-telescope/telescope.nvim"),
 }, { confirm = false })
 
+local telescope = require("telescope")
 local actions = require("telescope.actions")
 local config = require("telescope.config")
 
-local custom_rg = { "rg", "--files", "--hidden", "--no-ignore", "--glob", "!**/.git/*" }
-local vimgrep_arg = { unpack(config.values.vimgrep_arguments) }
-for i, rg_arg in ipairs(custom_rg) do
-    if i > 2 then
-        table.insert(vimgrep_arg, rg_arg)
-    end
-end
-local o = {}
-o.defaults = {
-    mappings = {
-        i = {
-            ["<Esc>"] = actions.close,
+local opts = {
+    defaults = {
+        mappings = {
+            i = {
+                ["<Esc>"] = actions.close,
+            },
         },
     },
-    vimgrep_arguments = vimgrep_arg,
-}
-o.pickers = {
-    find_files = {
-        find_command = custom_rg,
-    },
-}
-o.extensions = {
-    file_browser = {
-        hijack_netrw = true,
-        hidden = true,
-        no_ignore = true,
+    extensions = {
+        file_browser = {
+            hijack_netrw = true,
+            hidden = true,
+            no_ignore = true,
+        },
     },
 }
 
-require("telescope").setup(o)
-require("telescope").load_extension("file_browser")
+if vim.fn.executable("rg") == 1 then
+    local rg = { "rg", "--files", "--hidden", "--no-ignore", "--glob", "!**/.git/*" }
+    local vg_arg = { unpack(config.values.vimgrep_arguments) }
+    for i, rg_arg in ipairs(rg) do
+        if i > 2 then
+            table.insert(vg_arg, rg_arg)
+        end
+    end
+    local rg_scope = {
+        defaults = { vimgrep_arguments = vg_arg },
+        pickers = { find_files = { find_command = rg } },
+    }
+    opts = vim.tbl_deep_extend("force", opts, rg_scope)
+end
+
+telescope.setup(opts)
+telescope.load_extension("file_browser")
+
 local libfzf = require("libfzf")
 libfzf.load()
 
 vim.api.nvim_create_autocmd("PackChanged", {
-    callback = function(opts)
-        if opts.data.spec.name == "telescope-fzf-native.nvim" and opts.data.kind == "update" then
+    callback = function(packOpts)
+        if packOpts.data.spec.name == "telescope-fzf-native.nvim" and packOpts.data.kind == "update" then
             libfzf.build()
         end
     end,
