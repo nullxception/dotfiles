@@ -12,7 +12,9 @@ if vim.uv.fs_stat(cfg) ~= nil then
     })
 end
 
+local augroup = vim.api.nvim_create_augroup("UserActivitiesAuto", { clear = true })
 vim.api.nvim_create_autocmd("PackChanged", {
+    group = augroup,
     callback = function(opts)
         if opts.data.spec.name == "cord.nvim" and opts.data.kind == "update" then
             vim.cmd("Cord update")
