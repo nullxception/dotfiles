@@ -1,10 +1,10 @@
 vim.pack.add({
     gh("folke/tokyonight.nvim"),
-    gh("nvim-lualine/lualine.nvim"),
     gh("nvim-mini/mini.icons"),
     gh("nvim-mini/mini.indentscope"),
     gh("sphamba/smear-cursor.nvim"),
     gh("folke/snacks.nvim"),
+    gh("sschleemilch/slimline.nvim"),
 }, { confirm = false })
 
 local icons = require("mini.icons")
@@ -24,7 +24,7 @@ require("tokyonight").setup({
     ---@param c ColorScheme
     on_colors = function(c)
         c.comment = "#767f99"
-        c.bg_statusline = "#23232F"
+        c.bg_statusline = nil
     end,
     ---@param hl tokyonight.Highlights
     on_highlights = function(hl, _)
@@ -34,6 +34,15 @@ require("tokyonight").setup({
     end,
 })
 vim.cmd.colorscheme("tokyonight")
+
+require("slimline").setup({
+    style = "fg",
+    spaces = {
+        components = "",
+        left = "",
+        right = "",
+    },
+})
 
 local snacks = require("snacks")
 snacks.setup({
@@ -127,25 +136,6 @@ vim.keymap.set({ "n", "t", "i" }, "<A-`>", function()
     Snacks.terminal()
 end, { desc = "Toggle Terminal" })
 
-local lualine = require("lualine")
-vim.api.nvim_create_autocmd("User", {
-    group = augroup,
-    pattern = "SnacksDashboardOpened",
-    callback = function()
-        lualine.setup({
-            options = {
-                theme = "tokyonight",
-                globalstatus = true,
-                disabled_filetypes = {
-                    statusline = {},
-                    winbar = {},
-                },
-            },
-        })
-        vim.o.laststatus = vim.g.lualine_laststatus
-    end,
-})
-
 local indentscope = require("mini.indentscope")
 indentscope.setup({
     symbol = "│",
@@ -169,6 +159,7 @@ vim.api.nvim_create_autocmd("User", {
     pattern = "SnacksDashboardOpened",
     callback = function(data)
         vim.b[data.buf].miniindentscope_disable = true
+        vim.o.laststatus = 3 -- enable statusline on dashboard
     end,
 })
 
