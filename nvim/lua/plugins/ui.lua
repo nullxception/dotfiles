@@ -7,6 +7,7 @@ vim.pack.add({
     gh("sschleemilch/slimline.nvim"),
     gh("declancm/cinnamon.nvim"),
     gh("j-hui/fidget.nvim"),
+    gh("ingur/floatty.nvim"),
 }, { confirm = false })
 
 local icons = require("mini.icons")
@@ -55,13 +56,28 @@ require("cinnamon").setup({
     -- Only scroll the window
     options = { mode = "window" },
 })
+local floatty = require("floatty").setup({
+    cmd = function()
+        if vim.uv.os_uname().sysname == "Windows" then
+            if vim.fn.executable("pwsh") == 1 then
+                return "pwsh -NoLogo"
+            elseif vim.fn.executable("powershell") == 1 then
+                return "powershell -NoLogo"
+            end
+        end
+        return vim.o.shell
+    end,
+    window = {
+        row = vim.o.lines - 11,
+        width = 1.0,
+        height = 8,
+    },
+})
+
+vim.keymap.set({ "n", "t", "i" }, "<A-`>", floatty.toggle, { desc = "Toggle Terminal" })
 
 local snacks = require("snacks")
 snacks.setup({
-    picker = {},
-    terminal = {
-        win = { height = 0.25 },
-    },
     dashboard = {
         enabled = true,
         preset = {
@@ -95,7 +111,7 @@ snacks.setup({
                     desc = "Terminal",
                     key = "`",
                     keymap = "<A-`>",
-                    action = ":lua Snacks.terminal()",
+                    action = floatty.toggle,
                 },
                 {
                     icon = " ",
@@ -117,10 +133,6 @@ snacks.setup({
         },
     },
 })
-
-vim.keymap.set({ "n", "t", "i" }, "<A-`>", function()
-    Snacks.terminal()
-end, { desc = "Toggle Terminal" })
 
 local indentscope = require("mini.indentscope")
 indentscope.setup({
