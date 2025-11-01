@@ -29,21 +29,11 @@ if vim.fn.executable("kotlin-lsp") ~= nil then
     vim.lsp.enable("kotlin_lsp")
 end
 
-vim.lsp.config.jsonls = {
-    settings = {
-        json = {
-            format = { enable = true },
-            validate = { enable = true },
-            schemas = require("schemastore").json.schemas(),
-        },
-    },
-}
-
 local ensure_installed = {
     "postgres_lsp",
 }
 if vim.fn.executable("npm") == 1 then
-    ensure_installed = vim.tbl_extend("keep", ensure_installed, {
+    vim.list_extend(ensure_installed, {
         "bashls",
         "cssls",
         "docker_compose_language_service",
@@ -62,21 +52,6 @@ end
 
 if vim.fn.executable("pwsh") == 1 then
     table.insert(ensure_installed, "powershell_es")
-
-    vim.lsp.config.powershell_es = {
-        filetypes = { "ps1", "psm1", "psd1" },
-        bundle_path = vim.fn.expand("$MASON/packages/powershell-editor-services"),
-        settings = {
-            powershell = {
-                codeFormatting = {
-                    Preset = "OTBS",
-                },
-            },
-        },
-        init_options = {
-            enableProfileLoading = false,
-        },
-    }
 end
 
 require("mason-lspconfig").setup({ ensure_installed = ensure_installed })
