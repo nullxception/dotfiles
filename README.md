@@ -15,7 +15,7 @@
 
 | hyprland - [README.md](hypr/README.md)                                                       | neovim - [README.md](nvim/README.md)                                                     |
 | -------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| ![hyprland](https://github.com/user-attachments/assets/3dc01457-e9dd-438e-8347-7f20f4919857) | ![nvim](https://github.com/user-attachments/assets/8bd5d275-e65a-4d93-aa05-7c612f019994) |
+| ![hyprland](https://github.com/user-attachments/assets/3dc01457-e9dd-438e-8347-7f20f4919857) | ![nvim](https://github.com/user-attachments/assets/0c19388f-1af9-44ac-a0c5-03a6f53a641f) |
 
 | hyprlock                                                                                     | rofi session menu                                                                                |
 | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |

@@ -1,4 +1,6 @@
-![nvim](https://github.com/user-attachments/assets/8bd5d275-e65a-4d93-aa05-7c612f019994)
+# ./nvim
+
+![nvim](https://github.com/user-attachments/assets/0c19388f-1af9-44ac-a0c5-03a6f53a641f)
 
 This is my **Neovim configuration** tailored for me and my machines (native win32, arch, and debian server).
 
