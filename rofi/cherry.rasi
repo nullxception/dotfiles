@@ -1,6 +1,9 @@
 configuration {
     show-icons: true;
-    display-run: ">_";
+    display-drun: "";
+    display-run: "";
+    display-window: "";
+    display-ssh: "󰣀";
 }
 
 * {
