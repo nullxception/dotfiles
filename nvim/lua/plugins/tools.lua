@@ -9,5 +9,6 @@ require("neogit").setup({
     integrations = {
         diffview = true,
     },
+    graph_style = "kitty",
 })
 vim.keymap.set("n", "<leader>ng", require("neogit").open, { desc = "NeoGit", silent = true })
