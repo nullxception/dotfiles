@@ -1,6 +1,5 @@
 vim.pack.add({
     gh("folke/tokyonight.nvim"),
-    gh("nvim-mini/mini.icons"),
     gh("nvim-mini/mini.indentscope"),
     gh("sphamba/smear-cursor.nvim"),
     gh("folke/snacks.nvim"),
@@ -8,11 +7,8 @@ vim.pack.add({
     gh("declancm/cinnamon.nvim"),
     gh("j-hui/fidget.nvim"),
     gh("ingur/floatty.nvim"),
+    gh("folke/which-key.nvim"),
 }, { confirm = false })
-
-local icons = require("mini.icons")
-icons.setup({})
-icons.mock_nvim_web_devicons()
 
 require("tokyonight").setup({
     style = "night",
@@ -168,4 +164,15 @@ require("smear_cursor").setup({
 
 require("fidget").setup({
     notification = { override_vim_notify = true },
+})
+
+local wk = require("which-key")
+wk.setup({ win = { border = "rounded" } })
+
+wk.add({
+    "<leader>?",
+    function()
+        require("which-key").show({ global = false })
+    end,
+    desc = "Buffer Local Keymaps",
 })

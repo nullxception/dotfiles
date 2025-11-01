@@ -4,10 +4,7 @@ _G.gh = function(repo)
     return "https://github.com/" .. repo
 end
 
-vim.pack.add({ gh("mason-org/mason.nvim") }, { confirm = false })
-
-require("mason").setup({})
-
+require("plugins.essentials")
 require("plugins.ui")
 require("plugins.lsp")
 require("plugins.formatters")
@@ -15,5 +12,4 @@ require("plugins.cmp")
 require("plugins.telescope")
 require("plugins.activities")
 require("plugins.tools")
-require("plugins.whichkey")
 require("plugins.treesitter")

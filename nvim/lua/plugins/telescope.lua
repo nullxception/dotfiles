@@ -1,5 +1,4 @@
 vim.pack.add({
-    gh("nvim-lua/plenary.nvim"),
     gh("nvim-telescope/telescope-symbols.nvim"),
     gh("nvim-telescope/telescope-fzf-native.nvim"),
     gh("nvim-telescope/telescope-file-browser.nvim"),
