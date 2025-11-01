@@ -1,5 +1,6 @@
 vim.pack.add({
     { src = gh("nvim-treesitter/nvim-treesitter"), version = "main" },
+    gh("nvim-treesitter/nvim-treesitter-context"),
 }, { confirm = false })
 
 local ensure_installed = {
