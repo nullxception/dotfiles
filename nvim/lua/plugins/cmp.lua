@@ -4,11 +4,19 @@ vim.pack.add({
     { src = gh("saghen/blink.cmp"), version = vim.version.range("1.*") },
 }, { confirm = false })
 
-require("lazydev").setup({
-    library = {
-        { path = "${3rd}/luv/library", words = { "vim%.uv" } },
-        { path = "wezterm-types", mods = { "wezterm" } },
-    },
+local augroup = vim.api.nvim_create_augroup("UserCmpAuto", { clear = true })
+vim.api.nvim_create_autocmd("BufEnter", {
+    once = true,
+    group = augroup,
+    pattern = "*.lua",
+    callback = function()
+        require("lazydev").setup({
+            library = {
+                { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+                { path = "wezterm-types", mods = { "wezterm" } },
+            },
+        })
+    end,
 })
 
 require("blink.cmp").setup({
