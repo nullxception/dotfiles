@@ -5,6 +5,7 @@ vim.pack.add({
     gh("sphamba/smear-cursor.nvim"),
     gh("folke/snacks.nvim"),
     gh("folke/which-key.nvim"),
+    gh("declancm/cinnamon.nvim"),
 }, { confirm = false })
 
 require("tokyonight").setup({
@@ -21,6 +22,14 @@ require("tokyonight").setup({
     end,
 })
 vim.cmd.colorscheme("tokyonight")
+
+require("cinnamon").setup({
+    keymaps = {
+        basic = true,
+        extra = true,
+    },
+    options = { mode = "window" },
+})
 
 local snacks = require("snacks")
 snacks.setup({
