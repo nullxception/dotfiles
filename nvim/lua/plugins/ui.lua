@@ -5,6 +5,7 @@ vim.pack.add({
     gh("sphamba/smear-cursor.nvim"),
     gh("folke/snacks.nvim"),
     gh("sschleemilch/slimline.nvim"),
+    gh("declancm/cinnamon.nvim"),
 }, { confirm = false })
 
 local icons = require("mini.icons")
@@ -42,6 +43,16 @@ require("slimline").setup({
         left = "",
         right = "",
     },
+})
+
+require("cinnamon").setup({
+    -- Enable all provided keymaps
+    keymaps = {
+        basic = true,
+        extra = true,
+    },
+    -- Only scroll the window
+    options = { mode = "window" },
 })
 
 local snacks = require("snacks")
