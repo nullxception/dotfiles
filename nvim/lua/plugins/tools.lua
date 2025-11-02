@@ -3,6 +3,7 @@ vim.pack.add({
     gh("sindrets/diffview.nvim"),
     gh("NeogitOrg/neogit"),
     gh("lambdalisue/suda.vim"),
+    gh("NMAC427/guess-indent.nvim"),
 }, { confirm = false })
 
 require("neogit").setup({
@@ -12,3 +13,5 @@ require("neogit").setup({
     graph_style = "kitty",
 })
 vim.keymap.set("n", "<leader>ng", require("neogit").open, { desc = "NeoGit", silent = true })
+
+require("guess-indent").setup({})
