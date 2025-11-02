@@ -32,6 +32,14 @@ require("cinnamon").setup({
 })
 
 local snacks = require("snacks")
+local shell = vim.o.shell
+if vim.uv.os_uname().sysname == "Windows_NT" then
+    if vim.fn.executable("pwsh") == 1 then
+        shell = "pwsh -NoLogo"
+    elseif vim.fn.executable("powershell") == 1 then
+        shell = "powershell -NoLogo"
+    end
+end
 snacks.setup({
     picker = {},
     notifier = {
@@ -41,6 +49,7 @@ snacks.setup({
     },
     terminal = {
         win = { height = 0.25 },
+        shell = shell,
     },
     dashboard = {
         enabled = true,
