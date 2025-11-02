@@ -9,10 +9,9 @@ vim.diagnostic.config({
 })
 
 local augroup = vim.api.nvim_create_augroup("UserMiscAuto", { clear = true })
--- highlight when yanking
 vim.api.nvim_create_autocmd("TextYankPost", {
     group = augroup,
     callback = function()
-        vim.highlight.on_yank({ higroup = "IncSearch", timeout = 150 })
+        vim.hl.on_yank()
     end,
 })
