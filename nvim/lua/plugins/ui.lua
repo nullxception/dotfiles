@@ -6,6 +6,7 @@ vim.pack.add({
     gh("folke/snacks.nvim"),
     gh("folke/which-key.nvim"),
     gh("declancm/cinnamon.nvim"),
+    gh("lewis6991/gitsigns.nvim"),
 }, { confirm = false })
 
 require("tokyonight").setup({
@@ -185,4 +186,11 @@ wk.add({
         require("which-key").show({ global = false })
     end,
     desc = "Buffer Local Keymaps",
+})
+
+require("gitsigns").setup({
+    current_line_blame = true,
+    current_line_blame_opts = {
+        delay = 300,
+    },
 })
