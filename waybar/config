@@ -1,5 +1,6 @@
 {
-    "output": "HDMI-A-1",
+    "output": "DP-1",
+    "position": "bottom",
     "modules-left": [
         "hyprland/submap",
         "hyprland/workspaces",
@@ -20,13 +21,7 @@
         "all-outputs": true,
         "on-click": "activate",
         "on-scroll-up": "hyprctl dispatch workspace r+1",
-        "on-scroll-down": "hyprctl dispatch workspace r-1",
-        "persistent_workspaces": {
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": []
-        }
+        "on-scroll-down": "hyprctl dispatch workspace r-1"
     },
     "hyprland/submap": {
         "format": "󰌓 \u2001{}",
