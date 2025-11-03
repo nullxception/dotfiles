@@ -3,6 +3,19 @@
 # toggle-gaps
 #
 
+lastfile="$HOME/.cache/hypr-gaps.last"
+if [ "$1" = "-r" ] && [ -f "$lastfile" ]; then
+    enabled=$(cat "$lastfile" | cut -d, -f1)
+    gaps_in=$(cat "$lastfile" | cut -d, -f2)
+    gaps_out=$(cat "$lastfile" | cut -d, -f3)
+    if [ "$enabled" = "true" ]; then
+        hyprctl --batch "\
+        keyword general:gaps_in $gaps_in;\
+        keyword general:gaps_out $gaps_out"
+        exit
+    fi
+fi
+
 if [[ "$1" -le 0 || "$2" -le 0 ]]; then
     name="$(basename "$0")"
     cat <<EOF
@@ -20,6 +33,10 @@ if [[ "$gaps" != "$1" ]]; then
     hyprctl --batch "\
         keyword general:gaps_in $1;\
         keyword general:gaps_out $2"
+
+    echo "true,$1,$2" >$lastfile
     exit
 fi
+
 hyprctl reload config-only
+echo "false,," >$lastfile
