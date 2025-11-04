@@ -1,40 +1,48 @@
 vim.pack.add({
     gh("stevearc/conform.nvim"),
-    gh("zapling/mason-conform.nvim"),
+    gh("WhoIsSethDaniel/mason-tool-installer.nvim"),
 }, { confirm = false })
 
-local fts = {
+local formatters = {
     sh = { "shfmt" },
     lua = { "stylua" },
     rust = { "rustfmt" },
 }
-if vim.fn.executable("npm") == 1 then
-    local prettierft = {
-        "css",
-        "less",
-        "scss",
-        "javascript",
-        "javascriptreact",
-        "typescript",
-        "typescriptreact",
-        "html",
-        "json",
-        "yaml",
-        "markdown",
-    }
-    for _, ft in ipairs(prettierft) do
-        fts[ft] = { "prettierd" }
+local prettierft = {
+    "css",
+    "less",
+    "scss",
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "html",
+    "json",
+    "yaml",
+    "markdown",
+}
+for _, ft in ipairs(prettierft) do
+    formatters[ft] = { "prettierd" }
+end
+
+local tools = {}
+for _, fmt in pairs(formatters) do
+    for _, v in ipairs(fmt) do
+        if not vim.tbl_contains(tools, v) then
+            table.insert(tools, v)
+        end
     end
 end
+
+require("mason-tool-installer").setup({ ensure_installed = tools })
 
 local conform = require("conform")
 conform.setup({
     default_format_opts = {
         lsp_format = "fallback",
     },
-    formatters_by_ft = fts,
+    formatters_by_ft = formatters,
 })
-require("mason-conform").setup({})
 
 local function cleanup_trailing_spaces()
     if vim.bo.filetype == "markdown" then
