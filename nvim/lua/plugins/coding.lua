@@ -4,6 +4,8 @@ vim.pack.add({
     gh("mason-org/mason-lspconfig.nvim"),
     gh("DrKJeff16/wezterm-types"),
     gh("folke/lazydev.nvim"),
+    gh("stevearc/conform.nvim"),
+    gh("WhoIsSethDaniel/mason-tool-installer.nvim"),
 }, { confirm = false })
 
 if vim.fn.executable("kotlin-lsp") ~= nil then
@@ -37,7 +39,7 @@ end
 
 require("mason-lspconfig").setup({ ensure_installed = ensure_installed })
 
-local augroup = vim.api.nvim_create_augroup("UserLspAutocmds", { clear = true })
+local augroup = vim.api.nvim_create_augroup("UserCodingAuto", { clear = true })
 
 vim.api.nvim_create_autocmd("LspAttach", {
     group = augroup,
@@ -69,5 +71,67 @@ vim.api.nvim_create_autocmd("BufEnter", {
                 { path = "wezterm-types", mods = { "wezterm" } },
             },
         })
+    end,
+})
+
+local formatters = {
+    sh = { "shfmt" },
+    lua = { "stylua" },
+    rust = { "rustfmt" },
+}
+local prettierft = {
+    "css",
+    "less",
+    "scss",
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "html",
+    "json",
+    "yaml",
+    "markdown",
+}
+for _, ft in ipairs(prettierft) do
+    formatters[ft] = { "prettierd" }
+end
+
+local tools = {}
+for _, fmts in pairs(formatters) do
+    for _, fmt in ipairs(fmts) do
+        if fmt == "rustfmt" then
+            -- rustfmt should not be installed from mason
+            goto skip
+        end
+        if not vim.tbl_contains(tools, fmt) then
+            table.insert(tools, fmt)
+        end
+        ::skip::
+    end
+end
+
+require("mason-tool-installer").setup({ ensure_installed = tools })
+
+local conform = require("conform")
+conform.setup({
+    default_format_opts = {
+        lsp_format = "fallback",
+    },
+    formatters_by_ft = formatters,
+})
+
+local function cleanup_trailing_spaces()
+    if vim.bo.filetype == "markdown" then
+        return
+    end
+    vim.cmd([[%s/\s\+$//e]])
+end
+
+vim.api.nvim_create_autocmd("BufWritePre", {
+    group = augroup,
+    pattern = "*",
+    callback = function(args)
+        cleanup_trailing_spaces()
+        conform.format({ bufnr = args.buf })
     end,
 })
