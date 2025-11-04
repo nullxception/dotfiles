@@ -74,7 +74,7 @@ To use it, you can just do pretty much similar way:
 ./dot.ps1 nvim
 ```
 
-This lets me sync cross-platform configs (like Neovim or WezTerm) seamlessly between Linux and Windows. ✨
+This lets me sync cross-platform configs (like Neovim or WezTerm) seamlessly between Linux and Windows.
 
 </details>
 
@@ -110,7 +110,7 @@ winget install BrechtSanders.WinLibs.POSIX.UCRT
 
 ## 💻 Installation
 
-You can use the `dot.sh` or `dot.ps1` script to set it up automatically
+You can use the `dot.sh` or `dot.ps1` script to set it up automatically:
 
 ### Linux
 
@@ -128,9 +128,14 @@ You can use the `dot.sh` or `dot.ps1` script to set it up automatically
 
 It's a pretty simple hyprland setup that utilize waybar, rofi, and some other programs to help my regular desktop usage.
 
+## ⚠ Disclaimer
+
+My Hyprland setup is configured for my dual monitor setup, including but not limited to workspace binding.
+So make sure you check and adjust the config accordingly.
+
 ## 🔗 Requirements
 
-Below are the list of programs and scripts that currently used on this setup :
+Below are the list of programs and scripts that currently used on this setup:
 
 | Program/script                        | Description                                 | config                                           |
 | ------------------------------------- | ------------------------------------------- | ------------------------------------------------ |
@@ -151,7 +156,7 @@ Below are the list of programs and scripts that currently used on this setup :
 
 ## 💻 Installation
 
-You can copy the necessary files into your own config dirs, or deploy the configs with `dot.sh` :
+You can copy the necessary files into your own config dirs, or deploy the configs with `dot.sh`:
 
 ```bash
 # Deploy hyprland and other configs
