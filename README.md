@@ -143,7 +143,7 @@ Below are the list of programs and scripts that currently used on this setup:
 | hyprlock                              | Lock Screen                                 | [hyprlock.conf](hypr/hyprlock.conf)              |
 | wezterm                               | Terminal emulator                           | [wezterm](wezterm)                               |
 | cliphist + wl-clip-persist            | Clipboard manager                           | --                                               |
-| swww                                  | Wallpaper daemon                            | --                                               |
+| waypaper (w/ hyprpaper or swww)       | Wallpaper manager                           | --                                               |
 | waybar                                | Panel                                       | [waybar](waybar)                                 |
 | mako                                  | Notification daemon                         | [mako](mako)                                     |
 | [subs-volume](hypr/bin/subs-volume)   | Volume notifier                             | --                                               |
