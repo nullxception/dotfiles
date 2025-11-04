@@ -7,8 +7,6 @@ end
 require("plugins.core")
 require("plugins.ui")
 require("plugins.coding")
-require("plugins.cmp")
 require("plugins.telescope")
 require("plugins.activities")
 require("plugins.tools")
-require("plugins.treesitter")

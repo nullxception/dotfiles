@@ -6,6 +6,7 @@ vim.pack.add({
     gh("folke/lazydev.nvim"),
     gh("stevearc/conform.nvim"),
     gh("WhoIsSethDaniel/mason-tool-installer.nvim"),
+    { src = gh("saghen/blink.cmp"), version = vim.version.range("1.*") },
 }, { confirm = false })
 
 if vim.fn.executable("kotlin-lsp") ~= nil then
@@ -135,3 +136,119 @@ vim.api.nvim_create_autocmd("BufWritePre", {
         conform.format({ bufnr = args.buf })
     end,
 })
+
+require("blink.cmp").setup({
+    sources = {
+        default = { "lazydev", "lsp", "path", "snippets", "buffer" },
+        providers = {
+            lazydev = { name = "LazyDev", module = "lazydev.integrations.blink", score_offset = 100 },
+        },
+    },
+    signature = { enabled = true },
+    cmdline = {
+        completion = { menu = { auto_show = true } },
+    },
+    completion = {
+        documentation = { auto_show = true, auto_show_delay_ms = 150 },
+    },
+})
+
+local ts_util = require("treesitter-util")
+if ts_util.low_mem() then
+    goto after_treesitter
+end
+
+vim.pack.add({
+    { src = gh("nvim-treesitter/nvim-treesitter"), version = "main" },
+    gh("nvim-treesitter/nvim-treesitter-context"),
+    { src = gh("nvim-treesitter/nvim-treesitter-textobjects"), version = "main" },
+}, { confirm = false })
+
+local ts_ft = {
+    "bash",
+    "c",
+    "cpp",
+    "css",
+    "dart",
+    "diff",
+    "git_rebase",
+    "gitcommit",
+    "gitignore",
+    "go",
+    "html",
+    "ini",
+    "java",
+    "javascript",
+    "json",
+    "kotlin",
+    "lua",
+    "markdown",
+    "python",
+    "rasi",
+    "scss",
+    "toml",
+    "tsx",
+    "typescript",
+    "yaml",
+    "vimdoc",
+}
+
+vim.api.nvim_create_autocmd("PackChanged", {
+    callback = function(opts)
+        if opts.data.spec.name == "nvim-treesitter" and opts.data.kind == "update" then
+            vim.cmd("TSUpdate")
+        end
+    end,
+})
+
+ts_util.ensure_tscli(function()
+    ts_util.install_missing(ts_ft)
+end)
+
+local ts = require("nvim-treesitter.config")
+local installed_parsers = ts.get_installed("parsers")
+
+vim.api.nvim_create_autocmd("BufEnter", {
+    group = augroup,
+    callback = function()
+        local ft = vim.bo.filetype
+        local lang = vim.treesitter.language.get_lang(ft)
+        if not vim.tbl_contains(ts.get_available(), lang) then
+            return
+        end
+        if not vim.tbl_contains(installed_parsers, lang) then
+            ts_util.install_missing({ lang })
+        end
+    end,
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+    group = augroup,
+    pattern = "*",
+    callback = function()
+        local success, _ = pcall(vim.treesitter.start)
+        if not success then
+            return
+        end
+
+        vim.bo.indentexpr = "v:lua.require('nvim-treesitter').indentexpr()"
+    end,
+})
+
+require("nvim-treesitter-textobjects").setup({ move = { set_jumps = true } })
+local o_select = require("nvim-treesitter-textobjects.select")
+local function map_select_object(key, object, source)
+    local desc = object:gsub("@", ""):gsub("%.", " ")
+
+    vim.keymap.set({ "x", "o" }, key, function()
+        o_select.select_textobject(object, source or "textobjects")
+    end, { desc = desc })
+end
+
+map_select_object("af", "@function.outer")
+map_select_object("if", "@function.inner")
+map_select_object("ac", "@class.outer")
+map_select_object("ic", "@class.inner")
+map_select_object("al", "@local.scope", "locals")
+
+::after_treesitter::
