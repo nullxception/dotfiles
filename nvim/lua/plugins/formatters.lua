@@ -26,11 +26,16 @@ for _, ft in ipairs(prettierft) do
 end
 
 local tools = {}
-for _, fmt in pairs(formatters) do
-    for _, v in ipairs(fmt) do
-        if not vim.tbl_contains(tools, v) then
-            table.insert(tools, v)
+for _, fmts in pairs(formatters) do
+    for _, fmt in ipairs(fmts) do
+        if fmt == "rustfmt" then
+            -- rustfmt should not be installed from mason
+            goto skip
         end
+        if not vim.tbl_contains(tools, fmt) then
+            table.insert(tools, fmt)
+        end
+        ::skip::
     end
 end
 
