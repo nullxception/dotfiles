@@ -13,13 +13,9 @@
 This is the place where I keep the dotfiles that I use daily.<br/>
 So yeah, it will definitely change from time to time :D
 
-| hyprland                                                                                     | neovim                                                                                   |
-| -------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| ![hyprland](https://github.com/user-attachments/assets/3dc01457-e9dd-438e-8347-7f20f4919857) | ![nvim](https://github.com/user-attachments/assets/8bd5d275-e65a-4d93-aa05-7c612f019994) |
-
-| hyprlock                                                                                     | session menu (rofi)                                                                              |
-| -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| ![hyprlock](https://github.com/user-attachments/assets/ea2c1020-66fa-4f6d-bc5f-2b5c02000870) | ![rofi-session](https://github.com/user-attachments/assets/95587895-7dbd-4913-9b78-06563b1bdeb3) |
+| hyprland                                                                                             | neovim                                                                                              |
+| ---------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| ![desktop-previews](https://github.com/user-attachments/assets/95db4d04-9ac0-4293-81b9-21e57f5bf92d) | ![neovim-previews](https://github.com/user-attachments/assets/8bd5d275-e65a-4d93-aa05-7c612f019994) |
 
 # 💻 Installation
 
@@ -136,22 +132,22 @@ It's a pretty simple hyprland setup that utilize waybar, rofi, and some other pr
 
 Below are the list of programs and scripts that currently used on this setup :
 
-| Program/script                   | Description                                 | config                                                 |
-| -------------------------------- | ------------------------------------------- | ------------------------------------------------------ |
-| hypridle                         | Idle daemon                                 | [hypridle.conf](hypridle.conf)                         |
-| hyprlock                         | Lock Screen                                 | [hyprlock.conf](hyprlock.conf)                         |
-| wezterm                          | Default terminal emulator                   | [../wezterm](../wezterm)                               |
-| wl-clipboard-history             | Clipboard history tracker                   | --                                                     |
-| swww                             | Wallpaper daemon                            | --                                                     |
-| waybar                           | Panel                                       | [../waybar](../waybar)                                 |
-| mako                             | Notification daemon                         | [../mako](../mako)                                     |
-| [subs-volume](bin/subs-volume)   | Volume notifier                             | --                                                     |
-| grimblast                        | Screenshot script                           | --                                                     |
-| rofi                             | App launcher                                | [../rofi](../rofi)                                     |
-| [rofi-session](bin/rofi-session) | Session menu                                | [../rofi/rofi-session.conf](../rofi/rofi-session.conf) |
-| rofi-polkit-agent                | Polkit agent                                | --                                                     |
-| rofimoji                         | Rofi Emoji Picker                           | --                                                     |
-| wtype                            | Used by rofimoji to simulate keyboard input | --                                                     |
+| Program/script                        | Description                                 | config                                           |
+| ------------------------------------- | ------------------------------------------- | ------------------------------------------------ |
+| hypridle                              | Idle daemon                                 | [hypridle.conf](hypr/hypridle.conf)              |
+| hyprlock                              | Lock Screen                                 | [hyprlock.conf](hypr/hyprlock.conf)              |
+| wezterm                               | Terminal emulator                           | [wezterm](wezterm)                               |
+| cliphist + wl-clip-persist            | Clipboard manager                           | --                                               |
+| swww                                  | Wallpaper daemon                            | --                                               |
+| waybar                                | Panel                                       | [waybar](waybar)                                 |
+| mako                                  | Notification daemon                         | [mako](mako)                                     |
+| [subs-volume](hypr/bin/subs-volume)   | Volume notifier                             | --                                               |
+| grimblast                             | Screenshot script                           | --                                               |
+| rofi                                  | App launcher                                | [rofi](rofi)                                     |
+| [rofi-session](hypr/bin/rofi-session) | Session menu                                | [rofi/rofi-session.conf](rofi/rofi-session.conf) |
+| rofi-polkit-agent                     | Polkit agent                                | --                                               |
+| rofimoji                              | Rofi Emoji Picker                           | --                                               |
+| wtype                                 | Used by rofimoji to simulate keyboard input | --                                               |
 
 ## 💻 Installation
 
@@ -167,4 +163,4 @@ You can copy the necessary files into your own config dirs, or deploy the config
 
 Unless otherwise noted, all code and configuration files are licensed under the [BSD 3-Clause License](LICENSE).
 
-<p align="center"><sub>Made with ❤️, ☕, and way too many terminal sessions.</sub></p>
+<p align="center"><sub>Made with ❤️, ☕, and too much neovim sessions.</sub></p>
