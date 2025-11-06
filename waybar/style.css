@@ -18,7 +18,7 @@
 }
 
 window#waybar {
-    background-color: alpha(@colorBackground, 0.95);
+    background-color: alpha(@colorBackground, 0.9);
     color: @colorForeground;
     border-bottom: 1px solid @color0;
 }
