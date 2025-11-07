@@ -58,11 +58,15 @@ autoload -U down-line-or-beginning-search
 zle -N up-line-or-beginning-search
 zle -N down-line-or-beginning-search
 bindkey -e
-bindkey '^[[Z' reverse-menu-complete          # Shift+Tab
-bindkey '^[[1;5C' forward-word                # Ctrl+Right move word
-bindkey '^[[1;5D' backward-word               # Ctrl+Left move word
+bindkey '^N' menu-complete                    # Ctrl-n
+bindkey '^P' reverse-menu-complete            # Ctrl-p
+bindkey '^[[Z' reverse-menu-complete          # Shift-Tab
+bindkey '^[[1;5C' forward-word                # Ctrl-Right
+bindkey '^[[1;5D' backward-word               # Ctrl-Left
+bindkey "^K" up-line-or-beginning-search      # Ctrl-j
 bindkey '^[[A' up-line-or-beginning-search    # Up arrow
 bindkey "^[OA" up-line-or-beginning-search
+bindkey "^J" down-line-or-beginning-search    # Ctrl-k
 bindkey '^[[B' down-line-or-beginning-search  # Down arrow
 bindkey "^[OB" down-line-or-beginning-search
 bindkey '^[[5~' up-line-or-beginning-search   # PageUp
