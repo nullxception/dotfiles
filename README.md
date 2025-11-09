@@ -41,6 +41,23 @@ Files inside the `nvim` and `zsh` dir will be copied to the location defined in 
 - `nvim/*` to `~/.config/nvim/`
 - `zsh/*` to `~/`
 
+This dotfiles structure is heavily inspired from stow-managed dotfiles.<br/>
+Fun fact, you can even use `stow` instead of `dot.sh` if you like using `stow`.<br/>
+Just make sure that you're providing the proper `--target` (you can take a look at `<module>/.install`):
+
+```bash
+# example: installing zsh and tmux config to $HOME
+stow -v --ignore=.install zsh tmux
+
+# example: installing nvim config
+mkdir ~/.config/nvim
+stow -v --ignore=.install --target=~/.config/nvim nvim
+
+# example: installing custom fontconfig
+mkdir ~/.config/fontconfig/conf.d
+stow -v --ignore=.install --target=~/.config/fontconfig/conf.d fontconfig
+```
+
 <details>
   <summary><h2>ⓘ About `dot.sh`</h2></summary>
   <hl/>
