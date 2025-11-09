@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+#
+# Random wallpaper setter that uses swww
+#
+WALLPAPERS="${SWWW_WALLPAPERS_HOME:-$HOME/Pictures/wallpapers}"
+
+# start swww-daemon if it hasn't started
+if ! pidof -q swww-daemon; then
+    swww-daemon >/dev/null 2>&1 &
+    disown
+fi
+
+# Set random wallpaper
+current="$(swww query | sed 's/.*: image: //' | head -1)"
+new=$(find "$WALLPAPERS" -type f \( -iname "*.jpeg" -o -iname "*.jpg" -o -iname "*.png" \) ! -path "$current" | shuf -n1)
+
+if [[ $(file --mime-type -b "$new") == image/*g ]]; then
+    if [[ -n "$SWWW_UPDATE_HOOK" ]]; then
+        eval "$SWWW_UPDATE_HOOK" <<<"$new" &
+        disown
+    fi
+    swww img -- "$new"
+fi

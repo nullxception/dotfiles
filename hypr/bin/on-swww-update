@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+#
+# A hook script to set $1 as rofi and fastfetch image
+#
+
+command -v magick >/dev/null || {
+    echo "imagemagick is not installed"
+    exit 1
+}
+
+read img
+cp_crop() {
+    magick "$img" -resize $1^ -gravity Center -extent $1 "$2"
+}
+
+cp_crop 640x360 ~/.config/rofi/header.jpg &
+cp_crop 512x512 ~/.config/fastfetch/logo.jpg &
