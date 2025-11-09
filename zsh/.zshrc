@@ -179,3 +179,7 @@ zi wait depth=1 lucid for \
     atload"_zsh_autosuggest_start" @zsh-users/zsh-autosuggestions \
     blockf atpull'zi creinstall -q .' @zsh-users/zsh-completions
 
+# zoxide integration
+if command -v zoxide >/dev/null; then
+    eval "$(zoxide init zsh --cmd cd)"
+fi
