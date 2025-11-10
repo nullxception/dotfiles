@@ -19,7 +19,7 @@ So yeah, it will definitely change from time to time :D
 
 # 💻 Installation
 
-Each module in this repo is self-contained.<br/>
+Each module in this repository is self-contained and can be installed independently.<br/>
 You can install one or multiple modules using the provided [`dot.sh`](dot.sh) script:
 
 ```bash
@@ -41,7 +41,8 @@ Files inside the `nvim` and `zsh` dir will be copied to the location defined in 
 - `nvim/*` to `~/.config/nvim/`
 - `zsh/*` to `~/`
 
-This dotfiles structure is heavily inspired from stow-managed dotfiles.<br/>
+This dotfiles structure is heavily inspired from stow-managed dotfiles.
+
 Fun fact, you can even use `stow` instead of `dot.sh` if you like using `stow`.<br/>
 Just make sure that you're providing the proper `--target` (you can take a look at `<module>/.install`):
 
@@ -59,8 +60,7 @@ stow -v --ignore=.install --target=~/.config/fontconfig/conf.d fontconfig
 ```
 
 <details>
-  <summary><h2>ⓘ About `dot.sh`</h2></summary>
-  <hl/>
+  <summary><h2>About `dot.sh`</h2></summary>
 
 [`dot.sh`](dot.sh) is a minimal Bash script that automates installation by reading the `module_target` variable inside each module’s `.install` file and copying files to that target path.
 
