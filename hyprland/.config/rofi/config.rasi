@@ -1,6 +1,10 @@
 configuration {
   font: "Inter Semibold 13px";
   icon-theme: "Papirus-Dark";
+  kb-remove-to-eol: "";
+  kb-accept-entry: "Return,KP_Enter";
+  kb-row-up: "Up,Control+p,Control+k";
+  kb-row-down: "Down,Control+n,Control+j";
 }
 
 @theme "cherry.rasi"
