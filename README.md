@@ -141,7 +141,7 @@ You can use the `dot.sh` or `dot.ps1` script to set it up automatically:
 ./dot.ps1 nvim
 ```
 
-# 🧩 Module: hypr
+# 🧩 Module: hyprland
 
 It's a pretty simple hyprland setup that utilize waybar, rofi, and some other programs to help my regular desktop usage.
 
@@ -154,30 +154,29 @@ So make sure you check and adjust the config accordingly.
 
 Below are the list of programs and scripts that currently used on this setup:
 
-| Program/script                        | Description                                 | config                                           |
-| ------------------------------------- | ------------------------------------------- | ------------------------------------------------ |
-| hypridle                              | Idle daemon                                 | [hypridle.conf](hypr/hypridle.conf)              |
-| hyprlock                              | Lock Screen                                 | [hyprlock.conf](hypr/hyprlock.conf)              |
-| wezterm                               | Terminal emulator                           | [wezterm](wezterm)                               |
-| cliphist + wl-clip-persist            | Clipboard manager                           | --                                               |
-| swww                                  | Wallpaper daemon                            | --                                               |
-| waybar                                | Panel                                       | [waybar](waybar)                                 |
-| mako                                  | Notification daemon                         | [mako](mako)                                     |
-| [subs-volume](hypr/bin/subs-volume)   | Volume notifier                             | --                                               |
-| grimblast                             | Screenshot script                           | --                                               |
-| rofi                                  | App launcher                                | [rofi](rofi)                                     |
-| [rofi-session](hypr/bin/rofi-session) | Session menu                                | [rofi/rofi-session.conf](rofi/rofi-session.conf) |
-| rofi-polkit-agent                     | Polkit agent                                | --                                               |
-| rofimoji                              | Rofi Emoji Picker                           | --                                               |
-| wtype                                 | Used by rofimoji to simulate keyboard input | --                                               |
+| Program/script                                   | Description                                 | config                                                            |
+| ------------------------------------------------ | ------------------------------------------- | ----------------------------------------------------------------- |
+| hypridle                                         | Idle daemon                                 | [hypridle.conf](hyprland/.config/hypr/hypridle.conf)              |
+| hyprlock                                         | Lock Screen                                 | [hyprlock.conf](hyprland/.config/hypr/hyprlock.conf)              |
+| wezterm                                          | Terminal emulator                           | [wezterm](wezterm)                                                |
+| cliphist + wl-clip-persist                       | Clipboard manager                           | --                                                                |
+| swww                                             | Wallpaper daemon                            | --                                                                |
+| waybar                                           | Panel                                       | [waybar](hyprland/.config/waybar)                                 |
+| mako                                             | Notification daemon                         | [mako](hyprland/.config/mako)                                     |
+| [subs-volume](hyprland/.local/bin/subs-volume)   | Volume notifier                             | --                                                                |
+| grimblast                                        | Screenshot script                           | --                                                                |
+| rofi                                             | App launcher                                | [rofi](hyprland/.config/rofi)                                     |
+| [rofi-session](hyprland/.local/bin/rofi-session) | Session menu                                | [rofi/rofi-session.conf](hyprland/.config/rofi/rofi-session.conf) |
+| rofi-polkit-agent                                | Polkit agent                                | --                                                                |
+| rofimoji                                         | Rofi Emoji Picker                           | --                                                                |
+| wtype                                            | Used by rofimoji to simulate keyboard input | --                                                                |
 
 ## 💻 Installation
 
 You can copy the necessary files into your own config dirs, or deploy the configs with `dot.sh`:
 
 ```bash
-# Deploy hyprland and other configs
-./dot.sh waybar mako rofi hypr
+./dot.sh hyprland
 
 ```
 
