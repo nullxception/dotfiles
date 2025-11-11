@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Random wallpaper setter that uses swww
+# Sequential wallpaper setter that uses swww
 #
 WALLPAPERS="${SWWW_WALLPAPERS_HOME:-$HOME/Pictures/wallpapers}"
 
@@ -10,10 +10,24 @@ if ! pidof -q swww-daemon; then
     disown
 fi
 
-# Set random wallpaper
 current="$(swww query | sed 's/.*: image: //' | head -1)"
-new=$(find "$WALLPAPERS" -type f \( -iname "*.jpeg" -o -iname "*.jpg" -o -iname "*.png" \) ! -path "$current" | shuf -n1)
+images=()
+while IFS= read -r -d $'\0'; do
+    images+=("$REPLY")
+done < <(find "$WALLPAPERS" -type f \( -iname "*.jpeg" -o -iname "*.jpg" -o -iname "*.png" \) -print0)
 
+newIndex=0
+for i in "${!images[@]}"; do
+    if [[ "${images[$i]}" == "$current" ]]; then
+        newIndex=$((i + 1))
+        if [[ $newIndex -eq ${#images[@]} ]]; then
+            newIndex=0
+        fi
+        break
+    fi
+done
+
+new="${images[$newIndex]}"
 if [[ $(file --mime-type -b "$new") == image/*g ]]; then
     if [[ -n "$SWWW_UPDATE_HOOK" ]]; then
         eval "$SWWW_UPDATE_HOOK" <<<"$new" &
