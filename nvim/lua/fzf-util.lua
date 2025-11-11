@@ -52,13 +52,12 @@ function M.build(plugindir, on_completed)
     end
 end
 
-function M.load()
+function M.load(plugindir)
     if not M.is_buildable() then
         return
     end
-    local telescope = require("telescope")
 
-    local plugindir = vim.pack.get({ "telescope-fzf-native.nvim" })[1].path
+    local telescope = require("telescope")
     local lib = libpath(plugindir)
     if vim.uv.fs_stat(lib) then
         telescope.load_extension("fzf")

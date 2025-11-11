@@ -45,12 +45,15 @@ telescope.setup(opts)
 telescope.load_extension("file_browser")
 
 local fzfutil = require("fzf-util")
-fzfutil.load()
+local fzfplugindir = vim.pack.get({ "telescope-fzf-native.nvim" })[1].path
+fzfutil.load(fzfplugindir)
 
 vim.api.nvim_create_autocmd("PackChanged", {
     callback = function(packOpts)
         if packOpts.data.spec.name == "telescope-fzf-native.nvim" and packOpts.data.kind == "update" then
-            fzfutil.build()
+            fzfutil.build(fzfplugindir, function()
+                telescope.load_extension("fzf")
+            end)
         end
     end,
 })
