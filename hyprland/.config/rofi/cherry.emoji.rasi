@@ -1,0 +1,41 @@
+@import "cherry.rasi"
+
+mainbox {
+    children: [ inputbar, listview, message];
+}
+
+listview {
+    columns: 8;
+    lines: 4;
+    spacing: 0;
+    margin: 1em;
+    border: 1px;
+    border-color: @bg-alt;
+    text-color: @fg;
+    cycle: true;
+    dynamic: true;
+    layout: vertical;
+    flow: horizontal;
+    reverse: false;
+    fixed-height: true;
+    fixed-columns: true;
+    border: 0;
+}
+
+element {
+    border-radius: 50%;
+    orientation: vertical;
+    children: [ element-text];
+}
+
+element-text {
+    font: "Sans 18";
+    horizontal-align: 0.5;
+}
+
+element selected.normal {
+    border-radius: 50%;
+    background-color: #ff568e25;
+    border: 1px;
+    border-color: #ff568e;
+}
