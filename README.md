@@ -154,22 +154,21 @@ So make sure you check and adjust the config accordingly.
 
 Below are the list of programs and scripts that currently used on this setup:
 
-| Program/script                                   | Description                                 | config                                                            |
-| ------------------------------------------------ | ------------------------------------------- | ----------------------------------------------------------------- |
-| hypridle                                         | Idle daemon                                 | [hypridle.conf](hyprland/.config/hypr/hypridle.conf)              |
-| hyprlock                                         | Lock Screen                                 | [hyprlock.conf](hyprland/.config/hypr/hyprlock.conf)              |
-| wezterm                                          | Terminal emulator                           | [wezterm](wezterm)                                                |
-| cliphist + wl-clip-persist                       | Clipboard manager                           | --                                                                |
-| swww                                             | Wallpaper daemon                            | --                                                                |
-| waybar                                           | Panel                                       | [waybar](hyprland/.config/waybar)                                 |
-| mako                                             | Notification daemon                         | [mako](hyprland/.config/mako)                                     |
-| [subs-volume](hyprland/.local/bin/subs-volume)   | Volume notifier                             | --                                                                |
-| grimblast                                        | Screenshot script                           | --                                                                |
-| rofi                                             | App launcher                                | [rofi](hyprland/.config/rofi)                                     |
-| [rofi-session](hyprland/.local/bin/rofi-session) | Session menu                                | [rofi/rofi-session.conf](hyprland/.config/rofi/rofi-session.conf) |
-| rofi-polkit-agent                                | Polkit agent                                | --                                                                |
-| rofimoji                                         | Rofi Emoji Picker                           | --                                                                |
-| wtype                                            | Used by rofimoji to simulate keyboard input | --                                                                |
+| Program/script                                   | Description         | config                                                            |
+| ------------------------------------------------ | ------------------- | ----------------------------------------------------------------- |
+| hypridle                                         | Idle daemon         | [hypridle.conf](hyprland/.config/hypr/hypridle.conf)              |
+| hyprlock                                         | Lock Screen         | [hyprlock.conf](hyprland/.config/hypr/hyprlock.conf)              |
+| wezterm                                          | Terminal emulator   | [wezterm](wezterm)                                                |
+| cliphist + wl-clip-persist                       | Clipboard manager   | --                                                                |
+| swww                                             | Wallpaper daemon    | --                                                                |
+| waybar                                           | Panel               | [waybar](hyprland/.config/waybar)                                 |
+| mako                                             | Notification daemon | [mako](hyprland/.config/mako)                                     |
+| [subs-volume](hyprland/.local/bin/subs-volume)   | Volume notifier     | --                                                                |
+| grimblast                                        | Screenshot script   | --                                                                |
+| rofi                                             | App launcher        | [rofi](hyprland/.config/rofi)                                     |
+| [rofi-session](hyprland/.local/bin/rofi-session) | Session menu        | [rofi/rofi-session.conf](hyprland/.config/rofi/rofi-session.conf) |
+| rofi-polkit-agent                                | Polkit agent        | --                                                                |
+| rofi-emoji                                       | Rofi Emoji Picker   | --                                                                |
 
 ## 💻 Installation
 
