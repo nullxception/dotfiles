@@ -56,7 +56,7 @@ function Test-HasPsModule {
     param(
         [string]$DirName
     )
-    $env:PSModulePath -split ":" | ForEach-Object { Join-Path "$_" "$DirName" } |
+    $env:PSModulePath -split [IO.Path]::PathSeparator | ForEach-Object { Join-Path "$_" "$DirName" } |
         Where-Object { Test-Path "$_" } | Select-Object -First 1
 }
 
