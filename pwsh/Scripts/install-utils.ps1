@@ -21,34 +21,27 @@ function Set-GitDefaults {
     }
 }
 
-winget install Microsoft.VCRedist.2015+.x64
-winget install zig.zig
-winget install Python.Python.3.14
-winget install Rustlang.Rustup
+$wingetOpts = @(
+    '--accept-package-agreements',
+    '--accept-source-agreements',
+    '--source', 'winget',
+    '--silent'
+)
 
-winget install 7zip.7zip
-winget install BurntSushi.ripgrep.MSVC
-winget install Git.Git
-winget install GnuPG.GnuPG
-winget install ISC.Bind
-winget install NSSM.NSSM
-winget install Neovim.Neovim
-winget install Schniz.fnm
-winget install aria2.aria2
-winget install eza-community.eza
-winget install gerardog.gsudo
-winget install jftuga.less
-winget install junegunn.fzf
-winget install sharkdp.bat
-winget install jstarks.npiperelay
-winget install GnuWin32.gzip
-winget install GnuWin32.unzip
+$wingetPackages = @(
+    'Microsoft.VCRedist.2015+.x64'
+    'Rustlang.Rustup'
+    '7zip.7zip'
+    'Git.Git'
+    'gerardog.gsudo'
+)
+
+$wingetPackages | ForEach-Object {
+    winget install --id $_ @wingetOpts
+}
 
 if ($env:PATH -notlike "*7-Zip*") {
     Register-Path -At "C:\Program Files\7-Zip" -Scope User
-}
-if ($env:PATH -notlike "*GnuWin32*") {
-    Register-Path -At "C:\Program Files (x86)\GnuWin32\bin\" -Scope User
 }
 
 Update-CurrentEnv
@@ -60,4 +53,22 @@ if (!(Get-Command scoop -ErrorAction SilentlyContinue)) {
 }
 scoop bucket add extras
 scoop bucket add nerd-fonts
-scoop install stylua JetBrainsMono-NF
+scoop config aria2-enabled false
+gsudo scoop install -g neovim `
+    aria2 `
+    bat `
+    bind `
+    eza `
+    fnm `
+    fzf `
+    gnupg `
+    gzip `
+    less `
+    npiperelay `
+    nssm `
+    python `
+    ripgrep `
+    stylua `
+    unzip `
+    zig `
+    JetBrainsMono-NF
