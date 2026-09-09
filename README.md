@@ -1,10 +1,10 @@
 <p align="center">
-<img alt="nullxception" src="https://images.weserv.nl/?url=avatars.githubusercontent.com/u/58150791?v=5&h=128&w=128&fit=cover&mask=circle&maxage=7d"/>
+<img alt="nullxception" src="https://images.weserv.nl/?url=avatars.githubusercontent.com/u/58150791?v=5&h=128&w=128&fit=cover&mask=circle&maxage=1d"/>
 <br/><br/>
 <b>~/.dotfiles</b>
 <br/><br/>
 <a href="#"><img alt="Stargazers" src="https://img.shields.io/github/stars/nullxception/dotfiles?style=for-the-badge&logo=apachespark&logoColor=ff89b5&color=ff89b5&labelColor=33333f"/></a>
-<a href="#-module-nvim"><img alt="$EDITOR" src="https://img.shields.io/badge/neovim-0.12--dev-73de8a?style=for-the-badge&logo=neovim&logoColor=73de8a&labelColor=33333f"/></a>
+<a href="#-module-nvim"><img alt="$EDITOR" src="https://img.shields.io/badge/neovim-0.12-73de8a?style=for-the-badge&logo=neovim&logoColor=73de8a&labelColor=33333f"/></a>
 <a href="#-module-hypr"><img alt="$XDG_CURRENT_DESKTOP" src="https://img.shields.io/badge/hyprland-btw-62e6fa?style=for-the-badge&logo=hyprland&logoColor=62e6fa&labelColor=33333f"/></a>
 <a href="LICENSE"><img alt="License" src="https://img.shields.io/github/license/nullxception/dotfiles?style=for-the-badge&logo=gitbook&logoColor=b0a8f7&color=b0a8f7&labelColor=33333f"/></a>
 </p>
